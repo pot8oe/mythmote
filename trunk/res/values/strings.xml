@@ -3,4 +3,14 @@
     
     <string name="app_name">mythmote</string>
 <string name="settings_menu_str">Settings</string>
+<string name="record">Rec</string>
+<string name="play">Play</string>
+<string name="stop">Stop</string>
+<string name="rewind">Rew</string>
+<string name="fastforward">FF</string>
+<string name="up">Up</string>
+<string name="down">Down</string>
+<string name="left">Left</string>
+<string name="right">Right</string>
+<string name="select">Select</string>
 </resources>
