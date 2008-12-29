@@ -1,6 +1,7 @@
 package tkj.android.homecontrol.mythmote;
 
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -49,13 +50,17 @@ public class mythmote extends TabActivity  implements TabHost.TabContentFactory 
 	   {
     	if(item.getItemId() == SETTINGS_ID)
     	{/* This fails */
-    		Intent intent = new Intent(this, new mythmotepreferences().getClass());
+    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.mythmotepreferences.class);
     		this.startActivity(intent);
     	}
 	   }
 	   catch(android.content.ActivityNotFoundException ex)
 	   {
-		   
+		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
+		   diag.setMessage(ex.getMessage());
+		   diag.setTitle("Error");
+		   diag.setNeutralButton("OK", null);
+		   diag.show();
 	   }
     	return false;
     }
