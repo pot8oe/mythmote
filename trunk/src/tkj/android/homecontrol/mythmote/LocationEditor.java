@@ -2,6 +2,6 @@ package tkj.android.homecontrol.mythmote;
 
 import android.app.Activity;
 
-public class AddressEditor extends Activity {
+public class LocationEditor extends Activity {
 
 }
