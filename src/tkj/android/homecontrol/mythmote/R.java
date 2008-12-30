@@ -56,6 +56,7 @@ public final class R {
         public static final int numberpad=0x7f030003;
     }
     public static final class string {
+        public static final int add_location=0x7f05000c;
         public static final int app_name=0x7f050000;
         public static final int down=0x7f050008;
         public static final int fastforward=0x7f050006;

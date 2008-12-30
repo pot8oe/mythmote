@@ -14,7 +14,7 @@ import android.view.View;
 
 
 
-public class mythmote extends TabActivity  implements TabHost.TabContentFactory {
+public class MythMote extends TabActivity  implements TabHost.TabContentFactory {
     
 	public static final int SETTINGS_ID = Menu.FIRST;
 	
@@ -50,7 +50,7 @@ public class mythmote extends TabActivity  implements TabHost.TabContentFactory 
 	   {
     	if(item.getItemId() == SETTINGS_ID)
     	{/* This fails */
-    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.mythmotepreferences.class);
+    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
     		this.startActivity(intent);
     	}
 	   }

@@ -13,4 +13,5 @@
 <string name="left">Left</string>
 <string name="right">Right</string>
 <string name="select">Select</string>
+<string name="add_location">New Location</string>
 </resources>
