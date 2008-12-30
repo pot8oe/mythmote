@@ -11,6 +11,6 @@
             </intent-filter>
         </activity>
     <activity android:name=".MythMotePreferences" android:label="preferences"></activity>
-<activity android:label="addresseditor" android:name=".AddressEditor"></activity>
+<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
 </application>
 </manifest> 
