@@ -30,9 +30,14 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         
 
         final TabHost tabHost = getTabHost();
-        tabHost.addTab(tabHost.newTabSpec(NAME_NAV_TAB).setIndicator("Navigation", this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
-        tabHost.addTab(tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator("Media", this.getResources().getDrawable(R.drawable.media)).setContent(this));
-        tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator("Num Pad").setContent(this));
+        tabHost.addTab(tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
+        		this.getResources().getString(R.string.navigation),
+        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
+        tabHost.addTab(tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
+        		this.getResources().getString(R.string.media),
+        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
+        tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
+        		"Num Pad").setContent(this));
     }
     
     /** Called to create the options menu once.  */
