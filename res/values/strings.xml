@@ -14,4 +14,8 @@
 <string name="right">Right</string>
 <string name="select">Select</string>
 <string name="add_location">New Location</string>
+<string name="navigation">Navigation</string>
+<string name="media">Media</string>
+<string name="numpad">Numers</string>
+
 </resources>
