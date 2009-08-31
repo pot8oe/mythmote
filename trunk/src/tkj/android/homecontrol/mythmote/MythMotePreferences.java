@@ -18,6 +18,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	static final String SEPERATOR_PIPE_REGEX = "\\|";
 	static final String PREF_ADDRESSES = "frontend-addresses";
 	static final String PREF_NAMES = "frontend-names";
+	static final String PREF_PORTS = "frontend-ports";
 	
 	private String[] locationNames = null;
 	private String[] locationAddresses = null;
@@ -30,8 +31,9 @@ public class MythMotePreferences extends PreferenceActivity{
         PreferenceScreen prefScreen = this.getPreferenceManager().createPreferenceScreen(this);
         
         //load preferences
-        final String nameStr = this.getPreferences(0).getString(PREF_NAMES, null);			//"Living Room|Bed Room|Kitchen";
-        final String addressesStr = this.getPreferences(0).getString(PREF_ADDRESSES, null);	//"192.168.1.101|192.168.1.102|192.168.1.3";
+        final String nameStr = this.getPreferences(MODE_PRIVATE).getString(PREF_NAMES, null);			//"Living Room|Bed Room|Kitchen";
+        final String addressesStr = this.getPreferences(MODE_PRIVATE).getString(PREF_ADDRESSES, null);	//"192.168.1.101|192.168.1.102|192.168.1.3";
+        final String portsStr = this.getPreferences(MODE_PRIVATE).getString(PREF_PORTS, null);			//"6546|6546|6546"
         
         if(addressesStr != null && nameStr != null)
         {
@@ -50,9 +52,9 @@ public class MythMotePreferences extends PreferenceActivity{
 	        }
 	        
 	        //create preference objects and add to preference screen
-	        for(int i=0; 
-	        	i<this.locationAddresses.length && i<this.locationNames.length; 
-	        	i++)
+	        int locationLen = this.locationAddresses.length;
+	        int namesLen = this.locationNames.length;
+	        for(int i=0; i<locationLen && i<namesLen; i++)
 	        {
 	        	prefScreen.addPreference(
 	        			MythMotePreferences.createPreference(this, this.locationNames[i], this.locationAddresses[i]));
