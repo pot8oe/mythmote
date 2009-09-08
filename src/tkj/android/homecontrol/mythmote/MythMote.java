@@ -3,11 +3,9 @@ package tkj.android.homecontrol.mythmote;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
-import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +47,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     public void onResume()
     {
     	super.onResume();
-
+    	_comm.Connect("192.168.1.100", 6564);
     }
     
     @Override
@@ -61,7 +59,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     		
     		
     		
-    		_comm.Connect("192.168.1.100", 6564);
+    		
     	}
     	else
     	{
@@ -112,38 +110,20 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 		
 		if(tag == NAME_NAV_TAB)
 		{
-			return this.getNavigationTabLayout();
+			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
 		}
 		else if(tag == NAME_MEDIA_TAB)
 		{
-			return this.getMediaControlTabLayout();
+			return this.getLayoutInflater().inflate(R.layout.mediacontrol, this.getTabHost().getTabContentView(), false);
 		}
 		else if(tag == NAME_NUMPAD_TAB)
 		{
-			return this.getNumberPadTabLayout();
+			return this.getLayoutInflater().inflate(R.layout.numberpad, this.getTabHost().getTabContentView(), false);
 		}
 		else
 		{
-			return this.getNavigationTabLayout();
+			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
 		}
-	}
-	
-	/** Reads the Navigation tab layout from resources */
-	protected View getNavigationTabLayout()
-	{
-		return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
-	}
-	
-	/** Reads the Media Control tab layout from resources */
-	protected View getMediaControlTabLayout()
-	{
-		return this.getLayoutInflater().inflate(R.layout.mediacontrol, this.getTabHost().getTabContentView(), false);
-	}
-	
-	/** Reads the Number pad tab layout from resources */
-	protected View getNumberPadTabLayout()
-	{
-		return this.getLayoutInflater().inflate(R.layout.numberpad, this.getTabHost().getTabContentView(), false);
 	}
 
 }
