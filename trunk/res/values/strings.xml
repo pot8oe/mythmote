@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string name="app_name">mythmote</string>
+<string name="app_name">mythmote</string>
 <string name="settings_menu_str">Settings</string>
-<string name="record">Rec</string>
-<string name="play">Play</string>
-<string name="stop">Stop</string>
-<string name="rewind">Rew</string>
-<string name="fastforward">FF</string>
-<string name="up">Up</string>
-<string name="down">Down</string>
-<string name="left">Left</string>
-<string name="right">Right</string>
-<string name="select">Select</string>
-<string name="add_location">New Location</string>
-<string name="navigation">Navigation</string>
-<string name="media">Media</string>
-<string name="numpad">Numers</string>
+<string name="record_str">Rec</string>
+<string name="play_str">Play</string>
+<string name="stop_str">Stop</string>
+<string name="rewind_str">Rew</string>
+<string name="fastforward_str">FF</string>
+<string name="up_str">Up</string>
+<string name="down_str">Down</string>
+<string name="left_str">Left</string>
+<string name="right_str">Right</string>
+<string name="select_str">Select</string>
+<string name="add_location_str">New Location</string>
+<string name="navigation_str">Navigation</string>
+<string name="media_str">Media</string>
+<string name="numpad_str">Numbers</string>
 
+<string name="enable_wifi_question_str">WiFi is not enabled and is required for proper application operation. Do you want to turn WiFi on now?</string>
+<string name="enable_wifi_str">Enable Wifi</string>
+<string name="exit_app_str">Exit mythmote</string>
+<string name="enabling_wifi_str">Enabling WiFI...</string>
 </resources>
