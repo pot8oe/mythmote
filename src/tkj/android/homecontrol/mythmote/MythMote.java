@@ -22,22 +22,51 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	
+	private static MythCom _comm;
+
+	
 	/** Called when the activity is first created.*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        //create comm class
+        _comm = new MythCom(this);
         
-
+        //create tab UI
         final TabHost tabHost = getTabHost();
         tabHost.addTab(tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
-        		this.getResources().getString(R.string.navigation),
+        		this.getResources().getString(R.string.navigation_str),
         		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
         tabHost.addTab(tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
-        		this.getResources().getString(R.string.media),
+        		this.getResources().getString(R.string.media_str),
         		this.getResources().getDrawable(R.drawable.media)).setContent(this));
         tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
         		"Num Pad").setContent(this));
+    }
+    
+    @Override
+    public void onResume()
+    {
+    	super.onResume();
+
+    }
+    
+    @Override
+    public void onWindowFocusChanged  (boolean hasFocus)
+    {
+    	if(hasFocus)
+    	{
+    		
+    		
+    		
+    		
+    		_comm.Connect("192.168.1.100", 6564);
+    	}
+    	else
+    	{
+    		_comm.Disconnect();
+    	}
     }
     
     /** Called to create the options menu once.  */
@@ -123,55 +152,4 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////
-////
-////	OLD GUI CREATION DONE IN CODE
-////
-////
-///* Table */
-//final TableLayout tLayout = new TableLayout(this);
-//tLayout.setStretchAllColumns(true);
-//
-///* Rows */
-//final TableRow row1 = new TableRow(this);
-//final TableRow row2 = new TableRow(this);
-//
-///*  Buttons */
-//final Button homeButton = mythmote.CreateButton(this, "Home", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//final Button guideButton = mythmote.CreateButton(this, "Guide", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//final Button tvButton = mythmote.CreateButton(this, "Live TV", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//final Button recordedTvButton = mythmote.CreateButton(this, "Rec TV", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//final Button musicButton = mythmote.CreateButton(this, "Music", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//final Button videoButton = mythmote.CreateButton(this, "Video", JUMP_BUTTON_WIDTH, JUMP_BUTTON_HEIGHT);
-//
-///* Add buttons to rows */
-//row1.addView(homeButton);
-//row1.addView(guideButton);
-//row1.addView(tvButton);
-//
-//row2.addView(recordedTvButton);
-//row2.addView(musicButton);
-//row2.addView(videoButton);
-//
-///* Add rows to table */
-//tLayout.addView(row1);
-//tLayout.addView(row2);
-//
-//
-//return tLayout;
 
