@@ -16,14 +16,14 @@
 
 <TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 </TableRow>
-<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView><Button android:id="@+id/Button07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:bufferType="normal" android:autoText="false" android:drawableTop="@drawable/up" android:text="@string/up"></Button>
+<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView><Button android:id="@+id/Button07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:bufferType="normal" android:autoText="false" android:drawableTop="@drawable/up" android:text="@string/up_str"></Button>
 </TableRow>
-<TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:id="@+id/Button08" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/left" android:text="@string/left"></Button>
-<Button android:id="@+id/Button09" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/square" android:text="@string/select"></Button>
-<Button android:id="@+id/Button10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/right" android:text="@string/right"></Button>
+<TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:id="@+id/Button08" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/left" android:text="@string/left_str"></Button>
+<Button android:id="@+id/Button09" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/square" android:text="@string/select_str"></Button>
+<Button android:id="@+id/Button10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/right" android:text="@string/right_str"></Button>
 </TableRow>
 <TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content">
 <TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-<Button android:id="@+id/Button11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/down" android:text="@string/down"></Button>
+<Button android:id="@+id/Button11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/down" android:text="@string/down_str"></Button>
 </TableRow><TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
 </TableLayout>
