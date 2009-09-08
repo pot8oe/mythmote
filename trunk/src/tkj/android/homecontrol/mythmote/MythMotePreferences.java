@@ -4,7 +4,6 @@ package tkj.android.homecontrol.mythmote;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -22,6 +21,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	
 	private String[] locationNames = null;
 	private String[] locationAddresses = null;
+	private int[] locationPorts = null;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, NEW_LOCATION_ID, 0, R.string.add_location).setIcon(R.drawable.settings);
+        menu.add(0, NEW_LOCATION_ID, 0, R.string.add_location_str).setIcon(R.drawable.settings);
         return result;
 	}
 	
