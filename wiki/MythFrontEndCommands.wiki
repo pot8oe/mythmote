@@ -1,0 +1,80 @@
+#List of commands supported by mythfrontend through the network remote control interface.
+
+= Introduction =
+
+= Valid Commands =
+<pre>
+jump               - Jump to a specified location in Myth
+key                - Send a keypress to the program
+play               - Playback related commands
+query              - Queries
+exit               - Exit Network Control
+</pre>
+
+
+== jump ==
+<pre>
+Jumps to a JUMPPOINT in the frontend.
+
+JUMPPOINT is one of the following:
+channelpriorities    - Channel Recording Priorities
+channelrecpriority   - Channel Recording Priorities
+deletebox            - TV Recording Deletion
+deleterecordings     - TV Recording Deletion
+flixbrowse           - Netflix Browser
+flixhistory          - Netflix History
+flixqueue            - Netflix Queue
+guidegrid            - Program Guide
+livetv               - Live TV
+livetvinguide        - Live TV In Guide
+mainmenu             - Main Menu
+managerecordings     - Manage Recordings / Fix Conflicts
+manualbox            - Manual Record Scheduling
+manualrecording      - Manual Record Scheduling
+musicplaylists       - Select music playlists
+mythgallery          - MythGallery
+mythgame             - MythGame
+mythmovietime        - MythMovieTime
+mythnews             - MythNews
+mythvideo            - MythVideo
+mythweather          - MythWeather
+playbackbox          - TV Recording Playback
+playbackrecordings   - TV Recording Playback
+playdvd              - Play DVD
+playmusic            - Play music
+previousbox          - Previously Recorded
+progfinder           - Program Finder
+programfinder        - Program Finder
+programguide         - Program Guide
+programrecpriority   - Program Recording Priorities
+recordingpriorities  - Program Recording Priorities
+ripcd                - Rip CD
+ripdvd               - Rip DVD
+statusbox            - Status Screen
+videobrowser         - Video Browser
+videogallery         - Video Gallery
+videolistings        - Video Listings
+videomanager         - Video Manager
+viewscheduled        - Manage Recordings / Fix Conflicts
+zoneminderconsole    - ZoneMinder Console
+zoneminderevents     - ZoneMinder Events
+zoneminderliveview   - ZoneMinder Live View
+</pre>
+
+== key ==
+<pre>
+
+</pre>
+
+== play ==
+<pre>
+
+</pre>
+
+== query ==
+<pre>
+
+</pre>
+
+== exit ==
+Disconnects from network control
