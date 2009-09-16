@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +17,9 @@ import android.view.View.OnClickListener;
 
 
 
-public class MythMote extends TabActivity  implements TabHost.TabContentFactory {
-    
+public class MythMote extends TabActivity  implements TabHost.TabContentFactory {	
+
+
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final String NAME_NAV_TAB = "TabNavigation";
@@ -85,9 +87,33 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
         		"Num Pad").setContent(this)); 
         
+        tabHost.setCurrentTab(0);
         
-        //setup event handlers
-        setupNavigationPanelButtonEvents();
+        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+
+			@Override
+			public void onTabChanged(String arg0) {
+				
+				int tabIndex = tabHost.getCurrentTab();
+				
+				switch(tabIndex)
+				{
+				case 0://navigation
+					setupNavigationPanelButtonEvents();
+					break;
+					
+				case 1://media
+					setupMediaPanelButtonEvents();
+					break;
+					
+				case 2://num pad
+					setupNumberPadButtonEvents();
+					break;
+				};
+				
+			}
+        	
+        });
     }
     
     @Override
@@ -104,21 +130,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	
     	_comm.Disconnect();
 
-    }
-    
-    @Override
-    public void onWindowFocusChanged  (boolean hasFocus)
-    {
-    	super.onWindowFocusChanged(hasFocus);
-    	
-    	if(hasFocus)
-    	{
-    		
-    	}
-    	else
-    	{
-    		
-    	}
     }
     
     /** Called to create the options menu once.  */
@@ -156,11 +167,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	return false;
     }
     
-    public static void SendMythFrontendCommand()
-    {
-    	
-    }
-    
     private void setupNavigationPanelButtonEvents()
     {
     	// jump buttons.
@@ -181,8 +187,35 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    
     }
     
+    private void setupMediaPanelButtonEvents()
+    {
+	    //TODO: implement media panel and button events
+    }
     
-    private void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
+    private void setupNumberPadButtonEvents()
+    {
+    	//numbers
+    	this.setupKeyButtonEvent(R.id.Button0, "0");
+	    this.setupKeyButtonEvent(R.id.Button1, "1");
+	    this.setupKeyButtonEvent(R.id.Button2, "2");
+	    this.setupKeyButtonEvent(R.id.Button3, "3");
+	    this.setupKeyButtonEvent(R.id.Button4, "4");
+	    this.setupKeyButtonEvent(R.id.Button5, "5");
+	    this.setupKeyButtonEvent(R.id.Button6, "6");
+	    this.setupKeyButtonEvent(R.id.Button7, "7");
+	    this.setupKeyButtonEvent(R.id.Button8, "8");
+	    this.setupKeyButtonEvent(R.id.Button9, "9");
+	    
+	    
+	    //control
+	    this.setupKeyButtonEvent(R.id.ButtonBackspace, MythCom.KEY_backspace);
+	    this.setupKeyButtonEvent(R.id.ButtonEnter, MythCom.KEY_enter);
+	    
+	    //TODO: implement send keyboard input button
+    }
+    
+    
+    private final void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
     {
     	final Button buttonJump = (Button) this.findViewById(buttonViewId);
 	    buttonJump.setOnClickListener(new OnClickListener() {
@@ -193,7 +226,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    });
     }
     
-    private void setupKeyButtonEvent(int buttonViewId, final String sendKey)
+    private final void setupKeyButtonEvent(int buttonViewId, final String sendKey)
     {
     	final Button button = (Button) this.findViewById(buttonViewId);
 	    button.setOnClickListener(new OnClickListener() {
