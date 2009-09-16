@@ -71,6 +71,7 @@ public class MythCom {
 	public static final String KEY_left = "left";
 	public static final String KEY_right = "right";
 	public static final String KEY_enter = "enter";
+	public static final String KEY_backspace = "backspace";
 	
 	
 	public static final int SOCKET_TIMEOUT = 2000;
