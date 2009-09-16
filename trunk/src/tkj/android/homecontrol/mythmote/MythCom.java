@@ -5,19 +5,15 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.EventListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.Handler;
+import android.view.Gravity;
+import android.widget.Toast;
 
 public class MythCom {
 	
@@ -71,6 +67,10 @@ public class MythCom {
 	public static final String JUMPPOINT_zoneminderliveview = "zoneminderliveview";   //- ZoneMinder Live View
 	
 	public static final String KEY_up = "up";
+	public static final String KEY_down = "down";
+	public static final String KEY_left = "left";
+	public static final String KEY_right = "right";
+	public static final String KEY_enter = "enter";
 	
 	
 	public static final int SOCKET_TIMEOUT = 2000;
@@ -78,6 +78,7 @@ public class MythCom {
 	public static final int CANCEL = 1;
 	public static final int STATUS_DISCONNECTED = 0;
 	public static final int STATUS_CONNECTED = 1;
+	public static final int STATUS_CONNECTING = 3;
 	public static final int STATUS_ERROR = 99;
 	
 	private static Socket _socket;
@@ -85,8 +86,21 @@ public class MythCom {
 	private static Activity _parent;
 	private static ConnectivityManager _conMgr;
 	private static String _status;
+	private static String _tmpStatus;
+	private static int _tmpStatusCode;
 	private static StatusChangedEventListener _statusListener;
+	private static String _address;
+	private static int _port;
 	
+	private final Handler mHandler = new Handler();
+	private final Runnable mSocketActionComplete = new Runnable()
+	{
+		public void run()
+		{
+			SetStatus(_tmpStatus, _tmpStatusCode);
+		}
+		
+	};
 
 	
 	/** Parent activity is used to get context and to close app when wifi is denied */
@@ -99,40 +113,23 @@ public class MythCom {
 	/** Connects to the given address and port. Any existing connection will be broken first **/
 	public void Connect(String address, int port)
 	{
-		try
-		{
 			//disconnect before we connect
 			this.Disconnect();
-
-			int ipHash = java.net.InetAddress.getByName(address).hashCode();
 			
-			this.SetStatus("Connecting", STATUS_DISCONNECTED);
-			if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
-			{
-				//create a socket connecting to the address on the requested port
-				_socket = new Socket();//address, port
-				_socket.connect(new InetSocketAddress(InetAddress.getByName(address), port), SOCKET_TIMEOUT);
-				_outputStream = new OutputStreamWriter(_socket.getOutputStream());
-				if(_socket.isConnected() && _outputStream != null)
-					this.SetStatus(_parent.getString(R.string.connected_str), STATUS_CONNECTED);
-				else
-					this.SetStatus("Unknown error getting output stream.", STATUS_ERROR);
-			}
-			else
-			{
-				//TODO: report to user that they need WiFi turned on and connected
-				this.SetStatus(_parent.getString(R.string.no_route_to_host_str), STATUS_ERROR);
-			}
-		
-		} 
-		catch (UnknownHostException e)
-		{
-			this.SetStatus("Unknown host: " + address, STATUS_ERROR);
-		}
-		catch (IOException e)
-		{
-			this.SetStatus("I/O Failed for host: " + address, STATUS_ERROR);
-		}
+			//set address and port
+			_address = address;
+			_port = port;
+			
+			//create toast for all to eat and enjoy
+			Toast toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+
+			this.SetStatus("Connecting", STATUS_CONNECTING);
+			
+			//create a socket connecting to the address on the requested port
+			_socket = new Socket();//address, port
+			this.connectSocket();
 	}
 	
 	/** Closes the socket if it exists and it is already connected **/
@@ -215,7 +212,55 @@ public class MythCom {
 	
 	
 	
-	
+	private void connectSocket()
+	{
+		Thread thread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					int ipHash = java.net.InetAddress.getByName(_address).hashCode();
+					if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
+					{
+						_socket.connect(new InetSocketAddress(InetAddress.getByName(_address), _port), SOCKET_TIMEOUT);
+						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
+						
+						//check if everything was connected OK
+						if(!_socket.isConnected() || _outputStream == null)
+						{
+							_tmpStatus = "Unknown error getting output stream.";
+							_tmpStatusCode = STATUS_ERROR;
+						}
+						else
+						{
+							_tmpStatus = _address + " - Connected";
+							_tmpStatusCode = STATUS_CONNECTED;
+						}
+					}
+					else
+					{
+						_tmpStatus = "No route to host: " + _address;
+						_tmpStatusCode = STATUS_ERROR;
+					}
+				}
+				catch (UnknownHostException e)
+				{
+					_tmpStatus = "Unknown host: " + _address;
+					_tmpStatusCode = STATUS_ERROR;
+				}
+				catch (IOException e)
+				{
+					_tmpStatus = "I/O Error connecting to host: " + _address;
+					_tmpStatusCode = STATUS_ERROR;
+				}
+				
+				//post results
+				mHandler.post(mSocketActionComplete);
+			}
+		};
+		thread.start();
+	}
 	
 	
 	private void SetStatus(String StatusMsg, int code)
