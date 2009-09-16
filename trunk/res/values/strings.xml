@@ -22,4 +22,8 @@
 <string name="enable_wifi_str">Enable Wifi</string>
 <string name="exit_app_str">Exit mythmote</string>
 <string name="enabling_wifi_str">Enabling WiFI...</string>
+<string name="ok_str">OK</string>
+<string name="no_route_to_host_str">No route to host</string>
+<string name="connected_str">Connected</string>
+<string name="reconnect_str">Reconnect</string>
 </resources>
