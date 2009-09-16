@@ -55,6 +55,10 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     			{
     				setTitleColor(Color.GREEN);
     			}
+    			else if(code == MythCom.STATUS_CONNECTING)
+    			{
+    				setTitleColor(Color.YELLOW);
+    			}
     		}
     		
     	};
@@ -83,7 +87,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         
         
         //setup event handlers
-        setupButtonEvents();
+        setupNavigationPanelButtonEvents();
     }
     
     @Override
@@ -157,33 +161,47 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	
     }
     
-    private void setupButtonEvents()
+    private void setupNavigationPanelButtonEvents()
     {
-    	
-	    final Button buttonJump1 = (Button) this.findViewById(R.id.ButtonJump1);
-	    buttonJump1.setOnClickListener(new OnClickListener() {
+    	// jump buttons.
+    	// TODO: Make these user definable in a later release
+    	this.setupJumpButtonEvent(R.id.ButtonJump1, MythCom.JUMPPOINT_mainmenu);
+    	this.setupJumpButtonEvent(R.id.ButtonJump2, MythCom.JUMPPOINT_livetv);
+    	this.setupJumpButtonEvent(R.id.ButtonJump3, MythCom.JUMPPOINT_playbackrecordings);
+    	this.setupJumpButtonEvent(R.id.ButtonJump4, MythCom.JUMPPOINT_playmusic);
+    	this.setupJumpButtonEvent(R.id.ButtonJump5, MythCom.JUMPPOINT_videogallery);
+    	this.setupJumpButtonEvent(R.id.ButtonJump6, MythCom.JUMPPOINT_livetvinguide);
+	    
+	    //navigation buttons
+	    this.setupKeyButtonEvent(R.id.ButtonUp, MythCom.KEY_up);
+	    this.setupKeyButtonEvent(R.id.ButtonDown, MythCom.KEY_down);
+	    this.setupKeyButtonEvent(R.id.ButtonLeft, MythCom.KEY_left);
+	    this.setupKeyButtonEvent(R.id.ButtonRight, MythCom.KEY_right);
+	    this.setupKeyButtonEvent(R.id.ButtonSelect, MythCom.KEY_enter);
+	    
+    }
+    
+    
+    private void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
+    {
+    	final Button buttonJump = (Button) this.findViewById(buttonViewId);
+	    buttonJump.setOnClickListener(new OnClickListener() {
 	        public void onClick(View v) {
 	            // Perform action on clicks
-	            _comm.SendJumpCommand(MythCom.JUMPPOINT_mainmenu);
+	            _comm.SendJumpCommand(jumpPoint);
 	        }
 	    });
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    final Button buttonUp = (Button) this.findViewById(R.id.ButtonUp);
-	    buttonUp.setOnClickListener(new OnClickListener() {
+    }
+    
+    private void setupKeyButtonEvent(int buttonViewId, final String sendKey)
+    {
+    	final Button button = (Button) this.findViewById(buttonViewId);
+	    button.setOnClickListener(new OnClickListener() {
 	        public void onClick(View v) {
 	            // Perform action on clicks
-	            _comm.SendKey(MythCom.KEY_up);
+	            _comm.SendKey(sendKey);
 	        }
 	    });
-	    
-	    
-	    
     }
 
 
