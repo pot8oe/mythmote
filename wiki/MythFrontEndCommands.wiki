@@ -3,17 +3,17 @@
 = Introduction =
 
 = Valid Commands =
-<pre>
+{{{
 jump               - Jump to a specified location in Myth
 key                - Send a keypress to the program
 play               - Playback related commands
 query              - Queries
 exit               - Exit Network Control
-</pre>
+}}}
 
 
 == jump ==
-<pre>
+{{{
 Jumps to a JUMPPOINT in the frontend.
 
 JUMPPOINT is one of the following:
@@ -59,20 +59,27 @@ viewscheduled        - Manage Recordings / Fix Conflicts
 zoneminderconsole    - ZoneMinder Console
 zoneminderevents     - ZoneMinder Events
 zoneminderliveview   - ZoneMinder Live View
-</pre>
+}}}
 
 == key ==
-<pre>
+{{{
 key LETTER           - Send the letter key specified
 key NUMBER           - Send the number key specified
 key CODE             - Send one of the following key codes
 
-#, $, %, &, (, ), *, +, ,, -, ., /, :, ;, <, =, >, ?, [, \, ], _, ampersand, asterisk, backslash, backspace, backtab, bar, bracketleft, bracketright, colon, comma, delete, dollar, down, end, enter, equal, escape, f1, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f2, f20, f21, f22, f23, f24, f3, f4, f5, f6, f7, f8, f9, greater, hash, home, insert, left, less, minus, numbersign, pagedown, pageup, parenleft, parenright, percent, period, pipe, plus, poundsign, question, return, right, semicolon, slash, space, tab, underscore, up, |
+#, $, %, &, (, ), *, +, ,, -, ., /, :, ;, <, =, >, ?, [, \, ], _, 
+ampersand, asterisk, backslash, backspace, backtab, bar, bracketleft, 
+bracketright, colon, comma, delete, dollar, down, end, enter, equal, 
+escape, f1, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f2, f20, 
+f21, f22, f23, f24, f3, f4, f5, f6, f7, f8, f9, greater, hash, home, 
+insert, left, less, minus, numbersign, pagedown, pageup, parenleft, 
+parenright, percent, period, pipe, plus, poundsign, question, return, 
+right, semicolon, slash, space, tab, underscore, up, |
 
-</pre>
+}}}
 
 == play ==
-<pre>
+{{{
 play channel up       - Change channel Up
 play channel down     - Change channel Down
 play channel NUMBER   - Change to a specific channel number
@@ -104,7 +111,7 @@ play stop             - Stop playback
 </pre>
 
 == query ==
-<pre>
+{{{
 query location        - Query current screen or location
 query recordings      - List currently available recordings
 query recording CHANID STARTTIME
@@ -113,7 +120,7 @@ query liveTV          - List current TV schedule
 query liveTV CHANID   - Query current program for specified channel
 query time            - Query current time on server
 
-</pre>
+}}}
 
 == exit ==
 Disconnects from network control
