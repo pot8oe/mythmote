@@ -108,7 +108,7 @@ play speed 8x         - Playback at 8x speed
 play speed 16x        - Playback at 16x speed
 play stop             - Stop playback
 
-</pre>
+}}}
 
 == query ==
 {{{
