@@ -161,7 +161,7 @@ public class MythCom {
 		{
 			try
 			{
-				_outputStream.write(String.format("jump %s\r", jumpPoint));
+				_outputStream.write(String.format("jump %s\n", jumpPoint));
 				_outputStream.flush();
 			}
 			catch (IOException e)
@@ -177,7 +177,7 @@ public class MythCom {
 		{
 			try
 			{
-				_outputStream.write(String.format("key %s\r", key));
+				_outputStream.write(String.format("key %s\n", key));
 				_outputStream.flush();
 			}
 			catch (IOException e)
