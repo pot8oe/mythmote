@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MythMotePreferences extends PreferenceActivity{
 
@@ -65,7 +67,7 @@ public class MythMotePreferences extends PreferenceActivity{
         {
         	// no preferences saved yet
         	prefScreen.addPreference(
-    	        	MythMotePreferences.createPreference(this, "Create a new location", null));
+    	        	MythMotePreferences.createPreference(this, this.getString(R.string.add_location_str), null));
         }
         
         //set preference screen
@@ -79,12 +81,27 @@ public class MythMotePreferences extends PreferenceActivity{
         return result;
 	}
 	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+		if(item.getItemId() == NEW_LOCATION_ID)
+		{
+			showLocationEditDialog(this);
+		}
+		return true;
+    }
 	
 	
 	
+	private void showLocationEditDialog(Context context)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(context.getString(R.string.add_location_str));
+		builder.setView(this.findViewById(R.layout.locationeditor));
+		builder.show();
+	}
 	
-	
-	private static Preference createPreference(Context context, String name, String value)
+	private static Preference createPreference(final Context context, String name, String value)
 	{
 		Preference pref = new Preference(context);
 		pref.setKey(name);
@@ -92,15 +109,37 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setDefaultValue(value);
 		pref.setEnabled(true);
 		pref.setSummary(value);
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				
+				//if the add new location preference is clicked
+				if(preference.getKey() == context.getString(R.string.add_location_str))
+				{
+					
+				}
+				else
+				{
+					
+				}
+				
+				return false;
+			}
+			
+		});
 		return pref;
 	}
-	private static Preference createPreference(Context context, String name, String value, boolean enabled)
-	{
-		Preference pref = new Preference(context);
-		pref.setKey(name);
-		pref.setTitle(name);
-		pref.setDefaultValue(value);
-		pref.setEnabled(enabled);
-		return pref;
-	}
+	
+	
+	
+//	private static Preference createPreference(Context context, String name, String value, boolean enabled)
+//	{
+//		Preference pref = new Preference(context);
+//		pref.setKey(name);
+//		pref.setTitle(name);
+//		pref.setDefaultValue(value);
+//		pref.setEnabled(enabled);
+//		return pref;
+//	}
 }
