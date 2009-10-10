@@ -122,7 +122,7 @@ public class MythCom {
 			_port = port;
 			
 			//create toast for all to eat and enjoy
-			Toast toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 
