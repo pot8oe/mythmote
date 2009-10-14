@@ -27,4 +27,5 @@
 <string name="connected_str">Connected</string>
 <string name="reconnect_str">Reconnect</string>
 <string name="attempting_to_connect_str">Attempting to connect to host</string>
+<string name="esc_string">Escape</string>
 </resources>
