@@ -4,6 +4,7 @@ package tkj.android.homecontrol.mythmote;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
@@ -28,9 +29,8 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	
 	private static MythCom _comm;
 	private static MythCom.StatusChangedEventListener _statusChanged;
-	private static String _address = "192.168.1.100";
-	private static int _port = 6546;
-
+	private static FrontendLocation _location = new FrontendLocation();
+	private static int selected = -1;
 	
 	/** Called when the activity is first created.*/
     @Override
@@ -64,12 +64,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     		}
     		
     	};
-        
-    	//request window features
-        super.requestWindowFeature(Window.FEATURE_RIGHT_ICON);
-       // super.setProgressBarIndeterminate(true);
-        super.setProgressBarIndeterminateVisibility(true);
-        this.setProgress(9000);
         
         //create comm class
         _comm = new MythCom(this);
@@ -120,7 +114,26 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     public void onResume()
     {
     	super.onResume();
-    	_comm.Connect(_address, _port);
+    	 //get selected frontend id
+        selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+        	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+        
+        LocationDbAdapter dbAdatper = new LocationDbAdapter(this);
+        dbAdatper.open();
+        Cursor cursor = dbAdatper.fetchFrontendLocation(selected);
+        if(cursor != null && cursor.getCount() > 0)
+        {
+        	_location.ID = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
+        	_location.Name = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
+        	_location.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
+        	_location.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
+        }
+        cursor.close();
+        dbAdatper.close();
+    	
+    	
+    	if(_location != null)
+    		_comm.Connect(_location.Address, _location.Port);
     }
     
     @Override
@@ -153,7 +166,8 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	}
     	else if(item.getItemId() == RECONNECT_ID)
     	{
-    		_comm.Connect(_address, _port);
+        	if(_location != null)
+        		_comm.Connect(_location.Address, _location.Port);
     	}
 	   }
 	   catch(android.content.ActivityNotFoundException ex)
