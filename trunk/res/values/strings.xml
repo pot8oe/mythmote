@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="port_example_string">default: 6546</string>
+    <string name="ip_Address_str">IP Address</string>
+    <string name="location_name_str">Location Name</string>
+    
+    
+    <string name="cancel_str">Cancel</string>
+    <string name="save_str">Save</string>
+    <string name="port_str">Port</string>
+    <string name="address_str">Address</string>
+    <string name="name_str">Name</string>
     
 <string name="app_name">mythmote</string>
 <string name="settings_menu_str">Settings</string>
@@ -26,6 +36,13 @@
 <string name="no_route_to_host_str">No route to host</string>
 <string name="connected_str">Connected</string>
 <string name="reconnect_str">Reconnect</string>
-<string name="attempting_to_connect_str">Attempting to connect to host</string>
-<string name="esc_string">Escape</string>
+<string name="attempting_to_connect_str">Attempting to connect to host</string><string name="esc_string">Escape</string>
+
+<string name="selected_location_str">Selected Location</string>
+<string name="location_list_str">Location List</string>
+<string name="error_input_str">Input Error</string>
+<string name="error_invalid_name_str">Invalid Name</string>
+<string name="error_invalid_address_str">Invalid Address</string>
+<string name="error_invalid_port_str">Invalid Port</string>
+<string name="delete_location_str">Delete Location</string>
 </resources>
