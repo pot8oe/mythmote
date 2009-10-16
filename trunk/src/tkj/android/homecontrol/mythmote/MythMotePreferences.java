@@ -2,82 +2,122 @@
 package tkj.android.homecontrol.mythmote;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.database.Cursor;
+import android.database.sqlite.*;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MythMotePreferences extends PreferenceActivity{
 
 	public static final int NEW_LOCATION_ID = Menu.FIRST;
+	public static final int DELETE_LOCATION_ID = Menu.FIRST + 1;
+	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
+	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
+	public static final String SELECTED_LOCATION = "Selected Location";
+	public static final int REQUEST_LOCATIONEDITOR = 0;
 	
-	static final String SEPERATOR_PIPE_REGEX = "\\|";
-	static final String PREF_ADDRESSES = "frontend-addresses";
-	static final String PREF_NAMES = "frontend-names";
-	static final String PREF_PORTS = "frontend-ports";
-	
-	private String[] locationNames = null;
-	private String[] locationAddresses = null;
-	private int[] locationPorts = null;
-	
+	private static int _idIndex;
+	private static int _addressIndex;
+	private static int _nameIndex;
+	private static int _portIndex;
+    
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         //create base preference screen
         PreferenceScreen prefScreen = this.getPreferenceManager().createPreferenceScreen(this);
+       
+        //create Categories
+        PreferenceCategory selectedCat = new PreferenceCategory(this);
+        selectedCat.setTitle(R.string.selected_location_str);
+        PreferenceCategory locationListCat = new PreferenceCategory(this);
+        locationListCat.setTitle(R.string.location_list_str);
+
+        //add categories to preference screen
+        prefScreen.addPreference(selectedCat);
+        prefScreen.addPreference(locationListCat);
         
-        //load preferences
-        final String nameStr = this.getPreferences(MODE_PRIVATE).getString(PREF_NAMES, null);			//"Living Room|Bed Room|Kitchen";
-        final String addressesStr = this.getPreferences(MODE_PRIVATE).getString(PREF_ADDRESSES, null);	//"192.168.1.101|192.168.1.102|192.168.1.3";
-        final String portsStr = this.getPreferences(MODE_PRIVATE).getString(PREF_PORTS, null);			//"6546|6546|6546"
+//        //create new/delte location preference(s)
+//        locationListCat.addPreference(
+//        		MythMotePreferences.createNewLocationPreference(this, this.getString(R.string.add_location_str), null));
+//        locationListCat.addPreference(
+//        		MythMotePreferences.createDeleteLocationPreference(this, this.getString(R.string.delete_location_str), null));
+
         
-        if(addressesStr != null && nameStr != null)
+        //open DB
+        LocationDbAdapter _dbAdapter = new LocationDbAdapter(this);
+        _dbAdapter.open();
+        
+        //get list of locations
+        Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
+        
+        //get column indexes 
+        _idIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID);
+        _addressIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS);
+        _nameIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_NAME);
+        _portIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_PORT);
+        
+        //determine if we have locations saved
+        int count = cursor.getCount();
+        if(count > 0 && cursor.moveToFirst())
         {
-        	//split into individual addresses
-	        this.locationAddresses = addressesStr.split(SEPERATOR_PIPE_REGEX);
-	        this.locationNames = nameStr.split(SEPERATOR_PIPE_REGEX);
-	        
-	        if(this.locationAddresses == null || this.locationNames == null || this.locationAddresses.length != this.locationNames.length)
-	        {
-	        	//warn that settings may be corrupt
-	        	AlertDialog.Builder diag = new AlertDialog.Builder(this);
-				diag.setMessage("Settings may be corrupt!");
-				diag.setTitle("Warning!");
-				diag.setNeutralButton("OK", null);
-				diag.show();
-	        }
-	        
-	        //create preference objects and add to preference screen
-	        int locationLen = this.locationAddresses.length;
-	        int namesLen = this.locationNames.length;
-	        for(int i=0; i<locationLen && i<namesLen; i++)
-	        {
-	        	prefScreen.addPreference(
-	        			MythMotePreferences.createPreference(this, this.locationNames[i], this.locationAddresses[i]));
-	        }
-	        
+        	
+            //get selected frontend id
+            int selected = this.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+            	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, cursor.getInt(_idIndex));
+        	
+        	//put each location in the preference list
+        	for(int i=0; i<count; i++)
+        	{
+        		locationListCat.addPreference(
+        				MythMotePreferences.createLocationPreference(
+        						this,
+        						cursor.getString(_idIndex),
+        						cursor.getString(_nameIndex), 
+        						cursor.getString(_addressIndex)));
+        		
+        		if(cursor.getInt(_idIndex) == selected)
+        		{
+        			//create preference for selected location
+        			selectedCat.addPreference(
+                			MythMotePreferences.createSelectedLocationPreference(
+                					this, SELECTED_LOCATION, cursor.getString(_nameIndex)));
+        		}
+
+        		cursor.moveToNext();
+        	}
         }
-        else
-        {
-        	// no preferences saved yet
-        	prefScreen.addPreference(
-    	        	MythMotePreferences.createPreference(this, this.getString(R.string.add_location_str), null));
-        }
+        cursor.close();
+        _dbAdapter.close();
+        
         
         //set preference screen
 		this.setPreferenceScreen(prefScreen);
     }
 	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
         menu.add(0, NEW_LOCATION_ID, 0, R.string.add_location_str).setIcon(R.drawable.settings);
+        menu.add(0, DELETE_LOCATION_ID, 0, R.string.delete_location_str).setIcon(R.drawable.settings);
         return result;
 	}
 	
@@ -86,22 +126,170 @@ public class MythMotePreferences extends PreferenceActivity{
     {
 		if(item.getItemId() == NEW_LOCATION_ID)
 		{
-			showLocationEditDialog(this);
+			showLocationEditDialog(this, null);
+		}
+		else if(item.getItemId() == DELETE_LOCATION_ID)
+		{
+			LocationDbAdapter _dbAdapter = new LocationDbAdapter(this);
+			_dbAdapter.open();
+			final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
+	        
+	        int count = cursor.getCount();
+	        if(count > 0 && cursor.moveToFirst())
+	        {
+	        	final String[] names = new String[count];
+	        	final int[] ids = new int[count];
+	        	for(int i=0; i<count; i++)
+	        	{
+	        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
+	        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
+	        		cursor.moveToNext();
+	        	}
+	        	
+	        	//show list of locations as a single selected list
+	        	final Context context = this;
+	        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        	builder.setTitle(R.string.selected_location_str);
+	        	builder.setItems(names, new DialogInterface.OnClickListener(){
+
+	        		@Override
+	        		public void onClick(DialogInterface dialog,
+	        				int which) {
+	        			LocationDbAdapter dbAdapter = new LocationDbAdapter(context);
+	        			dbAdapter.open();
+	        			dbAdapter.deleteFrontendLocation(ids[which]);
+	        			dbAdapter.close();
+	        		}});
+	        	builder.show();
+	        }
+			cursor.close();
+	        _dbAdapter.close();
 		}
 		return true;
     }
+
 	
 	
-	
-	private void showLocationEditDialog(Context context)
+	private static void showLocationEditDialog(Activity context, FrontendLocation location)
 	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(context.getString(R.string.add_location_str));
-		builder.setView(this.findViewById(R.layout.locationeditor));
-		builder.show();
+		Intent intent = new Intent(context, tkj.android.homecontrol.mythmote.LocationEditor.class);
+		
+		//put extra information is needed
+		if(location != null)
+		{
+			intent.putExtra(FrontendLocation.STR_ID, location.ID);
+			intent.putExtra(FrontendLocation.STR_NAME, location.Name);
+			intent.putExtra(FrontendLocation.STR_ADDRESS, location.Address);
+			intent.putExtra(FrontendLocation.STR_PORT, location.Port);
+		}
+		
+		//start activity
+		context.startActivity(intent);
 	}
 	
-	private static Preference createPreference(final Context context, String name, String value)
+	private static Preference createLocationPreference(final Activity context, String key, String name, String value)
+	{
+		Preference pref = new Preference(context);
+		pref.setKey(key);
+		pref.setTitle(name);
+		pref.setDefaultValue(value);
+		pref.setEnabled(true);
+		pref.setSummary(value);
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				//Open location edit dialog with a location loaded
+				FrontendLocation location = new FrontendLocation();
+				location.ID = 0;
+				location.Name = "Testicular";
+				location.Address = "192.168.0.100";
+				location.Port = 6456;
+				showLocationEditDialog(context, location);
+				
+				return false;
+			}
+			
+		});
+		return pref;
+	}
+	
+	private static Preference createNewLocationPreference(final Activity context, String name, String value)
+	{
+		Preference pref = new Preference(context);
+		pref.setKey(name);
+		pref.setTitle(name);
+		pref.setDefaultValue(value);
+		pref.setEnabled(true);
+		pref.setSummary(value);
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				showLocationEditDialog(context, null);
+				return false;
+			}
+			
+		});
+		return pref;
+	}
+	
+	private static Preference createDeleteLocationPreference(final Activity context, String name, String value)
+	{
+		Preference pref = new Preference(context);
+		pref.setKey(name);
+		pref.setTitle(name);
+		pref.setDefaultValue(value);
+		pref.setEnabled(true);
+		pref.setSummary(value);
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				final LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+				_dbAdapter.open();
+				Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
+		        
+				//get column indexes 
+		        _idIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID);
+		        _addressIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS);
+		        _nameIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_NAME);
+		        _portIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_PORT);
+		        
+		        int count = cursor.getCount();
+		        if(count > 0 && cursor.moveToFirst())
+		        {
+		        	String[] names = new String[count];
+
+		        	for(int i=0; i<count; i++)
+		        	{
+		        		names[i] = cursor.getString(_nameIndex);
+		        		cursor.moveToNext();
+		        	}
+		        	cursor.close();
+		        	//show list of locations as a single selected list
+		        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		        	builder.setTitle(R.string.selected_location_str);
+		        	builder.setItems(names, new DialogInterface.OnClickListener(){
+
+		        		@Override
+		        		public void onClick(DialogInterface dialog,
+		        				int which) {
+		        			_dbAdapter.deleteFrontendLocation(which);
+		        		}});
+		        	builder.show();
+		        }
+				
+		        _dbAdapter.close();
+		        
+				return false;
+			}
+			
+		});
+		return pref;
+	}
+	
+	private static Preference createSelectedLocationPreference(final Activity context, String name, String value)
 	{
 		Preference pref = new Preference(context);
 		pref.setKey(name);
@@ -114,15 +302,39 @@ public class MythMotePreferences extends PreferenceActivity{
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				
-				//if the add new location preference is clicked
-				if(preference.getKey() == context.getString(R.string.add_location_str))
-				{
-					
-				}
-				else
-				{
-					
-				}
+				LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+				_dbAdapter.open();
+				final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
+		        
+		        int count = cursor.getCount();
+		        if(count > 0 && cursor.moveToFirst())
+		        {
+		        	final String[] names = new String[count];
+		        	final int[] ids = new int[count];
+		        	for(int i=0; i<count; i++)
+		        	{
+		        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
+		        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
+		        		cursor.moveToNext();
+		        	}
+		        	
+		        	//show list of locations as a single selected list
+		        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		        	builder.setTitle(R.string.selected_location_str);
+		        	builder.setItems(names, new DialogInterface.OnClickListener(){
+
+		        		@Override
+		        		public void onClick(DialogInterface dialog,
+		        				int which) {
+		        			SharedPreferences settings = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE);
+		        			SharedPreferences.Editor editor = settings.edit();
+		        			editor.putInt(MythMotePreferences.PREF_SELECTED_LOCATION, ids[which]);
+		        			editor.commit();
+		        		}});
+		        	builder.show();
+		        }
+				cursor.close();
+		        _dbAdapter.close();
 				
 				return false;
 			}
@@ -131,15 +343,5 @@ public class MythMotePreferences extends PreferenceActivity{
 		return pref;
 	}
 	
-	
-	
-//	private static Preference createPreference(Context context, String name, String value, boolean enabled)
-//	{
-//		Preference pref = new Preference(context);
-//		pref.setKey(name);
-//		pref.setTitle(name);
-//		pref.setDefaultValue(value);
-//		pref.setEnabled(enabled);
-//		return pref;
-//	}
+
 }
