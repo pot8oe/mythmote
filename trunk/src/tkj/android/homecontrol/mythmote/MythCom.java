@@ -72,6 +72,7 @@ public class MythCom {
 	public static final String KEY_right = "right";
 	public static final String KEY_enter = "enter";
 	public static final String KEY_backspace = "backspace";
+	public static final String KEY_esc = "escape";
 	
 	
 	public static final int SOCKET_TIMEOUT = 2000;
@@ -182,7 +183,7 @@ public class MythCom {
 			}
 			catch (IOException e)
 			{
-				this.SetStatus("I/O Error sending Jump", STATUS_ERROR);
+				this.SetStatus("I/O Error sending key", STATUS_ERROR);
 			}
 		}
 	}
