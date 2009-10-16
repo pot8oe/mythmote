@@ -81,7 +81,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
         		"Num Pad").setContent(this)); 
         
-        tabHost.setCurrentTab(0);
         
         tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 
@@ -108,14 +107,25 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 			}
         	
         });
+        
+        //set navigation tab and setup events
+        tabHost.setCurrentTab(0);
+        setupNavigationPanelButtonEvents();
     }
     
     @Override
     public void onResume()
     {
     	super.onResume();
-    	 //get selected frontend id
-        selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+    	 
+    	//connect to saved location
+        connectToSelectedLocation();
+    }
+
+	private void connectToSelectedLocation() {
+
+		//get selected frontend id
+		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
         	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
         
         LocationDbAdapter dbAdatper = new LocationDbAdapter(this);
@@ -134,7 +144,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	
     	if(_location != null)
     		_comm.Connect(_location.Address, _location.Port);
-    }
+	}
     
     @Override
     public void onPause()
@@ -166,8 +176,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	}
     	else if(item.getItemId() == RECONNECT_ID)
     	{
-        	if(_location != null)
-        		_comm.Connect(_location.Address, _location.Port);
+    		connectToSelectedLocation();
     	}
 	   }
 	   catch(android.content.ActivityNotFoundException ex)
@@ -193,6 +202,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	this.setupJumpButtonEvent(R.id.ButtonJump6, MythCom.JUMPPOINT_livetvinguide);
 	    
 	    //navigation buttons
+    	this.setupKeyButtonEvent(R.id.ButtonEsc, MythCom.KEY_esc);
 	    this.setupKeyButtonEvent(R.id.ButtonUp, MythCom.KEY_up);
 	    this.setupKeyButtonEvent(R.id.ButtonDown, MythCom.KEY_down);
 	    this.setupKeyButtonEvent(R.id.ButtonLeft, MythCom.KEY_left);
