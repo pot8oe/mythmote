@@ -174,7 +174,6 @@ public class MythMotePreferences extends PreferenceActivity{
 	        	builder.setTitle(R.string.selected_location_str);
 	        	builder.setItems(names, new DialogInterface.OnClickListener(){
 
-	        		@Override
 	        		public void onClick(DialogInterface dialog,
 	        				int which) {
 	        			LocationDbAdapter dbAdapter = new LocationDbAdapter(context);
@@ -219,7 +218,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setSummary(value);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
-			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				//Open location edit dialog with a location loaded
 				FrontendLocation location = new FrontendLocation();
@@ -261,7 +259,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setSummary(value);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
-			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				final LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
 				_dbAdapter.open();
@@ -289,7 +286,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		        	builder.setTitle(R.string.selected_location_str);
 		        	builder.setItems(names, new DialogInterface.OnClickListener(){
 
-		        		@Override
 		        		public void onClick(DialogInterface dialog,
 		        				int which) {
 		        			_dbAdapter.deleteFrontendLocation(which);
@@ -316,7 +312,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setSummary(value);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
-			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				
 				LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
@@ -340,7 +335,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		        	builder.setTitle(R.string.selected_location_str);
 		        	builder.setItems(names, new DialogInterface.OnClickListener(){
 
-		        		@Override
 		        		public void onClick(DialogInterface dialog,
 		        				int which) {
 		        			SharedPreferences settings = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE);
