@@ -13,11 +13,11 @@
     
 <string name="app_name">mythmote</string>
 <string name="settings_menu_str">Settings</string>
-<string name="record_str">Rec</string>
+<string name="rec_str">Rec</string>
 <string name="play_str">Play</string>
 <string name="stop_str">Stop</string>
-<string name="rewind_str">Rew</string>
-<string name="fastforward_str">FF</string>
+<string name="rw_str">Rew</string>
+<string name="ff_str">FF</string>
 <string name="up_str">Up</string>
 <string name="down_str">Down</string>
 <string name="left_str">Left</string>
@@ -45,4 +45,11 @@
 <string name="error_invalid_address_str">Invalid Address</string>
 <string name="error_invalid_port_str">Invalid Port</string>
 <string name="delete_location_str">Delete Location</string>
+
+<string name="mute_str">Mute</string>
+<string name="vol_up_str">Vol +</string>
+<string name="vol_down_str">Vol -</string>
+<string name="ch_up_str">Ch +</string>
+<string name="ch_down_str">Ch -</string>
+<string name="ch_return_str">Last</string>
 </resources>
