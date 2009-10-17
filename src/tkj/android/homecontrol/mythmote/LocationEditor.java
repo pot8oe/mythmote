@@ -70,7 +70,6 @@ public class LocationEditor extends Activity {
 		builder.setTitle(R.string.error_input_str);
 		builder.setNeutralButton(R.string.ok_str, new DialogInterface.OnClickListener(){
 
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				

@@ -161,7 +161,6 @@ public class LocationDbAdapter {
     		builder.setMessage(e.getLocalizedMessage());
     		builder.setNeutralButton(R.string.ok_str, new OnClickListener(){
 
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					

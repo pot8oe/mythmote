@@ -84,7 +84,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         
         tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 
-			@Override
 			public void onTabChanged(String arg0) {
 				
 				int tabIndex = tabHost.getCurrentTab();
