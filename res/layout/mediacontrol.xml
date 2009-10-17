@@ -2,8 +2,21 @@
 
 
 
-<TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:stretchColumns="0,1,2"><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoText="false"></Button>
-<Button android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-<Button android:id="@+id/Button03" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+<TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:stretchColumns="0,1,2"><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoText="false" android:id="@+id/ButtonRecord" android:drawableTop="@drawable/rec" android:text="@string/rec_str"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonStop" android:drawableTop="@drawable/stop" android:text="@string/stop_str"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonPlay" android:drawableTop="@drawable/play" android:text="@string/play_str"></Button>
+</TableRow>
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/rw" android:layout_weight="50" android:text="@string/rw_str" android:id="@+id/ButtonRew"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/ff" android:layout_weight="50" android:text="@string/ff_str" android:id="@+id/ButtonFF"></Button>
+</TableRow>
+<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/vol_up_str" android:id="@+id/ButtonVolUp" android:layout_weight="50"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ch_up_str" android:id="@+id/ButtonChUp" android:layout_weight="50"></Button>
+
+</TableRow>
+<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonMute" android:text="@string/mute_str" android:layout_weight="50"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonChReturn" android:text="@string/ch_return_str" android:layout_weight="50"></Button>
+</TableRow>
+<TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonVolDown" android:text="@string/vol_down_str" android:layout_weight="50"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonChDown" android:text="@string/ch_down_str" android:layout_weight="50"></Button>
 </TableRow>
 </TableLayout>
