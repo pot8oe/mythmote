@@ -160,7 +160,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(R.drawable.settings);
-        menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str);
+        menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
         return result;
     }
     

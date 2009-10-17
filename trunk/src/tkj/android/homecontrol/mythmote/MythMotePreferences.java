@@ -138,8 +138,8 @@ public class MythMotePreferences extends PreferenceActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, NEW_LOCATION_ID, 0, R.string.add_location_str).setIcon(R.drawable.settings);
-        menu.add(0, DELETE_LOCATION_ID, 0, R.string.delete_location_str).setIcon(R.drawable.settings);
+        menu.add(0, NEW_LOCATION_ID, 0, R.string.add_location_str).setIcon(R.drawable.menu_add);
+        menu.add(0, DELETE_LOCATION_ID, 0, R.string.delete_location_str).setIcon(R.drawable.menu_close_clear_cancel);
         return result;
 	}
 	
