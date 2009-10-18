@@ -8,8 +8,10 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +81,8 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         		this.getString(R.string.media_str),
         		this.getResources().getDrawable(R.drawable.media)).setContent(this));
         tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
-        		"Num Pad").setContent(this)); 
+        		this.getString(R.string.numpad_str),
+        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this)); 
         
         
         tabHost.setOnTabChangedListener(new OnTabChangeListener(){
@@ -212,7 +215,23 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     
     private void setupMediaPanelButtonEvents()
     {
-	    //TODO: implement media panel and button events
+    	// media playback
+    	this.setupKeyButtonEvent(R.id.ButtonRecord, "r");
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonStop, MythCom.PLAY_STOP);
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonPlay, MythCom.PLAY_PLAY);
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonRew, MythCom.PLAY_SEEK_BW);
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonFF, MythCom.PLAY_SEEK_FW);
+    	this.setupKeyButtonEvent(R.id.ButtonPause, "p");
+    	
+    	//volume
+    	this.setupKeyButtonEvent(R.id.ButtonVolUp, "]");
+    	this.setupKeyButtonEvent(R.id.ButtonVolDown, "[");
+    	this.setupKeyButtonEvent(R.id.ButtonMute, "|");
+    	
+    	//ch
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonChUp, MythCom.PLAY_CH_UP);
+    	this.setupPlaybackCmdButtonEvent(R.id.ButtonChDown, MythCom.PLAY_CH_DW);
+	    this.setupKeyButtonEvent(R.id.ButtonChReturn, "h");
     }
     
     private void setupNumberPadButtonEvents()
@@ -234,7 +253,24 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    this.setupKeyButtonEvent(R.id.ButtonBackspace, MythCom.KEY_backspace);
 	    this.setupKeyButtonEvent(R.id.ButtonEnter, MythCom.KEY_enter);
 	    
-	    //TODO: implement send keyboard input button
+	    //send keyboard input
+	    final Button buttonJump = (Button) this.findViewById(R.id.ButtonSend);
+	    final EditText textBox = (EditText) this.findViewById(R.id.EditTextKeyboardInput);
+	    if(buttonJump != null && textBox != null)
+	    {
+		    buttonJump.setOnClickListener(new OnClickListener() {
+		        public void onClick(View v) {
+		            // Perform action on clicks
+		        	Editable text = textBox.getText();
+		        	int count = text.length();
+		        	for(int i=0; i<count; i++)
+		        	{
+		        		_comm.SendKey(text.charAt(i));
+		        	}
+		        }
+		    });
+	    }
+	    
     }
     
     
@@ -256,6 +292,17 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	        public void onClick(View v) {
 	            // Perform action on clicks
 	            _comm.SendKey(sendKey);
+	        }
+	    });
+    }
+    
+    private final void setupPlaybackCmdButtonEvent(int buttonViewId, final String sendCmd)
+    {
+    	final Button button = (Button) this.findViewById(buttonViewId);
+	    button.setOnClickListener(new OnClickListener() {
+	        public void onClick(View v) {
+	            // Perform action on clicks
+	            _comm.SendPlaybackCmd(sendCmd);
 	        }
 	    });
     }
