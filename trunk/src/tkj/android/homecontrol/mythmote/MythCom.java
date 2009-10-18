@@ -74,6 +74,12 @@ public class MythCom {
 	public static final String KEY_backspace = "backspace";
 	public static final String KEY_esc = "escape";
 	
+	public static final String PLAY_CH_UP = "channel up";
+	public static final String PLAY_CH_DW = "channel down";
+	public static final String PLAY_STOP = "stop";
+	public static final String PLAY_PLAY = "speed normal";
+	public static final String PLAY_SEEK_FW = "seek forward";
+	public static final String PLAY_SEEK_BW = "seek backward";
 	
 	public static final int SOCKET_TIMEOUT = 2000;
 	public static final int ENABLE_WIFI = 0;
@@ -179,6 +185,38 @@ public class MythCom {
 			try
 			{
 				_outputStream.write(String.format("key %s\n", key));
+				_outputStream.flush();
+			}
+			catch (IOException e)
+			{
+				this.SetStatus("I/O Error sending key", STATUS_ERROR);
+			}
+		}
+	}
+	
+	public void SendKey(char key)
+	{
+		if(_outputStream != null)
+		{
+			try
+			{
+				_outputStream.write(String.format("key %s\n", key));
+				_outputStream.flush();
+			}
+			catch (IOException e)
+			{
+				this.SetStatus("I/O Error sending key", STATUS_ERROR);
+			}
+		}
+	}
+	
+	public void SendPlaybackCmd(String cmd)
+	{
+		if(_outputStream != null)
+		{
+			try
+			{
+				_outputStream.write(String.format("play %s\n", cmd));
 				_outputStream.flush();
 			}
 			catch (IOException e)
