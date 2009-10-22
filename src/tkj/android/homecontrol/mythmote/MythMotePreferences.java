@@ -55,21 +55,16 @@ public class MythMotePreferences extends PreferenceActivity{
     public void onResume()
     {
 		super.onResume();
-		
-		//create base preference screen
-        PreferenceScreen prefScreen = this.getPreferenceManager().createPreferenceScreen(this);
-        prefScreen.removeAll();
-        
         //configure all preferences
-        setupPreferences(prefScreen, this);
-        
-        //set preference screen
-		this.setPreferenceScreen(prefScreen);
+        setupPreferences(this);
     }
 
 
-	private static void setupPreferences(PreferenceScreen prefScreen, PreferenceActivity context) {
+	private static void setupPreferences(PreferenceActivity context) {
 		//create Categories
+		PreferenceScreen prefScreen = context.getPreferenceManager().createPreferenceScreen(context);
+		prefScreen.removeAll();
+		
         PreferenceCategory selectedCat = new PreferenceCategory(context);
         selectedCat.setTitle(R.string.selected_location_str);
         PreferenceCategory locationListCat = new PreferenceCategory(context);
@@ -128,10 +123,17 @@ public class MythMotePreferences extends PreferenceActivity{
         		selectedCat.addPreference(
             			MythMotePreferences.createSelectedLocationPreference(
             					context, SELECTED_LOCATION, cursor.getString(_nameIndex)));
+
+        		//save location ID so that it is for real
+        		SaveSelectedLocationId(context, cursor.getInt(_idIndex));
         	}
         }
         cursor.close();
         _dbAdapter.close();
+        
+        
+        //set preference screen
+		context.setPreferenceScreen(prefScreen);
 	}
 	
 	
@@ -181,7 +183,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	        			dbAdapter.deleteFrontendLocation(ids[which]);
 	        			dbAdapter.close();
 	        			
-	        			RefreshPreferences(context.getPreferenceScreen(), context);
+	        			setupPreferences(context);
 	        		}
 
 					});
@@ -192,14 +194,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		}
 		return true;
     }
-
-	private static void RefreshPreferences(final PreferenceScreen prefScreen, final PreferenceActivity context)
-	{
-		prefScreen.removeAll();
-		setupPreferences(prefScreen, context);
-		context.setPreferenceScreen(prefScreen);
-	}
-	
 	
 	private static void showLocationEditDialog(Activity context, FrontendLocation location)
 	{
@@ -347,12 +341,12 @@ public class MythMotePreferences extends PreferenceActivity{
 
 		        		public void onClick(DialogInterface dialog,
 		        				int which) {
-		        			SharedPreferences settings = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE);
-		        			SharedPreferences.Editor editor = settings.edit();
-		        			editor.putInt(MythMotePreferences.PREF_SELECTED_LOCATION, ids[which]);
-		        			editor.commit();
 		        			
-		        			RefreshPreferences(context.getPreferenceScreen(), context);
+		        			//save selected location
+		        			SaveSelectedLocationId(context, ids[which]);
+		        			
+		        			//refresh preferences
+		        			setupPreferences(context);
 		        		}});
 		        	builder.show();
 		        }
@@ -364,6 +358,14 @@ public class MythMotePreferences extends PreferenceActivity{
 			
 		});
 		return pref;
+	}
+	
+	private static void SaveSelectedLocationId(Activity context, int id)
+	{
+		SharedPreferences settings = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt(MythMotePreferences.PREF_SELECTED_LOCATION, id);
+		editor.commit();
 	}
 	
 
