@@ -61,18 +61,18 @@ public class MythMotePreferences extends PreferenceActivity{
         prefScreen.removeAll();
         
         //configure all preferences
-        setupPreferences(prefScreen);
+        setupPreferences(prefScreen, this);
         
         //set preference screen
 		this.setPreferenceScreen(prefScreen);
     }
 
 
-	private void setupPreferences(PreferenceScreen prefScreen) {
+	private static void setupPreferences(PreferenceScreen prefScreen, PreferenceActivity context) {
 		//create Categories
-        PreferenceCategory selectedCat = new PreferenceCategory(this);
+        PreferenceCategory selectedCat = new PreferenceCategory(context);
         selectedCat.setTitle(R.string.selected_location_str);
-        PreferenceCategory locationListCat = new PreferenceCategory(this);
+        PreferenceCategory locationListCat = new PreferenceCategory(context);
         locationListCat.setTitle(R.string.location_list_str);
 
         //add categories to preference screen
@@ -80,7 +80,7 @@ public class MythMotePreferences extends PreferenceActivity{
         prefScreen.addPreference(locationListCat);
         
         //open DB
-        LocationDbAdapter _dbAdapter = new LocationDbAdapter(this);
+        LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
         _dbAdapter.open();
         
         //get list of locations
@@ -97,7 +97,7 @@ public class MythMotePreferences extends PreferenceActivity{
         if(count > 0 && cursor.moveToFirst())
         {
             //get selected frontend id
-            int selected = this.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+            int selected = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
             	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, cursor.getInt(_idIndex));
         	
         	//put each location in the preference list
@@ -105,7 +105,7 @@ public class MythMotePreferences extends PreferenceActivity{
         	{
         		locationListCat.addPreference(
         				MythMotePreferences.createLocationPreference(
-        						this,
+        						context,
         						cursor.getString(_idIndex),
         						cursor.getString(_nameIndex), 
         						cursor.getString(_addressIndex)));
@@ -115,7 +115,7 @@ public class MythMotePreferences extends PreferenceActivity{
         			//create preference for selected location
         			selectedCat.addPreference(
                 			MythMotePreferences.createSelectedLocationPreference(
-                					this, SELECTED_LOCATION, cursor.getString(_nameIndex)));
+                					context, SELECTED_LOCATION, cursor.getString(_nameIndex)));
         		}
 
         		cursor.moveToNext();
@@ -127,7 +127,7 @@ public class MythMotePreferences extends PreferenceActivity{
         		cursor.moveToFirst();
         		selectedCat.addPreference(
             			MythMotePreferences.createSelectedLocationPreference(
-            					this, SELECTED_LOCATION, cursor.getString(_nameIndex)));
+            					context, SELECTED_LOCATION, cursor.getString(_nameIndex)));
         	}
         }
         cursor.close();
@@ -146,9 +146,11 @@ public class MythMotePreferences extends PreferenceActivity{
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+    	final PreferenceActivity context = this;
+    	
 		if(item.getItemId() == NEW_LOCATION_ID)
 		{
-			showLocationEditDialog(this, null);
+			showLocationEditDialog(context, null);
 		}
 		else if(item.getItemId() == DELETE_LOCATION_ID)
 		{
@@ -168,8 +170,6 @@ public class MythMotePreferences extends PreferenceActivity{
 	        		cursor.moveToNext();
 	        	}
 	        	
-	        	//show list of locations as a single selected list
-	        	final Context context = this;
 	        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	        	builder.setTitle(R.string.selected_location_str);
 	        	builder.setItems(names, new DialogInterface.OnClickListener(){
@@ -180,7 +180,11 @@ public class MythMotePreferences extends PreferenceActivity{
 	        			dbAdapter.open();
 	        			dbAdapter.deleteFrontendLocation(ids[which]);
 	        			dbAdapter.close();
-	        		}});
+	        			
+	        			RefreshPreferences(context.getPreferenceScreen(), context);
+	        		}
+
+					});
 	        	builder.show();
 	        }
 			cursor.close();
@@ -189,6 +193,12 @@ public class MythMotePreferences extends PreferenceActivity{
 		return true;
     }
 
+	private static void RefreshPreferences(final PreferenceScreen prefScreen, final PreferenceActivity context)
+	{
+		prefScreen.removeAll();
+		setupPreferences(prefScreen, context);
+		context.setPreferenceScreen(prefScreen);
+	}
 	
 	
 	private static void showLocationEditDialog(Activity context, FrontendLocation location)
@@ -302,7 +312,7 @@ public class MythMotePreferences extends PreferenceActivity{
 		return pref;
 	}
 	
-	private static Preference createSelectedLocationPreference(final Activity context, String name, String value)
+	private static Preference createSelectedLocationPreference(final PreferenceActivity context, String name, String value)
 	{
 		Preference pref = new Preference(context);
 		pref.setKey(name);
@@ -341,6 +351,8 @@ public class MythMotePreferences extends PreferenceActivity{
 		        			SharedPreferences.Editor editor = settings.edit();
 		        			editor.putInt(MythMotePreferences.PREF_SELECTED_LOCATION, ids[which]);
 		        			editor.commit();
+		        			
+		        			RefreshPreferences(context.getPreferenceScreen(), context);
 		        		}});
 		        	builder.show();
 		        }
