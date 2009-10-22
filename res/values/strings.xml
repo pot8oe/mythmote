@@ -36,7 +36,7 @@
 <string name="no_route_to_host_str">No route to host</string>
 <string name="connected_str">Connected</string>
 <string name="reconnect_str">Reconnect</string>
-<string name="attempting_to_connect_str">Attempting to connect to host</string><string name="esc_string">Escape</string>
+<string name="attempting_to_connect_str">Attempting to connect to host</string>
 
 <string name="selected_location_str">Selected Location</string>
 <string name="location_list_str">Location List</string>
@@ -53,4 +53,5 @@
 <string name="ch_down_str">Ch -</string>
 <string name="ch_return_str">Last</string>
 <string name="pause_str">Pause</string>
+<string name="menu_str">Menu</string>
 </resources>
