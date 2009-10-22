@@ -81,6 +81,7 @@ public class MythCom {
 	public static final String PLAY_SEEK_FW = "seek forward";
 	public static final String PLAY_SEEK_BW = "seek backward";
 	
+	public static final int DEFAULT_MYTH_PORT = 6546;
 	public static final int SOCKET_TIMEOUT = 2000;
 	public static final int ENABLE_WIFI = 0;
 	public static final int CANCEL = 1;
@@ -88,6 +89,7 @@ public class MythCom {
 	public static final int STATUS_CONNECTED = 1;
 	public static final int STATUS_CONNECTING = 3;
 	public static final int STATUS_ERROR = 99;
+	
 	
 	private static Socket _socket;
 	private static OutputStreamWriter _outputStream;

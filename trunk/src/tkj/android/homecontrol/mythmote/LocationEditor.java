@@ -84,18 +84,22 @@ public class LocationEditor extends Activity {
 			builder.setMessage(R.string.error_invalid_address_str);
 			builder.show();
 		}
-		else if(this._location.Port < 0)
-		{
-			builder.setMessage(R.string.error_invalid_port_str);
-			builder.show();
-		}
+//		else if(this._location.Port < 0)
+//		{
+//			builder.setMessage(R.string.error_invalid_port_str);
+//			builder.show();
+//		}
 		else
 		{
+			//set default port if port was not set.
+			if(this._location.Port <= 0)
+				this._location.Port = MythCom.DEFAULT_MYTH_PORT;
+			
 			LocationDbAdapter adapter = new LocationDbAdapter(this);
 			adapter.open();
 			if(this._location.ID == -1)
 			{
-				adapter.createFrontendLocation(this._location.Name, this._location.Address, this._location.Port);
+				this._location.ID = (int) adapter.createFrontendLocation(this._location.Name, this._location.Address, this._location.Port);
 			}
 			else
 			{
