@@ -117,7 +117,7 @@ public class LocationEditor extends Activity {
 	{
 		//only exit if save is successful.
 		if(Save())
-			this.setResult(RESULT_OK);
+			this.finish();
 	}
 	
 	
@@ -189,7 +189,7 @@ public class LocationEditor extends Activity {
 	    button.setOnClickListener(new OnClickListener() {
 	        public void onClick(View v) {
 	            //just exit
-	        	setResult(RESULT_CANCELED);
+	        	finish();
 	        }
 	    });
     }
