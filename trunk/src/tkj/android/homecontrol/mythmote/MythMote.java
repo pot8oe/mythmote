@@ -205,6 +205,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    
 	    //navigation buttons
     	this.setupKeyButtonEvent(R.id.ButtonEsc, MythCom.KEY_esc);
+    	this.setupKeyButtonEvent(R.id.ButtonMenu, "m");
 	    this.setupKeyButtonEvent(R.id.ButtonUp, MythCom.KEY_up);
 	    this.setupKeyButtonEvent(R.id.ButtonDown, MythCom.KEY_down);
 	    this.setupKeyButtonEvent(R.id.ButtonLeft, MythCom.KEY_left);
