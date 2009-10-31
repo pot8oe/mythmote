@@ -44,7 +44,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 
     		public void StatusChanged(String StatusMsg, int code) {
     			//set title
-    			setTitle(String.format("%s - %s", getString(R.string.app_name), StatusMsg));
+    			setTitle(StatusMsg);
     			
     			//change color based on status code
     			if(code == MythCom.STATUS_ERROR)
@@ -145,7 +145,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	
     	
     	if(_location != null)
-    		_comm.Connect(_location.Address, _location.Port);
+    		_comm.Connect(_location);
 	}
     
     @Override
