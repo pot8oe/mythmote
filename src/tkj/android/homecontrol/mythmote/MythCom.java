@@ -99,8 +99,7 @@ public class MythCom {
 	private static String _tmpStatus;
 	private static int _tmpStatusCode;
 	private static StatusChangedEventListener _statusListener;
-	private static String _address;
-	private static int _port;
+	private static FrontendLocation _frontend;
 	
 	private final Handler mHandler = new Handler();
 	private final Runnable mSocketActionComplete = new Runnable()
@@ -121,14 +120,13 @@ public class MythCom {
 	}
 	
 	/** Connects to the given address and port. Any existing connection will be broken first **/
-	public void Connect(String address, int port)
+	public void Connect(FrontendLocation frontend)
 	{
 			//disconnect before we connect
 			this.Disconnect();
 			
 			//set address and port
-			_address = address;
-			_port = port;
+			_frontend = frontend;
 			
 			//create toast for all to eat and enjoy
 			Toast toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
@@ -262,10 +260,10 @@ public class MythCom {
 			{
 				try
 				{
-					int ipHash = java.net.InetAddress.getByName(_address).hashCode();
+					int ipHash = java.net.InetAddress.getByName(_frontend.Address).hashCode();
 					if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
 					{
-						_socket.connect(new InetSocketAddress(InetAddress.getByName(_address), _port), SOCKET_TIMEOUT);
+						_socket.connect(new InetSocketAddress(InetAddress.getByName(_frontend.Address), _frontend.Port), SOCKET_TIMEOUT);
 						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
 						
 						//check if everything was connected OK
@@ -276,24 +274,24 @@ public class MythCom {
 						}
 						else
 						{
-							_tmpStatus = _address + " - Connected";
+							_tmpStatus = _frontend.Name + " - Connected";
 							_tmpStatusCode = STATUS_CONNECTED;
 						}
 					}
 					else
 					{
-						_tmpStatus = "No route to host: " + _address;
+						_tmpStatus = "No route to host: " + _frontend.Address;
 						_tmpStatusCode = STATUS_ERROR;
 					}
 				}
 				catch (UnknownHostException e)
 				{
-					_tmpStatus = "Unknown host: " + _address;
+					_tmpStatus = "Unknown host: " + _frontend.Address;
 					_tmpStatusCode = STATUS_ERROR;
 				}
 				catch (IOException e)
 				{
-					_tmpStatus = "I/O Error connecting to host: " + _address;
+					_tmpStatus = "I/O Error connecting to host: " + _frontend.Address;
 					_tmpStatusCode = STATUS_ERROR;
 				}
 				
