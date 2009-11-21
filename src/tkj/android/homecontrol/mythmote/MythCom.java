@@ -261,8 +261,10 @@ public class MythCom {
 				try
 				{
 					int ipHash = java.net.InetAddress.getByName(_frontend.Address).hashCode();
-					if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
-					{
+					
+				// This check for a route to the host is failing since android SDK 1.6
+				//	if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
+				//	{
 						_socket.connect(new InetSocketAddress(InetAddress.getByName(_frontend.Address), _frontend.Port), SOCKET_TIMEOUT);
 						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
 						
@@ -277,12 +279,12 @@ public class MythCom {
 							_tmpStatus = _frontend.Name + " - Connected";
 							_tmpStatusCode = STATUS_CONNECTED;
 						}
-					}
-					else
-					{
-						_tmpStatus = "No route to host: " + _frontend.Address;
-						_tmpStatusCode = STATUS_ERROR;
-					}
+				//	}
+				//	else
+				//	{
+				//		_tmpStatus = "No route to host: " + _frontend.Address;
+				//		_tmpStatusCode = STATUS_ERROR;
+				//	}
 				}
 				catch (UnknownHostException e)
 				{
