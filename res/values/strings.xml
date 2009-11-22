@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="next_str">Next</string>
+    <string name="previous_str">Prev</string>
     <string name="port_example_string">default: 6546</string>
     <string name="ip_Address_str">IP Address</string>
     <string name="location_name_str">Location Name</string>

@@ -223,6 +223,8 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	this.setupPlaybackCmdButtonEvent(R.id.ButtonRew, MythCom.PLAY_SEEK_BW);
     	this.setupPlaybackCmdButtonEvent(R.id.ButtonFF, MythCom.PLAY_SEEK_FW);
     	this.setupKeyButtonEvent(R.id.ButtonPause, "p");
+    	this.setupKeyButtonEvent(R.id.ButtonSkipBack, "home");
+    	this.setupKeyButtonEvent(R.id.ButtonSkipForward, "end");
     	
     	//volume
     	this.setupKeyButtonEvent(R.id.ButtonVolUp, "]");
