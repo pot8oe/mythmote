@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+
 <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/TableLayoutLocationEditor"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextViewName" android:text="@string/name_str"></TextView><EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="@string/location_name_str" android:id="@+id/EditTextLocationName"></EditText>
 
 
@@ -14,3 +20,5 @@
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cancel_str" android:id="@+id/ButtonLocationCancel" android:layout_weight="50"></Button>
 </TableRow>
 </TableLayout>
+</ScrollView>
+</LinearLayout>
