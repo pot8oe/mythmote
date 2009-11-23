@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 <TableLayout android:id="@+id/TableLayout01" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:isScrollContainer="true" android:stretchColumns="0,1,2,3,4,5"><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1"><Button android:layout_height="wrap_content" android:autoText="false" android:id="@+id/ButtonRecord" android:drawableTop="@drawable/rec" android:layout_width="wrap_content" android:text="@string/rec_str" android:layout_weight="0.25"></Button><Button android:layout_height="wrap_content" android:id="@+id/ButtonStop" android:drawableTop="@drawable/stop" android:layout_width="wrap_content" android:text="@string/stop_str" android:layout_weight="0.25"></Button><Button android:layout_height="wrap_content" android:drawableTop="@drawable/pause" android:id="@+id/ButtonPause" android:layout_width="wrap_content" android:text="@string/pause_str" android:layout_weight="0.25"></Button><Button android:layout_height="wrap_content" android:id="@+id/ButtonPlay" android:drawableTop="@drawable/play" android:layout_width="wrap_content" android:text="@string/play_str" android:layout_weight="0.25"></Button>
 
 
@@ -31,3 +34,5 @@
 
 
 </TableLayout>
+</ScrollView>
+</LinearLayout>
