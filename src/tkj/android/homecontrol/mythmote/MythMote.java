@@ -1,6 +1,7 @@
 package tkj.android.homecontrol.mythmote;
 
 
+import tkj.android.homecontrol.mythmote.MythMotePreferences.LocationChangedEventListener;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -25,6 +26,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
+	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
 	public static final String NAME_NAV_TAB = "TabNavigation";
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
@@ -115,6 +117,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
         setupNavigationPanelButtonEvents();
     }
     
+    /** Called when the activity is resumed **/
     @Override
     public void onResume()
     {
@@ -123,7 +126,69 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	//connect to saved location
         connectToSelectedLocation();
     }
+    
+	/** Called when the activity is paused **/
+    @Override
+    public void onPause()
+    {
+    	super.onPause();
+    	
+    	_comm.Disconnect();
 
+    }
+    
+    /** Called to create the options menu once.  */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(R.drawable.settings);
+        menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
+        menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
+        return result;
+    }
+    
+   @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+	   try
+	   {
+    	if(item.getItemId() == SETTINGS_ID)
+    	{/* This fails */
+    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
+    		this.startActivity(intent);
+    	}
+    	else if(item.getItemId() == RECONNECT_ID)
+    	{
+    		connectToSelectedLocation();
+    	}
+    	else if(item.getItemId() == SELECTLOCATION_ID)
+    	{
+    		//Displays the list of configured frontend locations.
+			//Fires the locationChanged event when the user selects a location
+			//even if the user selects the same location already selected.
+    		MythMotePreferences.SelectLocation(this, new LocationChangedEventListener()
+			{
+				@Override
+				public void LocationChanged() {
+					//reconnect to selected location
+					connectToSelectedLocation();
+				}
+
+			});
+    	}
+	   }
+	   catch(android.content.ActivityNotFoundException ex)
+	   {
+		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
+		   diag.setMessage(ex.getMessage());
+		   diag.setTitle("Error");
+		   diag.setNeutralButton("OK", null);
+		   diag.show();
+	   }
+    	return false;
+    }
+    
+   /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
 	private void connectToSelectedLocation() {
 
 		//get selected frontend id
@@ -147,51 +212,8 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	if(_location != null)
     		_comm.Connect(_location);
 	}
-    
-    @Override
-    public void onPause()
-    {
-    	super.onPause();
-    	
-    	_comm.Disconnect();
-
-    }
-    
-    /** Called to create the options menu once.  */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(R.drawable.settings);
-        menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
-        return result;
-    }
-    
-   @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-	   try
-	   {
-    	if(item.getItemId() == SETTINGS_ID)
-    	{/* This fails */
-    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
-    		this.startActivity(intent);
-    	}
-    	else if(item.getItemId() == RECONNECT_ID)
-    	{
-    		connectToSelectedLocation();
-    	}
-	   }
-	   catch(android.content.ActivityNotFoundException ex)
-	   {
-		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
-		   diag.setMessage(ex.getMessage());
-		   diag.setTitle("Error");
-		   diag.setNeutralButton("OK", null);
-		   diag.show();
-	   }
-    	return false;
-    }
-    
+	
+	/** Sets up the navigation tab's button events **/
     private void setupNavigationPanelButtonEvents()
     {
     	// jump buttons.
@@ -214,6 +236,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    
     }
     
+    /** Sets up the Media playback tab's buttons **/
     private void setupMediaPanelButtonEvents()
     {
     	// media playback
@@ -237,6 +260,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 	    this.setupKeyButtonEvent(R.id.ButtonChReturn, "h");
     }
     
+    /** Sets up the number pad tab's buttons **/
     private void setupNumberPadButtonEvents()
     {
     	//numbers
