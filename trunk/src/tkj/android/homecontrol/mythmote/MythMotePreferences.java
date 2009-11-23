@@ -2,6 +2,8 @@
 package tkj.android.homecontrol.mythmote;
 
 
+import java.util.EventListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,6 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class MythMotePreferences extends PreferenceActivity{
+	
+	public interface LocationChangedEventListener extends EventListener {
+		
+		public void LocationChanged();
+	}
 
 	public static final int NEW_LOCATION_ID = Menu.FIRST;
 	public static final int DELETE_LOCATION_ID = Menu.FIRST + 1;
@@ -318,46 +325,59 @@ public class MythMotePreferences extends PreferenceActivity{
 
 			public boolean onPreferenceClick(Preference preference) {
 				
-				LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
-				_dbAdapter.open();
-				final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
-		        
-		        int count = cursor.getCount();
-		        if(count > 0 && cursor.moveToFirst())
-		        {
-		        	final String[] names = new String[count];
-		        	final int[] ids = new int[count];
-		        	for(int i=0; i<count; i++)
-		        	{
-		        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
-		        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
-		        		cursor.moveToNext();
-		        	}
-		        	
-		        	//show list of locations as a single selected list
-		        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		        	builder.setTitle(R.string.selected_location_str);
-		        	builder.setItems(names, new DialogInterface.OnClickListener(){
+				//Displays the list of configured frontend locations.
+				//Fires the locationChanged event when the user selects a location
+				//even if the user selects the same location already selected.
+				SelectLocation(context, new LocationChangedEventListener()
+				{
+					@Override
+					public void LocationChanged() {
+						//reset the preferences list with udpates selection
+						setupPreferences(context);
+					}
 
-		        		public void onClick(DialogInterface dialog,
-		        				int which) {
-		        			
-		        			//save selected location
-		        			SaveSelectedLocationId(context, ids[which]);
-		        			
-		        			//refresh preferences
-		        			setupPreferences(context);
-		        		}});
-		        	builder.show();
-		        }
-				cursor.close();
-		        _dbAdapter.close();
-				
+				});
 				return false;
 			}
-			
 		});
 		return pref;
+	}
+	
+	public static void SelectLocation(final Activity context, final LocationChangedEventListener listener) {
+		LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+		_dbAdapter.open();
+		final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
+        
+        int count = cursor.getCount();
+        if(count > 0 && cursor.moveToFirst())
+        {
+        	final String[] names = new String[count];
+        	final int[] ids = new int[count];
+        	for(int i=0; i<count; i++)
+        	{
+        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
+        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
+        		cursor.moveToNext();
+        	}
+        	
+        	//show list of locations as a single selected list
+        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        	builder.setTitle(R.string.selected_location_str);
+        	builder.setItems(names, new DialogInterface.OnClickListener(){
+
+        		public void onClick(DialogInterface dialog,
+        				int which) {
+        			
+        			//save selected location
+        			SaveSelectedLocationId(context, ids[which]);
+        			
+        			//notify that we selected a location
+        			listener.LocationChanged();
+        		}});
+        	builder.show();
+        }
+		cursor.close();
+        _dbAdapter.close();
 	}
 	
 	private static void SaveSelectedLocationId(Activity context, int id)
