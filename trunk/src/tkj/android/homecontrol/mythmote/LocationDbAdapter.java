@@ -142,7 +142,7 @@ public class LocationDbAdapter {
      * @param rowId id of note to retrieve
      * @return Cursor positioned to matching note, if found
      */
-    public Cursor fetchFrontendLocation(long rowId) throws SQLException {
+    public Cursor fetchFrontendLocation(long rowId)  {
     	Cursor mCursor = null;
     	try
     	{
@@ -150,9 +150,10 @@ public class LocationDbAdapter {
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
                         KEY_NAME, KEY_ADDRESS, KEY_PORT}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
+	        if (mCursor != null) 
+	        {
+	            mCursor.moveToFirst();
+	        }
     	}
     	catch(SQLException e)
     	{

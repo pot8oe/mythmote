@@ -100,7 +100,16 @@ public class MythMotePreferences extends PreferenceActivity{
         {
             //get selected frontend id
             int selected = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-            	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, cursor.getInt(_idIndex));
+            	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+            
+            //if selected failed
+            if(selected == -1)
+            {
+            	//set to first in list
+            	selected = cursor.getInt(_idIndex);
+            	//save (defaulted) selected location
+    			SaveSelectedLocationId(context, selected);
+            }
         	
         	//put each location in the preference list
         	for(int i=0; i<count; i++)
