@@ -260,12 +260,13 @@ public class MythCom {
 			{
 				try
 				{
-					int ipHash = java.net.InetAddress.getByName(_frontend.Address).hashCode();
+					InetAddress address = java.net.InetAddress.getByName(_frontend.Address);
 					
+				//	int ipHash = address.hashCode();
 				// This check for a route to the host is failing since android SDK 1.6
 				//	if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
 				//	{
-						_socket.connect(new InetSocketAddress(InetAddress.getByName(_frontend.Address), _frontend.Port), SOCKET_TIMEOUT);
+						_socket.connect(new InetSocketAddress(address, _frontend.Port), SOCKET_TIMEOUT);
 						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
 						
 						//check if everything was connected OK
