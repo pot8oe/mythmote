@@ -302,6 +302,8 @@ public class MythCom {
 				mHandler.post(mSocketActionComplete);
 			}
 		};
+		
+		//run thread
 		thread.start();
 	}
 	
