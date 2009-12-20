@@ -101,6 +101,7 @@ public class MythCom {
 	private static StatusChangedEventListener _statusListener;
 	private static FrontendLocation _frontend;
 	
+	private final String currentLocation = "";
 	private final Handler mHandler = new Handler();
 	private final Runnable mSocketActionComplete = new Runnable()
 	{
@@ -251,7 +252,7 @@ public class MythCom {
 	
 	
 	
-	
+	/** Connects _socket to _frontend using a separate thread  **/
 	private void connectSocket()
 	{
 		Thread thread = new Thread()
@@ -307,7 +308,7 @@ public class MythCom {
 		thread.start();
 	}
 	
-	
+	/** Sets _status and fires the StatusChanged event **/
 	private void SetStatus(String StatusMsg, int code)
 	{
 		_status = StatusMsg;

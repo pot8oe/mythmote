@@ -224,8 +224,9 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
     	this.setupJumpButtonEvent(R.id.ButtonJump4, MythCom.JUMPPOINT_playmusic);
     	this.setupJumpButtonEvent(R.id.ButtonJump5, MythCom.JUMPPOINT_videogallery);
     	this.setupJumpButtonEvent(R.id.ButtonJump6, MythCom.JUMPPOINT_livetvinguide);
-	    
+    	
 	    //navigation buttons
+    	this.setupKeyButtonEvent(R.id.ButtonInfo, "i");
     	this.setupKeyButtonEvent(R.id.ButtonEsc, MythCom.KEY_esc);
     	this.setupKeyButtonEvent(R.id.ButtonMenu, "m");
 	    this.setupKeyButtonEvent(R.id.ButtonUp, MythCom.KEY_up);
