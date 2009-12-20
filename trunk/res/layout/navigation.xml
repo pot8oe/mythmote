@@ -12,7 +12,7 @@
 </TableRow>
 <TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Music" android:id="@+id/ButtonJump4"></Button>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Videos" android:id="@+id/ButtonJump5"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Guide" android:clickable="true" android:id="@+id/ButtonJump6"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true" android:id="@+id/ButtonJump6" android:text="Status"></Button>
 </TableRow>
 <TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content">
 
@@ -23,6 +23,7 @@
 <TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonInfo" android:text="@string/info_str" android:drawableTop="@drawable/info"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:bufferType="normal" android:autoText="false" android:drawableTop="@drawable/up" android:text="@string/up_str" android:id="@+id/ButtonUp"></Button>
 
 
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/guide" android:id="@+id/ButtonGuide" android:text="Guide"></Button>
 </TableRow>
 <TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/left" android:text="@string/left_str" android:id="@+id/ButtonLeft"></Button>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/square" android:text="@string/select_str" android:id="@+id/ButtonSelect"></Button>
