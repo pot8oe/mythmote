@@ -74,21 +74,16 @@ public class LocationEditor extends Activity {
 				// TODO Auto-generated method stub
 				
 			}});
-		if(this._location.Name == null)
+		if(this._location.Name.trim().equals(""))
 		{
 			builder.setMessage(R.string.error_invalid_name_str);
 			builder.show();
 		}
-		else if(this._location.Address == null)
+		else if(this._location.Address.trim().equals(""))
 		{
 			builder.setMessage(R.string.error_invalid_address_str);
 			builder.show();
 		}
-//		else if(this._location.Port < 0)
-//		{
-//			builder.setMessage(R.string.error_invalid_port_str);
-//			builder.show();
-//		}
 		else
 		{
 			//set default port if port was not set.
