@@ -20,7 +20,8 @@
 
 <TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 </TableRow>
-<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:bufferType="normal" android:autoText="false" android:drawableTop="@drawable/up" android:text="@string/up_str" android:id="@+id/ButtonUp"></Button>
+<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonInfo" android:text="@string/info_str" android:drawableTop="@drawable/info"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:bufferType="normal" android:autoText="false" android:drawableTop="@drawable/up" android:text="@string/up_str" android:id="@+id/ButtonUp"></Button>
+
 
 </TableRow>
 <TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/left" android:text="@string/left_str" android:id="@+id/ButtonLeft"></Button>
