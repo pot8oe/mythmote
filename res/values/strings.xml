@@ -56,4 +56,5 @@
 <string name="ch_return_str">Last</string>
 <string name="pause_str">Pause</string>
 <string name="menu_str">Menu</string>
+<string name="info_str">Info</string>
 </resources>
