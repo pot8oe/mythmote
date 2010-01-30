@@ -1,6 +1,7 @@
 package tkj.android.homecontrol.mythmote;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -93,6 +94,7 @@ public class MythCom {
 	
 	private static Socket _socket;
 	private static OutputStreamWriter _outputStream;
+	private static InputStreamReader  _inputStream;
 	private static Activity _parent;
 	private static ConnectivityManager _conMgr;
 	private static String _status;
@@ -137,7 +139,6 @@ public class MythCom {
 			this.SetStatus("Connecting", STATUS_CONNECTING);
 			
 			//create a socket connecting to the address on the requested port
-			_socket = new Socket();//address, port
 			this.connectSocket();
 	}
 	
@@ -165,66 +166,38 @@ public class MythCom {
 	
 	public void SendJumpCommand(String jumpPoint)
 	{
-		if(_outputStream != null)
-		{
-			try
-			{
-				_outputStream.write(String.format("jump %s\n", jumpPoint));
-				_outputStream.flush();
-			}
-			catch (IOException e)
-			{
-				this.SetStatus("I/O Error sending Jump", STATUS_ERROR);
-			}
-		}
+		//send command data
+		this.SendData(String.format("jump %s\n", jumpPoint));
+		
+		//update screen location
+		queryMythScreen();
 	}
 	
 	public void SendKey(String key)
 	{
-		if(_outputStream != null)
-		{
-			try
-			{
-				_outputStream.write(String.format("key %s\n", key));
-				_outputStream.flush();
-			}
-			catch (IOException e)
-			{
-				this.SetStatus("I/O Error sending key", STATUS_ERROR);
-			}
-		}
+		//send command data
+		this.SendData(String.format("key %s\n", key));
+		
+		//update screen location
+		queryMythScreen();
 	}
 	
 	public void SendKey(char key)
 	{
-		if(_outputStream != null)
-		{
-			try
-			{
-				_outputStream.write(String.format("key %s\n", key));
-				_outputStream.flush();
-			}
-			catch (IOException e)
-			{
-				this.SetStatus("I/O Error sending key", STATUS_ERROR);
-			}
-		}
+		//send command data
+		this.SendData(String.format("key %s\n", key));
+		
+		//update screen location
+		queryMythScreen();
 	}
 	
 	public void SendPlaybackCmd(String cmd)
 	{
-		if(_outputStream != null)
-		{
-			try
-			{
-				_outputStream.write(String.format("play %s\n", cmd));
-				_outputStream.flush();
-			}
-			catch (IOException e)
-			{
-				this.SetStatus("I/O Error sending key", STATUS_ERROR);
-			}
-		}
+		//send command data
+		this.SendData(String.format("play %s\n", cmd));
+		
+		//update screen location
+		queryMythScreen();
 	}
 	
 	public void SetOnStatusChangeHandler(StatusChangedEventListener listener)
@@ -246,7 +219,8 @@ public class MythCom {
 	
 	public boolean IsConnected()
 	{
-		return _socket.isConnected();
+		
+		return _socket.isConnected() && _socket.isBound();
 	}
 	
 	
@@ -255,6 +229,9 @@ public class MythCom {
 	/** Connects _socket to _frontend using a separate thread  **/
 	private void connectSocket()
 	{
+		//create socket
+		_socket = new Socket();
+		
 		Thread thread = new Thread()
 		{
 			public void run()
@@ -269,6 +246,7 @@ public class MythCom {
 				//	{
 						_socket.connect(new InetSocketAddress(address, _frontend.Port), SOCKET_TIMEOUT);
 						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
+						_inputStream = new InputStreamReader(_socket.getInputStream());
 						
 						//check if everything was connected OK
 						if(!_socket.isConnected() || _outputStream == null)
@@ -308,6 +286,57 @@ public class MythCom {
 		thread.start();
 	}
 	
+	/** Sends data to the output stream of the socket.
+	 * Attempts to reconnect socket if connection does not already exist. **/
+	private void SendData(String data)
+	{
+		if(this.IsConnected() && _outputStream != null)
+		{
+			try
+			{
+				if(!data.endsWith("\n")) 
+					data = String.format("%s\n", data);
+				
+				_outputStream.write(data);
+				_outputStream.flush();
+			}
+			catch (IOException e)
+			{
+				this.SetStatus("I/O Error data", STATUS_ERROR);
+			}
+		}
+		else
+		{
+			this.connectSocket();
+		}
+	}
+	
+	/** Reads data from the input stream of the socket.
+	 * Returns null if no data in received **/
+	private char[] ReadData()
+	{
+		if(this.IsConnected() && _inputStream != null )
+		{
+			char[] buf = new char[100];
+			try 
+			{
+				if(_inputStream.ready())
+				{
+					int len = _inputStream.read(buf);
+					if(len != -1)
+						return buf;
+				}
+			} 
+			catch (IOException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//return null if no data was received
+		return null;
+	}
+	
 	/** Sets _status and fires the StatusChanged event **/
 	private void SetStatus(String StatusMsg, int code)
 	{
@@ -316,8 +345,28 @@ public class MythCom {
 			_statusListener.StatusChanged(StatusMsg, code);
 	}
 	
-	
-	
+	/** Returns the string representation of the current mythfrontend
+	 * screen location. Returns null on error **/
+	private String queryMythScreen()
+	{
+		//send query location command
+		this.SendData("query location");
+		
+		//read input stream
+		char[] data = this.ReadData();
+		
+		if(data != null && data.length > 0)
+		{
+			return data.toString();
+		}
+		else
+		{
+			//we're not receiving data the other end dropped out
+			this.connectSocket();
+				
+			return null;
+		}
+	}
 	
 	
 }
