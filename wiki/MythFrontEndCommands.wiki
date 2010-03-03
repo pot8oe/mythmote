@@ -118,7 +118,13 @@ query recording CHANID STARTTIME
                       - List info about the specified program
 query liveTV          - List current TV schedule
 query liveTV CHANID   - Query current program for specified channel
-query time            - Query current time on server
+query load            - List 1/5/15 load averages
+query memstats        - List free and total, physical and swap memory
+query time            - Query current time on frontend
+query uptime          - Query machine uptime
+query verbose         - Get current VERBOSE filter
+query version         - Query Frontend version details
+
 
 }}}
 
