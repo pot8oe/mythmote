@@ -168,7 +168,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory 
 			//even if the user selects the same location already selected.
     		MythMotePreferences.SelectLocation(this, new LocationChangedEventListener()
 			{
-				@Override
 				public void LocationChanged() {
 					//reconnect to selected location
 					connectToSelectedLocation();
