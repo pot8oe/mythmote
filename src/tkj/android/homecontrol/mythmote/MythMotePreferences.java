@@ -339,7 +339,6 @@ public class MythMotePreferences extends PreferenceActivity{
 				//even if the user selects the same location already selected.
 				SelectLocation(context, new LocationChangedEventListener()
 				{
-					@Override
 					public void LocationChanged() {
 						//reset the preferences list with udpates selection
 						setupPreferences(context);
