@@ -103,7 +103,6 @@ public class MythCom {
 	private static StatusChangedEventListener _statusListener;
 	private static FrontendLocation _frontend;
 	
-	private final String currentLocation = "";
 	private final Handler mHandler = new Handler();
 	private final Runnable mSocketActionComplete = new Runnable()
 	{
