@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next_str">Next</string>
+    <string name="previous_str">Prev</string>
+    <string name="port_example_string">default: 6546</string>
+    <string name="ip_Address_str">IP Address</string>
+    <string name="location_name_str">Location Name</string>
+    
+    
+    <string name="cancel_str">Cancel</string>
+    <string name="save_str">Save</string>
+    <string name="port_str">Port</string>
+    <string name="address_str">Address</string>
+    <string name="name_str">Name</string>
+    
+<string name="app_name">mythmote</string>
+<string name="settings_menu_str">Settings</string>
+<string name="rec_str">Rec</string>
+<string name="play_str">Play</string>
+<string name="stop_str">Stop</string>
+<string name="rw_str">Rew</string>
+<string name="ff_str">FF</string>
+<string name="up_str">Up</string>
+<string name="down_str">Down</string>
+<string name="left_str">Left</string>
+<string name="right_str">Right</string>
+<string name="select_str">Select</string>
+<string name="add_location_str">New Location</string>
+<string name="navigation_str">Navigation</string>
+<string name="media_str">Media</string>
+<string name="numpad_str">Numbers</string>
+
+<string name="enable_wifi_question_str">WiFi is not enabled and is required for proper application operation. Do you want to turn WiFi on now?</string>
+<string name="enable_wifi_str">Enable Wifi</string>
+<string name="exit_app_str">Exit mythmote</string>
+<string name="enabling_wifi_str">Enabling WiFI...</string>
+<string name="ok_str">OK</string>
+<string name="no_route_to_host_str">No route to host</string>
+<string name="connected_str">Connected</string>
+<string name="reconnect_str">Reconnect</string>
+<string name="attempting_to_connect_str">Attempting to connect to host</string>
+
+<string name="selected_location_str">Selected Location</string>
+<string name="location_list_str">Location List</string>
+<string name="error_input_str">Input Error</string>
+<string name="error_invalid_name_str">Invalid Name</string>
+<string name="error_invalid_address_str">Invalid Address</string>
+<string name="error_invalid_port_str">Invalid Port</string>
+<string name="delete_location_str">Delete Location</string>
+
+<string name="mute_str">Mute</string>
+<string name="vol_up_str">Vol +</string>
+<string name="vol_down_str">Vol -</string>
+<string name="ch_up_str">Ch +</string>
+<string name="ch_down_str">Ch -</string>
+<string name="ch_return_str">Last</string>
+<string name="pause_str">Pause</string>
+<string name="menu_str">Menu</string>
+<string name="info_str">Info</string>
+</resources>
