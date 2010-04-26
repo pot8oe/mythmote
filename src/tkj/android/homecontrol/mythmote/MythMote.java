@@ -1,7 +1,7 @@
 package tkj.android.homecontrol.mythmote;
 
 
-import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
+import tkj.android.homecontrol.mythmote.MythMotePreferences.LocationChangedEventListener;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -16,11 +16,12 @@ import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 
 
 
-public class MythMote extends TabActivity  implements TabHost.TabContentFactory, OnTabChangeListener, LocationChangedEventListener{	
+public class MythMote extends TabActivity  implements TabHost.TabContentFactory {	
 
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -30,7 +31,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	
-	private static TabHost _tabHost;
 	private static MythCom _comm;
 	private static MythCom.StatusChangedEventListener _statusChanged;
 	private static FrontendLocation _location = new FrontendLocation();
@@ -71,35 +71,56 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
         
         //create comm class
         _comm = new MythCom(this);
-        
         //set status changed event handler
         _comm.SetOnStatusChangeHandler(_statusChanged);
         
         //create tab UI
-        _tabHost = getTabHost();
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
+        final TabHost tabHost = getTabHost();
+        tabHost.addTab(tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
         		this.getString(R.string.navigation_str),
         		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
+        tabHost.addTab(tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
         		this.getString(R.string.media_str),
         		this.getResources().getDrawable(R.drawable.media)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
+        tabHost.addTab(tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
         		this.getString(R.string.numpad_str),
         		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this)); 
         
-        //setup on tab change event
-        _tabHost.setOnTabChangedListener(this);
+        
+        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+
+			public void onTabChanged(String arg0) {
+				
+				int tabIndex = tabHost.getCurrentTab();
+				
+				switch(tabIndex)
+				{
+				case 0://navigation
+					setupNavigationPanelButtonEvents();
+					break;
+					
+				case 1://media
+					setupMediaPanelButtonEvents();
+					break;
+					
+				case 2://num pad
+					setupNumberPadButtonEvents();
+					break;
+				};
+				
+			}
+        	
+        });
         
         //set navigation tab and setup events
-        _tabHost.setCurrentTab(0);
-        
-        //setup navifation panel button events
+        tabHost.setCurrentTab(0);
         setupNavigationPanelButtonEvents();
     }
     
     /** Called when the activity is resumed **/
     @Override
-    public void onResume(){
+    public void onResume()
+    {
     	super.onResume();
     	 
     	//connect to saved location
@@ -108,62 +129,56 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
     
 	/** Called when the activity is paused **/
     @Override
-    public void onPause(){
+    public void onPause()
+    {
     	super.onPause();
     	
-    	//disconnect from frontend
     	_comm.Disconnect();
 
     }
     
-    /** Called to create the options menu once.  **/
+    /** Called to create the options menu once.  */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        
-        //create settings  menu item
         menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(R.drawable.settings);
-        
-        //create reconnect menu item
         menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
-        
-        //create select location menu item
         menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
-        
-        //return results
         return result;
     }
     
-    /** Called when a menu item is selected **/
    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
 	   try
 	   {
-		   //Check which menu item was selected
-		   switch(item.getItemId())
-		   {
-		   		case SETTINGS_ID:
-		   			//Create mythmote preferences intent and start the activity
-		   			Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
-				   	this.startActivity(intent);
-				   	break;
+    	if(item.getItemId() == SETTINGS_ID)
+    	{/* This fails */
+    		Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
+    		this.startActivity(intent);
+    	}
+    	else if(item.getItemId() == RECONNECT_ID)
+    	{
+    		connectToSelectedLocation();
+    	}
+    	else if(item.getItemId() == SELECTLOCATION_ID)
+    	{
+    		//Displays the list of configured frontend locations.
+			//Fires the locationChanged event when the user selects a location
+			//even if the user selects the same location already selected.
+    		MythMotePreferences.SelectLocation(this, new LocationChangedEventListener()
+			{
+				@Override
+				public void LocationChanged() {
+					//reconnect to selected location
+					connectToSelectedLocation();
+				}
 
-		   		case RECONNECT_ID:
-		   			//connect to selected location
-		   			this.connectToSelectedLocation();
-		   			break;
-		   			
-		   		case SELECTLOCATION_ID:
-		   			//Displays the list of configured frontend locations.
-					//Fires the locationChanged event when the user selects a location
-					//even if the user selects the same location already selected.
-					MythMotePreferences.SelectLocation(this, this);
-		   			break;
-		   };
+			});
+    	}
 	   }
 	   catch(android.content.ActivityNotFoundException ex)
 	   {
-		   //Show error when actibity is not found
 		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
 		   diag.setMessage(ex.getMessage());
 		   diag.setTitle("Error");
@@ -172,96 +187,28 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	   }
     	return false;
     }
-   
-    /** Called when the selected tab page is changed **/
-	public void onTabChanged(String arg0) {
-		
-		//get tab tag
-		String tabTag = _tabHost.getCurrentTabTag();
-		
-		//check for which tab has been selected
-		if(tabTag.equals(NAME_NAV_TAB))
-		{
-			//setup navigation tab button events
-			setupNavigationPanelButtonEvents();
-		}
-		else if(tabTag.equals(NAME_MEDIA_TAB))
-		{
-			//setup media tab button events
-			setupMediaPanelButtonEvents();
-		}
-		else if(tabTag.equals(NAME_NUMPAD_TAB))
-		{
-			//setup number pad button events
-			setupNumberPadButtonEvents();
-		}
-	}
-   
-    /** Called when a tab is selected. Returns the layout for the selected tab. 
-    * Default is navigation tab */
-	public View createTabContent(String tag) {
-		
-		//check which tab content to return
-		if(tag == NAME_NAV_TAB)
-		{
-			//get navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
-		}
-		else if(tag == NAME_MEDIA_TAB)
-		{
-			//return media tab view
-			return this.getLayoutInflater().inflate(R.layout.mediacontrol, this.getTabHost().getTabContentView(), false);
-		}
-		else if(tag == NAME_NUMPAD_TAB)
-		{
-			//return number pad view
-			return this.getLayoutInflater().inflate(R.layout.numberpad, this.getTabHost().getTabContentView(), false);
-		}
-		else
-		{
-			//default to navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
-		}
-	}
-
-	/** Called when the frontend location is changed */
-	public void LocationChanged() {
-		
-		//connect to selected location
-		this.connectToSelectedLocation();
-	}
-   
-    /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
+    
+   /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
 	private void connectToSelectedLocation() {
 
 		//get selected frontend id
 		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
         	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
         
-		//create location database adapter
         LocationDbAdapter dbAdatper = new LocationDbAdapter(this);
-        
-        //open connect
         dbAdatper.open();
-        
-        //get the selected location information by it's ID
         Cursor cursor = dbAdatper.fetchFrontendLocation(selected);
-        
-        //make sure returned cursor is valid
         if(cursor != null && cursor.getCount() > 0)
         {
-        	//set selected location from Cursor
         	_location.ID = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
         	_location.Name = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
         	_location.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
         	_location.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
         }
-        
-        //close cursor and db adapter
         cursor.close();
         dbAdatper.close();
     	
-    	//connect to location if it is not null
+    	
     	if(_location != null)
     		_comm.Connect(_location);
 	}
@@ -355,7 +302,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	    
     }
     
-    /** Sets up a mythcom jump button click event  **/
+    
     private final void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
     {
     	final Button buttonJump = (Button) this.findViewById(buttonViewId);
@@ -367,7 +314,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	    });
     }
     
-    /** Sets up a mythcom keyboard button click event **/
     private final void setupKeyButtonEvent(int buttonViewId, final String sendKey)
     {
     	final Button button = (Button) this.findViewById(buttonViewId);
@@ -379,7 +325,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	    });
     }
     
-    /** Sets up a mythcom playback command button click event **/
     private final void setupPlaybackCmdButtonEvent(int buttonViewId, final String sendCmd)
     {
     	final Button button = (Button) this.findViewById(buttonViewId);
@@ -391,6 +336,28 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	    });
     }
 
+
+    /** Called when a tab is selected. Returns the layout for the selected tab. 
+     * Default is navigation tab */
+	public View createTabContent(String tag) {
+		
+		if(tag == NAME_NAV_TAB)
+		{
+			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
+		}
+		else if(tag == NAME_MEDIA_TAB)
+		{
+			return this.getLayoutInflater().inflate(R.layout.mediacontrol, this.getTabHost().getTabContentView(), false);
+		}
+		else if(tag == NAME_NUMPAD_TAB)
+		{
+			return this.getLayoutInflater().inflate(R.layout.numberpad, this.getTabHost().getTabContentView(), false);
+		}
+		else
+		{
+			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
+		}
+	}
 
 }
 

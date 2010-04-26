@@ -2,22 +2,35 @@
 package tkj.android.homecontrol.mythmote;
 
 
+import java.util.EventListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.database.Cursor;
+import android.database.sqlite.*;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MythMotePreferences extends PreferenceActivity{
+	
+	public interface LocationChangedEventListener extends EventListener {
+		
+		public void LocationChanged();
+	}
 
 	public static final int NEW_LOCATION_ID = Menu.FIRST;
 	public static final int DELETE_LOCATION_ID = Menu.FIRST + 1;
@@ -326,8 +339,9 @@ public class MythMotePreferences extends PreferenceActivity{
 				//even if the user selects the same location already selected.
 				SelectLocation(context, new LocationChangedEventListener()
 				{
+					@Override
 					public void LocationChanged() {
-						//reset preference list with updated selection
+						//reset the preferences list with udpates selection
 						setupPreferences(context);
 					}
 
@@ -382,5 +396,6 @@ public class MythMotePreferences extends PreferenceActivity{
 		editor.putInt(MythMotePreferences.PREF_SELECTED_LOCATION, id);
 		editor.commit();
 	}
+	
 
 }

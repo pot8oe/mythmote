@@ -12,7 +12,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Location database adapter. 
+ * Simple notes database access helper class. Defines the basic CRUD operations
+ * for the notepad example, and gives the ability to list all notes as well as
+ * retrieve or modify a specific note.
+ * 
+ * This has been improved from the first version of this tutorial through the
+ * addition of better error handling and also using returning a Cursor instead
+ * of using a collection of inner classes (which is less scalable and not
+ * recommended).
  */
 public class LocationDbAdapter {
 
