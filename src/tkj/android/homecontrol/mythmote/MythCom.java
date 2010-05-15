@@ -8,6 +8,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.EventListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,8 +18,8 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Toast;
 
+/** Class that handles network communication with mythtvfrontend **/
 public class MythCom {
-	
 
 	public interface StatusChangedEventListener extends EventListener {
 		
@@ -91,7 +93,7 @@ public class MythCom {
 	public static final int STATUS_CONNECTING = 3;
 	public static final int STATUS_ERROR = 99;
 	
-	
+	private static Timer _timer;
 	private static Socket _socket;
 	private static OutputStreamWriter _outputStream;
 	private static InputStreamReader  _inputStream;
@@ -108,17 +110,38 @@ public class MythCom {
 	{
 		public void run()
 		{
-			SetStatus(_tmpStatus, _tmpStatusCode);
+			setStatus(_tmpStatus, _tmpStatusCode);
 		}
 		
 	};
+	
+	/** TimerTask that probes the current connection for its mythtv screen.  **/
+	private final TimerTask timerTaskCheckStatus = new TimerTask()
+	{
+		//Run at every timer tick
+		public void run() 
+		{
+			//only if socket is connected
+			if(IsConnected())
+			{
+				//set disconnected status if nothing is returned.
+				if(queryMythScreen() == null)
+				{
+					//_timer.cancel();
+					setStatus("Disconnected", STATUS_DISCONNECTED);
+				}
+			}
+		}
+	};
 
 	
-	/** Parent activity is used to get context and to close app when wifi is denied */
+	/** Parent activity is used to get context */
 	public MythCom(Activity parentActivity)
 	{
 		_parent = parentActivity;
 		_conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+		_timer = new Timer();
+		_timer.schedule(timerTaskCheckStatus, 5000, 5000);
 	}
 	
 	/** Connects to the given address and port. Any existing connection will be broken first **/
@@ -135,7 +158,7 @@ public class MythCom {
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 
-			this.SetStatus("Connecting", STATUS_CONNECTING);
+			this.setStatus("Connecting", STATUS_CONNECTING);
 			
 			//create a socket connecting to the address on the requested port
 			this.connectSocket();
@@ -146,57 +169,52 @@ public class MythCom {
 	{
 		try
 		{
+			//check if output stream exists
 			if(_outputStream != null)
 			{
+				//close output stream
 				_outputStream.close();
 				_outputStream = null;
 			}
 			
-			if(_socket != null && _socket.isConnected())
+			//check if socket exists
+			if(_socket != null)
 			{
-				_socket.close();
+				//close if connected
+				if(_socket.isConnected()) _socket.close();
+
+				//set socket to null
+				_socket = null;
 			}
 		}
 		catch(IOException ex)
 		{
-			this.SetStatus("Disconnect I/O error", STATUS_ERROR);
+			this.setStatus("Disconnect I/O error", STATUS_ERROR);
 		}
 	}
 	
 	public void SendJumpCommand(String jumpPoint)
 	{
 		//send command data
-		this.SendData(String.format("jump %s\n", jumpPoint));
-		
-		//update screen location
-		queryMythScreen();
+		this.sendData(String.format("jump %s\n", jumpPoint));
 	}
 	
 	public void SendKey(String key)
 	{
 		//send command data
-		this.SendData(String.format("key %s\n", key));
-		
-		//update screen location
-		queryMythScreen();
+		this.sendData(String.format("key %s\n", key));
 	}
 	
 	public void SendKey(char key)
 	{
 		//send command data
-		this.SendData(String.format("key %s\n", key));
-		
-		//update screen location
-		queryMythScreen();
+		this.sendData(String.format("key %s\n", key));
 	}
 	
 	public void SendPlaybackCmd(String cmd)
 	{
 		//send command data
-		this.SendData(String.format("play %s\n", cmd));
-		
-		//update screen location
-		queryMythScreen();
+		this.sendData(String.format("play %s\n", cmd));
 	}
 	
 	public void SetOnStatusChangeHandler(StatusChangedEventListener listener)
@@ -218,10 +236,12 @@ public class MythCom {
 	
 	public boolean IsConnected()
 	{
+		if(_socket == null) return false;
 		
 		return _socket.isConnected() && _socket.isBound();
 	}
-	
+
+
 	
 	
 	
@@ -287,7 +307,7 @@ public class MythCom {
 	
 	/** Sends data to the output stream of the socket.
 	 * Attempts to reconnect socket if connection does not already exist. **/
-	private void SendData(String data)
+	private void sendData(String data)
 	{
 		if(this.IsConnected() && _outputStream != null)
 		{
@@ -301,7 +321,7 @@ public class MythCom {
 			}
 			catch (IOException e)
 			{
-				this.SetStatus("I/O Error data", STATUS_ERROR);
+				this.setStatus("I/O Error data", STATUS_ERROR);
 			}
 		}
 		else
@@ -312,7 +332,7 @@ public class MythCom {
 	
 	/** Reads data from the input stream of the socket.
 	 * Returns null if no data in received **/
-	private char[] ReadData()
+	private char[] readData()
 	{
 		if(this.IsConnected() && _inputStream != null )
 		{
@@ -322,7 +342,7 @@ public class MythCom {
 				if(_inputStream.ready())
 				{
 					int len = _inputStream.read(buf);
-					if(len != -1)
+					if(len > 0)
 						return buf;
 				}
 			} 
@@ -337,11 +357,18 @@ public class MythCom {
 	}
 	
 	/** Sets _status and fires the StatusChanged event **/
-	private void SetStatus(String StatusMsg, int code)
+	private void setStatus(final String StatusMsg, final int code)
 	{
-		_status = StatusMsg;
-		if(_statusListener != null)
-			_statusListener.StatusChanged(StatusMsg, code);
+		_parent.runOnUiThread(new Runnable(){
+
+			public void run() 
+			{
+				_status = StatusMsg;
+				if(_statusListener != null)
+					_statusListener.StatusChanged(StatusMsg, code);
+			}
+			
+		});
 	}
 	
 	/** Returns the string representation of the current mythfrontend
@@ -349,10 +376,10 @@ public class MythCom {
 	private String queryMythScreen()
 	{
 		//send query location command
-		this.SendData("query location");
+		this.sendData("query location");
 		
 		//read input stream
-		char[] data = this.ReadData();
+		char[] data = this.readData();
 		
 		if(data != null && data.length > 0)
 		{
@@ -360,12 +387,12 @@ public class MythCom {
 		}
 		else
 		{
-			//we're not receiving data the other end dropped out
-			this.connectSocket();
-				
+			//we're not receiving data the other 
+			//end must have disconnected
 			return null;
 		}
 	}
-	
+
+
 	
 }
