@@ -20,7 +20,12 @@ import android.view.View.OnClickListener;
 
 
 
-public class MythMote extends TabActivity  implements TabHost.TabContentFactory, OnTabChangeListener, LocationChangedEventListener{	
+public class MythMote extends TabActivity  implements 
+	TabHost.TabContentFactory, 
+	OnTabChangeListener, 
+	LocationChangedEventListener, 
+	MythCom.StatusChangedEventListener
+	{	
 
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -32,7 +37,6 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	
 	private static TabHost _tabHost;
 	private static MythCom _comm;
-	private static MythCom.StatusChangedEventListener _statusChanged;
 	private static FrontendLocation _location = new FrontendLocation();
 	private static int selected = -1;
 	
@@ -41,39 +45,11 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //Create status changed event handler
-        _statusChanged = new MythCom.StatusChangedEventListener(){
-
-    		public void StatusChanged(String StatusMsg, int code) {
-    			//set titleJUMPPOINT_guidegrid
-    			setTitle(StatusMsg);
-    			
-    			//change color based on status code
-    			if(code == MythCom.STATUS_ERROR)
-    			{
-    				setTitleColor(Color.RED);
-    			}
-    			else if(code == MythCom.STATUS_DISCONNECTED)
-    			{
-    				setTitleColor(Color.YELLOW);
-    			}
-    			else if(code == MythCom.STATUS_CONNECTED)
-    			{
-    				setTitleColor(Color.GREEN);
-    			}
-    			else if(code == MythCom.STATUS_CONNECTING)
-    			{
-    				setTitleColor(Color.YELLOW);
-    			}
-    		}
-    		
-    	};
-        
         //create comm class
         _comm = new MythCom(this);
         
         //set status changed event handler
-        _comm.SetOnStatusChangeHandler(_statusChanged);
+        _comm.SetOnStatusChangeHandler(this);
         
         //create tab UI
         _tabHost = getTabHost();
@@ -231,6 +207,30 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 		this.connectToSelectedLocation();
 	}
    
+	/** Called when MythCom status changes **/
+    public void StatusChanged(String StatusMsg, int statusCode) {
+		//set titleJUMPPOINT_guidegrid
+		setTitle(StatusMsg);
+		
+		//change color based on status code
+		if(statusCode == MythCom.STATUS_ERROR)
+		{
+			setTitleColor(Color.RED);
+		}
+		else if(statusCode == MythCom.STATUS_DISCONNECTED)
+		{
+			setTitleColor(Color.RED);
+		}
+		else if(statusCode == MythCom.STATUS_CONNECTED)
+		{
+			setTitleColor(Color.GREEN);
+		}
+		else if(statusCode == MythCom.STATUS_CONNECTING)
+		{
+			setTitleColor(Color.YELLOW);
+		}
+	}
+	
     /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
 	private void connectToSelectedLocation() {
 
@@ -390,6 +390,7 @@ public class MythMote extends TabActivity  implements TabHost.TabContentFactory,
 	        }
 	    });
     }
+
 
 
 }
