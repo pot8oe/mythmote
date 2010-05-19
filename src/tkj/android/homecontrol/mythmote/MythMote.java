@@ -5,6 +5,7 @@ import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -90,6 +91,14 @@ public class MythMote extends TabActivity  implements
     	//disconnect from frontend
     	_comm.Disconnect();
 
+    }
+    
+    /** Called when device configuration changes occur. Configuration 
+     * changes that cause this function to be called must be 
+     * registered in AndroidManifest.xml **/
+    public void onConfigurationChanged(Configuration config)
+    {
+    	super.onConfigurationChanged(config);    	
     }
     
     /** Called to create the options menu once.  **/
