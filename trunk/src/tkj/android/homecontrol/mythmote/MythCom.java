@@ -77,12 +77,17 @@ public class MythCom {
 	public static final String KEY_backspace = "backspace";
 	public static final String KEY_esc = "escape";
 	
+    public static final String VOLUME_DOWN = "[";
+    public static final String VOLUME_UP = "]";
+    public static final String VOLUME_MUTE = "|";
+    public static final String CH_RETURN = "h";
 	public static final String PLAY_CH_UP = "channel up";
 	public static final String PLAY_CH_DW = "channel down";
 	public static final String PLAY_STOP = "stop";
 	public static final String PLAY_PLAY = "speed normal";
 	public static final String PLAY_SEEK_FW = "seek forward";
 	public static final String PLAY_SEEK_BW = "seek backward";
+	public static final String EXIT = "exit";
 	
 	public static final int DEFAULT_MYTH_PORT = 6546;
 	public static final int SOCKET_TIMEOUT = 2000;
@@ -130,6 +135,10 @@ public class MythCom {
 					//_timer.cancel();
 					setStatus("Disconnected", STATUS_DISCONNECTED);
 				}
+				else
+				{
+					setStatus(_frontend.Name + " - Connected", STATUS_CONNECTED);
+				}
 			}
 		}
 	};
@@ -169,23 +178,29 @@ public class MythCom {
 	{
 		try
 		{
+			//send exit if connected
+			if(this.IsConnected())
+				this.sendData("exit\n");
+			
 			//check if output stream exists
 			if(_outputStream != null)
 			{
-				//close output stream
 				_outputStream.close();
 				_outputStream = null;
 			}
 			
-			//check if socket exists
-			if(_socket != null)
+			//check if input stream exists
+			if(_inputStream != null)
 			{
-				//close if connected
-				if(_socket.isConnected()) _socket.close();
-
-				//set socket to null
-				_socket = null;
+				//close input stream
+				_inputStream.close();
+				_inputStream = null;
 			}
+			
+			if(this.IsConnected())
+				_socket.close();
+			if(_socket != null)
+				_socket = null;
 		}
 		catch(IOException ex)
 		{
@@ -238,7 +253,7 @@ public class MythCom {
 	{
 		if(_socket == null) return false;
 		
-		return _socket.isConnected() && _socket.isBound();
+		return (!_socket.isClosed()) && _socket.isConnected();
 	}
 
 
@@ -292,7 +307,7 @@ public class MythCom {
 				}
 				catch (IOException e)
 				{
-					_tmpStatus = "I/O Error connecting to host: " + _frontend.Address;
+					_tmpStatus = e.getLocalizedMessage() + ": " + _frontend.Address;
 					_tmpStatusCode = STATUS_ERROR;
 				}
 				
@@ -323,10 +338,6 @@ public class MythCom {
 			{
 				this.setStatus("I/O Error data", STATUS_ERROR);
 			}
-		}
-		else
-		{
-			this.connectSocket();
 		}
 	}
 	
