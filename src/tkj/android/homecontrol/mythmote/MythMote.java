@@ -54,6 +54,7 @@ public class MythMote extends TabActivity  implements
         
         //create tab UI
         _tabHost = getTabHost();
+        
         _tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
         		this.getString(R.string.navigation_str),
         		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
@@ -351,12 +352,37 @@ public class MythMote extends TabActivity  implements
 	    {
 		    buttonJump.setOnClickListener(new OnClickListener() {
 		        public void onClick(View v) {
-		            // Perform action on clicks
+		            
+		        	//get send keyboard text
 		        	Editable text = textBox.getText();
 		        	int count = text.length();
+		        	
+		        	//for each character
 		        	for(int i=0; i<count; i++)
 		        	{
-		        		_comm.SendKey(text.charAt(i));
+		        		//get char
+		        		char c = text.charAt(i);
+		        		
+		        		//check if it's whitespace
+		        		if(Character.isWhitespace(c))
+		        		{
+		        			if(c == '\t')//tab
+		        			{
+		        				_comm.SendKey("tab");
+		        			}
+		        			else if(c == ' ')//space
+		        			{
+		        				_comm.SendKey("space");
+		        			}
+		        			else if(c == '\r')//enter/return
+		        			{
+		        				_comm.SendKey("enter");
+		        			}
+		        		}
+		        		else//not white space. Just send as is
+		        		{
+		        			_comm.SendKey(c);
+		        		}
 		        	}
 		        }
 		    });
