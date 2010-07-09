@@ -4,7 +4,6 @@
 	android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android"
 	android:stretchColumns="0,1,2,3,4,5" android:layout_height="wrap_content">
 		<TableRow android:paddingTop="2dip"  android:layout_weight=".25">
-
 		<Button android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:text="Music" android:id="@+id/ButtonJump4"></Button>
 		<Button android:layout_width="fill_parent"
@@ -21,27 +20,27 @@
 	<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content"
 		android:layout_height="fill_parent" android:layout_gravity="clip_vertical" android:layout_weight=".25">
 		<Button android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:drawableTop="@drawable/square"
+			android:text="@string/select_str" android:id="@+id/ButtonSelect"></Button>
+		<Button android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:id="@+id/ButtonInfo"
 			android:text="@string/info_str" android:drawableTop="@drawable/info"></Button>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/guide"
-			android:id="@+id/ButtonGuide" android:text="Guide"></Button>
 		<Button android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:bufferType="normal"
 			android:autoText="false" android:drawableTop="@drawable/up"
 			android:text="@string/up_str" android:id="@+id/ButtonUp"></Button>
 		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:cursorVisible="true"
-			android:id="@+id/ButtonEsc" android:text="@string/cancel_str"
-			android:drawableTop="@drawable/cancel"></Button>
+			android:layout_height="fill_parent" android:drawableTop="@drawable/guide"
+			android:id="@+id/ButtonGuide" android:text="Guide"></Button>
 		<Button android:layout_width="fill_parent" android:drawableTop="@drawable/home"
 			android:layout_height="fill_parent" android:text="Home" android:id="@+id/ButtonJump1"></Button>
 	</TableRow>
 	<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content"
 		android:layout_height="fill_parent"  android:layout_weight=".25">
 		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/square"
-			android:text="@string/select_str" android:id="@+id/ButtonSelect"></Button>
+			android:layout_height="fill_parent" android:cursorVisible="true"
+			android:id="@+id/ButtonEsc" android:text="@string/cancel_str"
+			android:drawableTop="@drawable/cancel"></Button>
 		<Button android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:drawableTop="@drawable/left"
 			android:text="@string/left_str" android:id="@+id/ButtonLeft"></Button>
