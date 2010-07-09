@@ -56,15 +56,8 @@ public class MythMote extends TabActivity  implements
         //create tab UI
         _tabHost = getTabHost();
         
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
-        		this.getString(R.string.navigation_str),
-        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
-        		this.getString(R.string.media_str),
-        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
-        		this.getString(R.string.numpad_str),
-        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this)); 
+        //create tabs
+    	createTabs();
         
         //setup on tab change event
         _tabHost.setOnTabChangedListener(this);
@@ -111,16 +104,8 @@ public class MythMote extends TabActivity  implements
     	//clear all tabs
     	_tabHost.clearAllTabs();
     	
-    	//recreate tabs
-    	_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
-        		this.getString(R.string.navigation_str),
-        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
-        		this.getString(R.string.media_str),
-        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
-        		this.getString(R.string.numpad_str),
-        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
+    	//create tabs
+    	createTabs();
         
         //set current tab back
         _tabHost.setCurrentTab(cTab);
@@ -225,6 +210,23 @@ public class MythMote extends TabActivity  implements
 			//setup number pad button events
 			setupNumberPadButtonEvents();
 		}
+	}
+	
+	/**
+	 * Called to create and add tabs to the tabhost
+	 */
+	private void createTabs()
+	{
+		//recreate tabs
+    	_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
+        		this.getString(R.string.navigation_str),
+        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
+        		this.getString(R.string.media_str),
+        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
+        		this.getString(R.string.numpad_str),
+        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
 	}
    
     /** Called when a tab is selected. Returns the layout for the selected tab. 
