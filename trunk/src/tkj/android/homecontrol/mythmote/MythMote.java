@@ -99,7 +99,30 @@ public class MythMote extends TabActivity  implements
      * registered in AndroidManifest.xml **/
     public void onConfigurationChanged(Configuration config)
     {
-    	super.onConfigurationChanged(config);    	
+    	super.onConfigurationChanged(config);
+    	
+    	//get current tab index
+    	int cTab = _tabHost.getCurrentTab();
+    	
+    	//set current tab to 0. Clear seems to fail when set to anything else
+    	_tabHost.setCurrentTab(0);
+    	
+    	//clear all tabs
+    	_tabHost.clearAllTabs();
+    	
+    	//recreate tabs
+    	_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
+        		this.getString(R.string.navigation_str),
+        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
+        		this.getString(R.string.media_str),
+        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
+        		this.getString(R.string.numpad_str),
+        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
+        
+        //set current tab back
+        _tabHost.setCurrentTab(cTab);
     }
     
     /** Called to create the options menu once.  **/
