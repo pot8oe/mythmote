@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,6 +124,26 @@ public class MythMote extends TabActivity  implements
         
         //set current tab back
         _tabHost.setCurrentTab(cTab);
+    }
+    
+    /**
+     * Overridden to allow the hardware volume controls to influence the Myth front end
+     * volume control
+     */
+    //@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+            switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    _comm.SendKey(MythCom.VOLUME_DOWN);
+                    return true;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                    _comm.SendKey(MythCom.VOLUME_UP);
+                    return true;
+            default:
+                    return super.onKeyDown(keyCode, event);
+
+            }
+
     }
     
     /** Called to create the options menu once.  **/
@@ -338,14 +359,14 @@ public class MythMote extends TabActivity  implements
     	this.setupKeyButtonEvent(R.id.ButtonSkipForward, "end");
     	
     	//volume
-    	this.setupKeyButtonEvent(R.id.ButtonVolUp, "]");
-    	this.setupKeyButtonEvent(R.id.ButtonVolDown, "[");
-    	this.setupKeyButtonEvent(R.id.ButtonMute, "|");
+    	this.setupKeyButtonEvent(R.id.ButtonVolUp, MythCom.VOLUME_UP);
+    	this.setupKeyButtonEvent(R.id.ButtonVolDown, MythCom.VOLUME_DOWN);
+    	this.setupKeyButtonEvent(R.id.ButtonMute, MythCom.VOLUME_MUTE);
     	
     	//ch
     	this.setupPlaybackCmdButtonEvent(R.id.ButtonChUp, MythCom.PLAY_CH_UP);
     	this.setupPlaybackCmdButtonEvent(R.id.ButtonChDown, MythCom.PLAY_CH_DW);
-	    this.setupKeyButtonEvent(R.id.ButtonChReturn, "h");
+	    this.setupKeyButtonEvent(R.id.ButtonChReturn, MythCom.CH_RETURN);
     }
     
     /** Sets up the number pad tab's buttons **/
