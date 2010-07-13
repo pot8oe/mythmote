@@ -4,10 +4,12 @@ package tkj.android.homecontrol.mythmote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -23,6 +25,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	public static final int DELETE_LOCATION_ID = Menu.FIRST + 1;
 	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
+	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 	
 	private static int _idIndex;
@@ -42,6 +45,7 @@ public class MythMotePreferences extends PreferenceActivity{
 //        
 //        //set preference screen
 //		this.setPreferenceScreen(prefScreen);
+        this.getPreferenceManager().setSharedPreferencesName(MYTHMOTE_SHARED_PREFERENCES_ID);
     }
 	
 	@Override
@@ -86,12 +90,15 @@ public class MythMotePreferences extends PreferenceActivity{
         selectedCat.setTitle(R.string.selected_location_str);
         PreferenceCategory locationListCat = new PreferenceCategory(context);
         locationListCat.setTitle(R.string.location_list_str);
+        PreferenceCategory generalCat = new PreferenceCategory(context);
+        generalCat.setTitle(R.string.general_preferences_str);
 
         //add categories to preference screen
         prefScreen.addPreference(selectedCat);
         prefScreen.addPreference(locationListCat);
+        prefScreen.addPreference(generalCat);
         
-        //Create add and delete location preferences
+        //Create add and delete location preferences and add to location list
         locationListCat.addPreference(createAddLocationPreference(
         		context, 
         		context.getString(R.string.add_location_str),
@@ -100,6 +107,14 @@ public class MythMotePreferences extends PreferenceActivity{
         		context, 
         		context.getString(R.string.delete_location_str),
         		context.getString(R.string.delete_location_description_str)));
+        
+        //read haptic feedback shared preference
+        generalCat.addPreference(createCheckBox(
+        		context, 
+        		PREF_HAPTIC_FEEDBACK_ENABLED, 
+        		R.string.haptic_feedback_enabled_str,
+        		R.string.haptic_feedback_enabled_description_str,
+        		false));
         
         //open DB
         LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
@@ -235,6 +250,17 @@ public class MythMotePreferences extends PreferenceActivity{
         }
 		cursor.close();
         _dbAdapter.close();
+	}
+	
+	private static CheckBoxPreference createCheckBox(Context context, String key, int title, int summary, Object defaultValue)
+	{
+		CheckBoxPreference pref = new CheckBoxPreference(context);
+        pref.setKey(key);
+        pref.setDefaultValue(defaultValue);
+        pref.setTitle(title);
+        pref.setSummary(summary);
+        pref.setPersistent(true);
+        return pref;
 	}
 	
 	private static Preference createLocationPreference(final Activity context, String key, String name, String value)
