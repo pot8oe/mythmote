@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.text.Editable;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ public class MythMote extends TabActivity  implements
 	private static MythCom _comm;
 	private static FrontendLocation _location = new FrontendLocation();
 	private static int selected = -1;
+	private static boolean hapticFeedbackEnabled = false;
 	
 	/** Called when the activity is first created.*/
     @Override
@@ -73,7 +75,7 @@ public class MythMote extends TabActivity  implements
     @Override
     public void onResume(){
     	super.onResume();
-    	 
+
     	//connect to saved location
         connectToSelectedLocation();
     }
@@ -228,6 +230,16 @@ public class MythMote extends TabActivity  implements
         		this.getString(R.string.numpad_str),
         		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
 	}
+	
+	private void loadSharedPreferences()
+	{
+		//get selected frontend id
+		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+        	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+		
+		hapticFeedbackEnabled = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+			.getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
+	}
    
     /** Called when a tab is selected. Returns the layout for the selected tab. 
     * Default is navigation tab */
@@ -289,11 +301,10 @@ public class MythMote extends TabActivity  implements
 	
     /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
 	private void connectToSelectedLocation() {
+		
+		//load shared preferences
+		this.loadSharedPreferences();
 
-		//get selected frontend id
-		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-        	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
-        
 		//create location database adapter
         LocationDbAdapter dbAdatper = new LocationDbAdapter(this);
         
@@ -439,11 +450,14 @@ public class MythMote extends TabActivity  implements
     /** Sets up a mythcom jump button click event  **/
     private final void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
     {
-    	final Button buttonJump = (Button) this.findViewById(buttonViewId);
-	    buttonJump.setOnClickListener(new OnClickListener() {
+    	final Button button = (Button) this.findViewById(buttonViewId);
+	    button.setOnClickListener(new OnClickListener() {
 	        public void onClick(View v) {
 	            // Perform action on clicks
 	            _comm.SendJumpCommand(jumpPoint);
+	            
+	            if(hapticFeedbackEnabled)
+	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 	        }
 	    });
     }
@@ -456,6 +470,9 @@ public class MythMote extends TabActivity  implements
 	        public void onClick(View v) {
 	            // Perform action on clicks
 	            _comm.SendKey(sendKey);
+	            
+	            if(hapticFeedbackEnabled)
+	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 	        }
 	    });
     }
@@ -468,6 +485,9 @@ public class MythMote extends TabActivity  implements
 	        public void onClick(View v) {
 	            // Perform action on clicks
 	            _comm.SendPlaybackCmd(sendCmd);
+	            
+	            if(hapticFeedbackEnabled)
+	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 	        }
 	    });
     }
