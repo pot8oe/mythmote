@@ -55,4 +55,7 @@
 <string name="menu_str">Menu</string>
 <string name="info_str">Info</string>
 <string name="no_frontend_locations_defined_str">No frontend locations defined.</string>
+<string name="general_preferences_str">General Preferences</string>
+<string name="haptic_feedback_enabled_str">Haptic Feedback Enabled</string>
+<string name="haptic_feedback_enabled_description_str">Perform haptic feedback on button press</string>
 </resources>
