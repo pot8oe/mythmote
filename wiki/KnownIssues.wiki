@@ -1,5 +1,4 @@
 #labels Phase-Support
-#Mythmote Known Issues
 
 = Mythmote Known Issues =
 
