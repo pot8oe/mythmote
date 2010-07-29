@@ -1,0 +1,9 @@
+#labels Phase-Support
+#MythMote Known Issues
+
+= MythMote Known Issues =
+
+ * *No control during video playback* - MythTV 0.21 uses mplayer to play video files that are not supported by the internal video player. When an external video player is in use mythtv cannot pass network remote control to player. Since MythMote uses the network remote control option in mythfrontend control of the video playback is lost.
+
+ * *Connection Refused* - If mythmote attempts to create a connection before the required data services is ready than mythmote can get into a state where it will refuse to connect. Usually this occurs when returning to mythmote before the wifi reconnects to it's hot spot. Sometimes attempting to connect to a different frontend and then returning back to the original frontend can overcome this state.
+
