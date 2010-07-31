@@ -256,8 +256,24 @@ public class MythCom {
 		return (!_socket.isClosed()) && _socket.isConnected();
 	}
 
+	/** Returns true if a route to the given InetAddress is available. **/
+	private static boolean checkRouteToHost(InetAddress address)throws IOException
+	{
+		//TODO SDK is depreciated. If we target a newer frame work chage to SDK_INT
+		int version = Integer.parseInt(android.os.Build.VERSION.SDK);
+		
+		if(version <= 4)//androind 1.x
+		{
+			return _conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, address.hashCode()) ||
+			_conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, address.hashCode());
+		}
+		else //android 2.x
+		{
+			return address.isReachable(30);
+		}
+		
+	}
 
-	
 	
 	
 	/** Connects _socket to _frontend using a separate thread  **/
@@ -274,10 +290,8 @@ public class MythCom {
 				{
 					InetAddress address = java.net.InetAddress.getByName(_frontend.Address);
 					
-				//	int ipHash = address.hashCode();
-				// This check for a route to the host is failing since android SDK 1.6
-				//	if(_conMgr.requestRouteToHost(ConnectivityManager.TYPE_WIFI, ipHash))// || _conMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, ipHash)
-				//	{
+					if(checkRouteToHost(address))
+					{
 						_socket.connect(new InetSocketAddress(address, _frontend.Port), SOCKET_TIMEOUT);
 						_outputStream = new OutputStreamWriter(_socket.getOutputStream());
 						_inputStream = new InputStreamReader(_socket.getInputStream());
@@ -293,12 +307,12 @@ public class MythCom {
 							_tmpStatus = _frontend.Name + " - Connected";
 							_tmpStatusCode = STATUS_CONNECTED;
 						}
-				//	}
-				//	else
-				//	{
-				//		_tmpStatus = "No route to host: " + _frontend.Address;
-				//		_tmpStatusCode = STATUS_ERROR;
-				//	}
+					}
+					else
+					{
+						_tmpStatus = "No route to host: " + _frontend.Address;
+						_tmpStatusCode = STATUS_ERROR;
+					}
 				}
 				catch (UnknownHostException e)
 				{
