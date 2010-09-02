@@ -49,11 +49,15 @@ public class MythMote extends TabActivity  implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //create comm class
-        _comm = new MythCom(this);
-        
+        if(_comm==null) {
+            //create comm class
+            _comm = new MythCom(this);
+        }
         //set status changed event handler
         _comm.SetOnStatusChangeHandler(this);
+        
+        
+        //this.setSelectedLocation();
         
         //create tab UI
         _tabHost = getTabHost();
@@ -67,7 +71,7 @@ public class MythMote extends TabActivity  implements
         //set navigation tab and setup events
         _tabHost.setCurrentTab(0);
         
-        //setup navifation panel button events
+        //setup navigation panel button events
         setupNavigationPanelButtonEvents();
     }
     
@@ -76,8 +80,14 @@ public class MythMote extends TabActivity  implements
     public void onResume(){
     	super.onResume();
 
-    	//connect to saved location
-        connectToSelectedLocation();
+    	if(!_comm.IsConnected() && !_comm.IsConnecting()) {
+    		_comm.Disconnect();
+    		
+        	if(this.setSelectedLocation())
+        		_comm.Connect(_location);
+    	}else{
+    		this.StatusChanged(_location.Name + " - Connected", MythCom.STATUS_CONNECTED);
+    	}
     }
     
 	/** Called when the activity is paused **/
@@ -85,9 +95,15 @@ public class MythMote extends TabActivity  implements
     public void onPause(){
     	super.onPause();
     	
-    	//disconnect from frontend
-    	_comm.Disconnect();
-
+    }
+    
+    public void onDestroy(){
+    	super.onDestroy();
+    	
+    	if(_comm.IsConnected())
+    		_comm.Disconnect();
+    	_tabHost = null;
+    	
     }
     
     /** Called when device configuration changes occur. Configuration 
@@ -166,8 +182,11 @@ public class MythMote extends TabActivity  implements
 				   	break;
 
 		   		case RECONNECT_ID:
-		   			//connect to selected location
-		   			this.connectToSelectedLocation();
+		   			if(_comm.IsConnected())
+		   			    _comm.Disconnect();
+		   			
+		   	    	if(this.setSelectedLocation())
+		   	    		_comm.Connect(_location);
 		   			break;
 		   			
 		   		case SELECTLOCATION_ID:
@@ -180,7 +199,7 @@ public class MythMote extends TabActivity  implements
 	   }
 	   catch(android.content.ActivityNotFoundException ex)
 	   {
-		   //Show error when actibity is not found
+		   //Show error when activity is not found
 		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
 		   diag.setMessage(ex.getMessage());
 		   diag.setTitle("Error");
@@ -270,9 +289,11 @@ public class MythMote extends TabActivity  implements
 
 	/** Called when the frontend location is changed */
 	public void LocationChanged() {
+		if(_comm.IsConnected())
+		    _comm.Disconnect();
 		
-		//connect to selected location
-		this.connectToSelectedLocation();
+    	if(this.setSelectedLocation())
+    		_comm.Connect(_location);
 	}
    
 	/** Called when MythCom status changes **/
@@ -300,19 +321,19 @@ public class MythMote extends TabActivity  implements
 	}
 	
     /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
-	private void connectToSelectedLocation() {
+	private boolean setSelectedLocation() {
 		
 		//load shared preferences
 		this.loadSharedPreferences();
 
 		//create location database adapter
-        LocationDbAdapter dbAdatper = new LocationDbAdapter(this);
+        LocationDbAdapter dbAdapter = new LocationDbAdapter(this);
         
         //open connect
-        dbAdatper.open();
+        dbAdapter.open();
         
         //get the selected location information by it's ID
-        Cursor cursor = dbAdatper.fetchFrontendLocation(selected);
+        Cursor cursor = dbAdapter.fetchFrontendLocation(selected);
         
         //make sure returned cursor is valid
         if(cursor != null && cursor.getCount() > 0)
@@ -323,14 +344,16 @@ public class MythMote extends TabActivity  implements
         	_location.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
         	_location.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
         }
+        else
+        {
+        	return false;
+        }
         
         //close cursor and db adapter
         cursor.close();
-        dbAdatper.close();
+        dbAdapter.close();
+        return true;
     	
-    	//connect to location if it is not null
-    	if(_location != null)
-    		_comm.Connect(_location);
 	}
 	
 	/** Sets up the navigation tab's button events **/
