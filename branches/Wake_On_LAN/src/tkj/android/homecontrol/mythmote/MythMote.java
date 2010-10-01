@@ -34,6 +34,7 @@ public class MythMote extends TabActivity  implements
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
+	public static final int SENDWOL_ID = SELECTLOCATION_ID + 1;
 	public static final String NAME_NAV_TAB = "TabNavigation";
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
@@ -163,6 +164,8 @@ public class MythMote extends TabActivity  implements
         //create select location menu item
         menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
         
+        menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
+        
         //return results
         return result;
     }
@@ -194,6 +197,10 @@ public class MythMote extends TabActivity  implements
 					//Fires the locationChanged event when the user selects a location
 					//even if the user selects the same location already selected.
 					MythMotePreferences.SelectLocation(this, this);
+		   			break;
+		   		case SENDWOL_ID:
+		   			WOLPowerManager pm = new WOLPowerManager();
+		   			pm.sendWOL(this);
 		   			break;
 		   };
 	   }

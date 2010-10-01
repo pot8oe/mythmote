@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="tkj.android.homecontrol.mythmote"
-      android:versionName="1.4.0" android:versionCode="8">
-      
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    
-    <application android:icon="@drawable/mythmote" android:label="@string/app_name">  <!-- android:debuggable="true" -->
-        <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    <activity android:name=".MythMotePreferences" android:label="preferences"></activity>
-<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
-</application>
-<uses-sdk android:minSdkVersion="3"></uses-sdk>
+	package="tkj.android.homecontrol.mythmote" android:versionName="1.4.0"
+	android:versionCode="8">
+	
+	<uses-sdk android:minSdkVersion="3"></uses-sdk>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.BROADCAST_WAP_PUSH"></uses-permission>
+
+	<application android:icon="@drawable/mythmote" android:label="@string/app_name" android:debuggable="true">  <!-- android:debuggable="true" -->
+		<activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
+		<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
+	</application>
+
 </manifest> 

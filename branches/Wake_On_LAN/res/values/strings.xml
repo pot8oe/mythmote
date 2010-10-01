@@ -35,6 +35,7 @@
 <string name="no_route_to_host_str">No route to host</string>
 <string name="connected_str">Connected</string>
 <string name="reconnect_str">Reconnect</string>
+<string name="send_wol_str">Send WakeOnLan</string>
 <string name="attempting_to_connect_str">Attempting to connect to host</string>
 <string name="selected_location_str">Selected Location</string>
 <string name="select_location_str">Select Location</string>
