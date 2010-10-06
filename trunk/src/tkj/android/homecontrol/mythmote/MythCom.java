@@ -93,6 +93,7 @@ public class MythCom {
 	
 	public static final int DEFAULT_MYTH_PORT = 6546;
 	public static final int SOCKET_TIMEOUT = 10000;
+	public static final int STATUS_UPDATE_INTERVAL = 5000;
 	public static final int ENABLE_WIFI = 0;
 	public static final int CANCEL = 1;
 	public static final int STATUS_DISCONNECTED = 0;
@@ -153,7 +154,7 @@ public class MythCom {
 		_parent = parentActivity;
 		_statusCode=STATUS_DISCONNECTED;
         _timer = new Timer();
-        _timer.schedule(timerTaskCheckStatus, 5000, 5000);
+        _timer.schedule(timerTaskCheckStatus, STATUS_UPDATE_INTERVAL, STATUS_UPDATE_INTERVAL);
 		
 	}
 	
