@@ -113,6 +113,10 @@ public class MythMote extends TabActivity  implements
     {
     	super.onConfigurationChanged(config);
     	
+    	//make sure tabhost has been set
+    	if(_tabHost == null)
+    		_tabHost = this.getTabHost();
+    	
     	//get current tab index
     	int cTab = _tabHost.getCurrentTab();
     	
