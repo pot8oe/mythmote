@@ -93,7 +93,6 @@ public class MythCom {
 	
 	public static final int DEFAULT_MYTH_PORT = 6546;
 	public static final int SOCKET_TIMEOUT = 10000;
-	public static final int STATUS_UPDATE_INTERVAL = 5000;
 	public static final int ENABLE_WIFI = 0;
 	public static final int CANCEL = 1;
 	public static final int STATUS_DISCONNECTED = 0;
@@ -126,26 +125,7 @@ public class MythCom {
 	};
 	
 	/** TimerTask that probes the current connection for its mythtv screen.  **/
-	private final TimerTask timerTaskCheckStatus = new TimerTask()
-	{
-		//Run at every timer tick
-		public void run() 
-		{
-			//only if socket is connected
-			if(IsConnected() && !IsConnecting())
-			{
-				//set disconnected status if nothing is returned.
-				if(queryMythScreen() == null)
-				{
-					setStatus("Disconnected", STATUS_DISCONNECTED);
-				}
-				else
-				{
-					setStatus(_frontend.Name + " - Connected", STATUS_CONNECTED);
-				}
-			}
-		}
-	};
+	private static TimerTask timerTaskCheckStatus;
 
 	
 	/** Parent activity is used to get context */
@@ -153,29 +133,33 @@ public class MythCom {
 	{
 		_parent = parentActivity;
 		_statusCode=STATUS_DISCONNECTED;
-        _timer = new Timer();
-        _timer.schedule(timerTaskCheckStatus, STATUS_UPDATE_INTERVAL, STATUS_UPDATE_INTERVAL);
-		
 	}
 	
 	/** Connects to the given address and port. Any existing connection will be broken first **/
 	public void Connect(FrontendLocation frontend)
 	{
-		    //get connection manager
-		    _conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
-		    
-			//set address and port
-			_frontend = frontend;
-			
-			//create toast for all to eat and enjoy
-			_toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
-			_toast.setGravity(Gravity.CENTER, 0, 0);
-			_toast.show();
+		//read status update interval preference
+		int updateInterval = _parent.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, Context.MODE_PRIVATE)
+		.getInt(MythMotePreferences.PREF_STATUS_UPDATE_INTERVAL, 5000);
+		
+		//schedule update timer
+		scheduleUpdateTimer(updateInterval);
 
-			this.setStatus("Connecting", STATUS_CONNECTING);
-			
-			//create a socket connecting to the address on the requested port
-			this.connectSocket();
+		//get connection manager
+		_conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		//set address and port
+		_frontend = frontend;
+
+		//create toast for all to eat and enjoy
+		_toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
+		_toast.setGravity(Gravity.CENTER, 0, 0);
+		_toast.show();
+
+		this.setStatus("Connecting", STATUS_CONNECTING);
+
+		//create a socket connecting to the address on the requested port
+		this.connectSocket();
 	}
 	
 	/** Closes the socket if it exists and it is already connected **/
@@ -383,16 +367,18 @@ public class MythCom {
 			} 
 			catch (IOException e) 
 			{
-				e.printStackTrace();
+				Log.e(MythMote.LOG_TAG, "IO Error reading data", e);
 				this.setStatus(e.getLocalizedMessage() + ": " + _frontend.Address , STATUS_ERROR);
 				this.Disconnect();
 				return null;
 			}
 		}
-		if(outString!=""){
+		
+		if(outString!="")
 			return outString;
-		}else{
-			Log.e	(_status, "Null outstring");
+		else
+		{
+			Log.e(MythMote.LOG_TAG, "Null outstring");
 			return null;
 		}
 	}
@@ -419,20 +405,76 @@ public class MythCom {
 
 		if(this.sendData("query location"))
 		{
-		    if(this.IsConnected()){
+		    if(this.IsConnected())
 		    	return this.readData();
-		    	
-		    }else{
-				Log.e(_status, "Not connected on receive");
+		    else
+		    {
+				Log.e(MythMote.LOG_TAG, _status + ": Not connected on receive");
 				return null;
 		    }
 		}
 		else
 		{
-			Log.e(_status, "Send failed");
+			Log.e(MythMote.LOG_TAG, _status + ": Send failed");
 			return null;
 		}
 
+	}
+	
+	/** Creates the update timer and schedules it for the given interval.
+	 * If the timer already exists it is destroyed and recreated. */
+	private void scheduleUpdateTimer(int updateInterval)
+	{
+		try
+		{
+			//close down the existing timer.
+			if(_timer != null)
+			{
+				_timer.cancel();
+				_timer.purge();
+				_timer = null;
+			}
+			
+			//clear timer task
+			if(timerTaskCheckStatus != null)
+			{
+				timerTaskCheckStatus.cancel();
+				timerTaskCheckStatus = null;
+			}
+
+			//(re)schedule the update timer
+			if(updateInterval > 0)
+			{
+				//create timer task
+				timerTaskCheckStatus = new TimerTask()
+				{
+					//Run at every timer tick
+					public void run() 
+					{
+						//only if socket is connected
+						if(IsConnected() && !IsConnecting())
+						{
+							//set disconnected status if nothing is returned.
+							if(queryMythScreen() == null)
+							{
+								setStatus("Disconnected", STATUS_DISCONNECTED);
+							}
+							else
+							{
+								setStatus(_frontend.Name + " - Connected", STATUS_CONNECTED);
+							}
+						}
+					}
+				};
+					
+				_timer = new Timer();
+				_timer.schedule(timerTaskCheckStatus, updateInterval, updateInterval);
+			}
+		}
+		catch(Exception ex)
+		{
+			Log.e(MythMote.LOG_TAG, "Error scheduling status update timer.", ex);
+		}
 	}
 	
 }
