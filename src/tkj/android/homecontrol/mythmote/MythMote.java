@@ -37,6 +37,7 @@ public class MythMote extends TabActivity  implements
 	public static final String NAME_NAV_TAB = "TabNavigation";
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
+	public static final String LOG_TAG = "MythMote";
 	
 	private static TabHost _tabHost;
 	private static MythCom _comm;
