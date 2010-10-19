@@ -26,6 +26,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
+	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 	
 	private static int _idIndex;
@@ -108,7 +109,17 @@ public class MythMotePreferences extends PreferenceActivity{
         		context.getString(R.string.delete_location_str),
         		context.getString(R.string.delete_location_description_str)));
         
-        //read haptic feedback shared preference
+        //create mythfrontend update status interval preference
+        generalCat.addPreference(createIntListPreference(
+        		context,
+        		PREF_STATUS_UPDATE_INTERVAL,
+        		R.string.status_update_interval_str,
+        		R.string.status_update_interval_description_str,
+        		R.array.status_Update_Interval_strings,
+        		R.array.status_Update_Interval_values,
+        		"5000"));
+        
+        //create haptic feedback shared preference
         generalCat.addPreference(createCheckBox(
         		context, 
         		PREF_HAPTIC_FEEDBACK_ENABLED, 
@@ -261,6 +272,19 @@ public class MythMotePreferences extends PreferenceActivity{
         pref.setSummary(summary);
         pref.setPersistent(true);
         return pref;
+	}
+	
+	private static IntegerListPreference createIntListPreference(Context context, String key, int titleID, int summaryID, int entrysID, int valuesID, Object defaultVal)
+	{
+		IntegerListPreference pref = new IntegerListPreference(context);
+		pref.setKey(key);
+		pref.setTitle(titleID);
+		pref.setSummary(summaryID);
+		pref.setEntries(entrysID);
+		pref.setEntryValues(valuesID);
+		pref.setDefaultValue(defaultVal);
+		
+		return pref;
 	}
 	
 	private static Preference createLocationPreference(final Activity context, String key, String name, String value)
