@@ -74,6 +74,7 @@ public class MythMoteDbHelper extends SQLiteOpenHelper
 			// we are just adding key bindings in this case
 			db.execSQL(CREATE_KEY_BINDINGS_TABLE);
 			createDefaultEntries(db);
+			db.setVersion(newVersion);
 		} else
 		{
 			db.execSQL("DROP TABLE IF EXISTS frontends");

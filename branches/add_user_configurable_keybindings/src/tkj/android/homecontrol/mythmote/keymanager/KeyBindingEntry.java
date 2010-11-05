@@ -27,14 +27,22 @@ public class KeyBindingEntry
 	private String command;
 
 	private boolean requiresConfirmation = false;
+	private int rowId;
 
-	public KeyBindingEntry(final String friendlyName, final MythKey mythKey,
+	public KeyBindingEntry(final int rowId, final String friendlyName, final MythKey mythKey,
 			final String command, final boolean requiresConfirm)
 	{
+		this.rowId = rowId;
 		this.command = command;
 		this.mythKey = mythKey;
 		this.friendlyName = friendlyName;
 		this.requiresConfirmation = requiresConfirm;
+	}
+
+	public KeyBindingEntry(String command, MythKey mythKey,
+			String friendlyName, boolean requiresConfirm)
+	{
+		this(-1, command, mythKey, friendlyName, requiresConfirm);
 	}
 
 	public String getFriendlyName()
@@ -55,6 +63,11 @@ public class KeyBindingEntry
 	public boolean requiresConfirmation()
 	{
 		return requiresConfirmation;
+	}
+
+	public int getRowID()
+	{
+		return rowId;
 	}
 
 }

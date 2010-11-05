@@ -60,7 +60,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		_comm.SetOnStatusChangeHandler(this);
 		
 		keyManager = new KeyBindingManager(this, this, _comm);
-		keyManager.loadKeys();
+		
 
 		// create tab UI
 		_tabHost = getTabHost();
@@ -181,7 +181,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	/** Called when the selected tab page is changed **/
 	public void onTabChanged(String arg0) {
-
+		keyManager.loadKeys();
 		// get tab tag
 		String tabTag = _tabHost.getCurrentTabTag();
 
@@ -289,43 +289,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// connect to location if it is not null
 		if (_location != null)
 			_comm.Connect(_location);
-	}
-
-	/** Sets up a mythcom jump button click event **/
-	private final void setupJumpButtonEvent(int buttonViewId,
-			final String jumpPoint) {
-		final Button buttonJump = (Button) this.findViewById(buttonViewId);
-
-		buttonJump.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				// Perform action on clicks
-				_comm.SendJumpCommand(jumpPoint);
-			}
-		});
-	}
-
-	/** Sets up a mythcom keyboard button click event **/
-	private final void setupKeyButtonEvent(int buttonViewId,
-			final String sendKey) {
-		final Button button = (Button) this.findViewById(buttonViewId);
-		button.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				// Perform action on clicks
-				_comm.SendKey(sendKey);
-			}
-		});
-	}
-
-	/** Sets up a mythcom playback command button click event **/
-	private final void setupPlaybackCmdButtonEvent(int buttonViewId,
-			final String sendCmd) {
-		final Button button = (Button) this.findViewById(buttonViewId);
-		button.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				// Perform action on clicks
-				_comm.SendPlaybackCmd(sendCmd);
-			}
-		});
 	}
 
 	/**

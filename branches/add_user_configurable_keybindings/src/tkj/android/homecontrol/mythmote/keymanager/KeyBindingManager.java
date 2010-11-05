@@ -50,11 +50,15 @@ import java.util.Map;
 import tkj.android.homecontrol.mythmote.MythCom;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.EditText;
 
 public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		OnLongClickListener
@@ -110,7 +114,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		BUTTON_MUTE("key |", ButtonMute),
 		BUTTON_VOLUME_UP("key ]", ButtonVolUp),
 		BUTTON_VOLUME_DOWN("key [", ButtonVolDown);
-		
+
 		private final String defaultCommand;
 		private final int layoutId;
 
@@ -237,11 +241,14 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 	private MythMoteDbManager databaseAdapter;
 
+	private Context context;
+
 	public KeyBindingManager(final Context ctx, final KeyMapBinder binder,
 			final MythCom communicator)
 	{
 		Log.d("KBM", "Created KeyBindingManager with ctx " + ctx + " binder "
 				+ binder + " comm " + communicator);
+		this.context = context;
 		this.databaseAdapter = new MythMoteDbManager(ctx);
 
 		this.binder = binder;
@@ -278,16 +285,54 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 		if (null != entry && null != communicator)
 		{
-			Log.d("KBM", "onClick " + entry.getFriendlyName());
+			Log.d("KBM", "onClick " + entry.getFriendlyName()+" command "+entry.getCommand());
 			communicator.SendCommand(entry.getCommand());
 		}
 
 	}
 
-	public boolean onLongClick(View v)
+	public boolean onLongClick(final View v)
 	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+		AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
 
+		alert.setTitle("Command");
+		alert.setMessage("Type the command to send to MythTV");
+
+		// Set an EditText view to get user input
+		final EditText input = new EditText(v.getContext());
+		KeyBindingEntry currentEntry = viewToEntryMap.get(v);
+		if ( null != currentEntry )
+			input.setText(currentEntry.getCommand());
+		alert.setView(input);
+
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				Editable value = input.getText();
+				KeyBindingEntry oldEntry = viewToEntryMap.get(v);
+				if (null != oldEntry && null != communicator)
+				{
+					Log.d("KBM", "onLongClick " + oldEntry.getFriendlyName());
+					KeyBindingEntry entry = new KeyBindingEntry(oldEntry
+							.getRowID(), oldEntry.getFriendlyName(), oldEntry
+							.getMythKey(), value.toString(), oldEntry
+							.requiresConfirmation());
+					viewToEntryMap.put(v, entry);
+					databaseAdapter.save(entry);
+				}
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// Canceled.
+			}
+		});
+
+		alert.show();
+		return true;
+	}
 }

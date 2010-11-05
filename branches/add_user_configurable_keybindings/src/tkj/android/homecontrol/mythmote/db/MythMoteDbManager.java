@@ -151,6 +151,7 @@ public class MythMoteDbManager
 	public boolean updateFrontendLocation(long rowId, String name,
 			String address, int port)
 	{
+		open();
 		ContentValues args = new ContentValues();
 		args.put(KEY_NAME, name);
 		args.put(KEY_ADDRESS, address);
@@ -158,11 +159,13 @@ public class MythMoteDbManager
 
 		int rows = db.update(FRONTEND_TABLE, args, KEY_ROWID + "=" + rowId,
 				null);
+		close();
 		return rows > 0;
 	}
 
 	public boolean save(final KeyBindingEntry entry)
 	{
+		open();
 		ContentValues values = new ContentValues();
 		values.put(KEYBINDINGS_COMMAND, entry.getCommand());
 		values.put(KEYBINDINGS_UI_KEY, entry.getMythKey().name());
@@ -171,7 +174,14 @@ public class MythMoteDbManager
 				entry.requiresConfirmation() ? 1 : 0);
 		Log.d("KBDA", "Adding entry " + entry.getFriendlyName() + " to "
 				+ entry.getCommand());
-		return db.insert(KEY_BINDINGS_TABLE, null, values) != -1;
+		boolean success = false;
+		if (entry.getRowID() != -1)
+			success= db.update(KEY_BINDINGS_TABLE, values, MythMoteDbHelper.KEYBINDINGS_ROWID + " = ?", new String[]
+			{ String.format("%d", entry.getRowID()) }) == 1;
+		else
+			success= db.insert(KEY_BINDINGS_TABLE, null, values) != -1;
+		close();
+		return success;
 	}
 
 	public void loadKeyMapEntries(final KeyMapBinder binder)
@@ -194,16 +204,7 @@ public class MythMoteDbManager
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setTitle("DataBase Error");
 			builder.setMessage(e.getLocalizedMessage());
-			builder.setNeutralButton(R.string.ok_str, new OnClickListener()
-			{
-
-				public void onClick(DialogInterface dialog, int which)
-				{
-					// TODO Auto-generated method stub
-
-				}
-			});
-
+			builder.show();
 		}
 		if (null == mCursor)
 			return;
@@ -218,9 +219,11 @@ public class MythMoteDbManager
 			Integer req = mCursor.getInt(mCursor
 					.getColumnIndex(KEYBINDINGS_REQUIRE_CONFIRMATION));
 			MythKey mythKey = MythKey.getByName(mythKeyName);
+			Integer id = mCursor.getInt(mCursor
+					.getColumnIndex(KEYBINDINGS_ROWID));
 			boolean requiresConfirmation = (req == 1);
-			KeyBindingEntry entry = new KeyBindingEntry(friendlyName, mythKey,
-					command, requiresConfirmation);
+			KeyBindingEntry entry = new KeyBindingEntry(id, friendlyName,
+					mythKey, command, requiresConfirmation);
 			binder.bind(entry);
 		} while (mCursor.moveToNext());
 		mCursor.close();
