@@ -58,36 +58,21 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		// set status changed event handler
 		_comm.SetOnStatusChangeHandler(this);
-		
-		keyManager = new KeyBindingManager(this, this, _comm);
-		
-
-		// create tab UI
-		_tabHost = getTabHost();
-		_tabHost.addTab(_tabHost
-				.newTabSpec(NAME_NAV_TAB)
-				.setIndicator(this.getString(R.string.navigation_str),
-						this.getResources().getDrawable(R.drawable.starsmall))
-				.setContent(this));
-		_tabHost.addTab(_tabHost
-				.newTabSpec(NAME_MEDIA_TAB)
-				.setIndicator(this.getString(R.string.media_str),
-						this.getResources().getDrawable(R.drawable.media))
-				.setContent(this));
-		_tabHost.addTab(_tabHost
-				.newTabSpec(NAME_NUMPAD_TAB)
-				.setIndicator(this.getString(R.string.numpad_str),
-						this.getResources().getDrawable(R.drawable.numberpad))
-				.setContent(this));
+        
+        //create tab UI
+        _tabHost = getTabHost();
+        
+        //create tabs
+    	createTabs();
 
 		// setup on tab change event
 		_tabHost.setOnTabChangedListener(this);
 
-		// register ourselves as a "media"
-		//this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
 		// set navigation tab and setup events
 		_tabHost.setCurrentTab(0);
+		
+		// create key manager and load keys from DB
+		keyManager = new KeyBindingManager(this, this, _comm);
 		keyManager.loadKeys();
 	}
 
@@ -117,6 +102,25 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	 **/
 	public void onConfigurationChanged(Configuration config) {
 		super.onConfigurationChanged(config);
+		
+    	//make sure tabhost has been set
+    	if(_tabHost == null)
+    		_tabHost = this.getTabHost();
+    	
+    	//get current tab index
+    	int cTab = _tabHost.getCurrentTab();
+    	
+    	//set current tab to 0. Clear seems to fail when set to anything else
+    	_tabHost.setCurrentTab(0);
+    	
+    	//clear all tabs
+    	_tabHost.clearAllTabs();
+    	
+    	//create tabs
+    	createTabs();
+        
+        //set current tab back
+        _tabHost.setCurrentTab(cTab);
 	}
 
 	/** Called to create the options menu once. **/
@@ -196,6 +200,23 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			// setup number pad button events
 //			setupNumberPadButtonEvents();
 		}
+	}
+	
+	/**
+	 * Called to create and add tabs to the tabhost
+	 */
+	private void createTabs()
+	{
+		//recreate tabs
+    	_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
+        		this.getString(R.string.navigation_str),
+        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
+        		this.getString(R.string.media_str),
+        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
+        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
+        		this.getString(R.string.numpad_str),
+        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
 	}
 
 	/**
