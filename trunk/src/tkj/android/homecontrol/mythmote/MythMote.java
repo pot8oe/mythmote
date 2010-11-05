@@ -56,10 +56,7 @@ public class MythMote extends TabActivity  implements
         }
         //set status changed event handler
         _comm.SetOnStatusChangeHandler(this);
-        
-        
-        //this.setSelectedLocation();
-        
+
         //create tab UI
         _tabHost = getTabHost();
         
