@@ -1,19 +1,26 @@
 package tkj.android.homecontrol.mythmote;
 
-
 import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
+import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
+import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
+import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
+import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
+import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.text.Editable;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -21,15 +28,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-
-
-public class MythMote extends TabActivity  implements 
-	TabHost.TabContentFactory, 
-	OnTabChangeListener, 
-	LocationChangedEventListener, 
-	MythCom.StatusChangedEventListener
-	{	
-
+public class MythMote extends TabActivity implements TabHost.TabContentFactory,
+		OnTabChangeListener, LocationChangedEventListener,
+		MythCom.StatusChangedEventListener, KeyMapBinder {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
@@ -39,6 +40,12 @@ public class MythMote extends TabActivity  implements
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	public static final String LOG_TAG = "MythMote";
 	
+	
+	private static final String KEY_VOLUME_DOWN = "[";
+	private static final String KEY_VOLUME_UP = "]";
+	
+	private KeyBindingManager keyManager;
+
 	private static TabHost _tabHost;
 	private static MythCom _comm;
 	private static FrontendLocation _location = new FrontendLocation();
@@ -62,21 +69,22 @@ public class MythMote extends TabActivity  implements
         
         //create tabs
     	createTabs();
-        
-        //setup on tab change event
-        _tabHost.setOnTabChangedListener(this);
-        
-        //set navigation tab and setup events
-        _tabHost.setCurrentTab(0);
-        
-        //setup navigation panel button events
-        setupNavigationPanelButtonEvents();
-    }
-    
-    /** Called when the activity is resumed **/
-    @Override
-    public void onResume(){
-    	super.onResume();
+
+		// setup on tab change event
+		_tabHost.setOnTabChangedListener(this);
+
+		// set navigation tab and setup events
+		_tabHost.setCurrentTab(0);
+		
+		// create key manager and load keys from DB
+		keyManager = new KeyBindingManager(this, this, _comm);
+		keyManager.loadKeys();
+	}
+
+	/** Called when the activity is resumed **/
+	@Override
+	public void onResume() {
+		super.onResume();
 
     	if(!_comm.IsConnected() && !_comm.IsConnecting()) {
     		_comm.Disconnect();
@@ -131,25 +139,26 @@ public class MythMote extends TabActivity  implements
         _tabHost.setCurrentTab(cTab);
     }
     
-    /**
-     * Overridden to allow the hardware volume controls to influence the Myth front end
-     * volume control
-     */
-    //@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-            switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    _comm.SendKey(MythCom.VOLUME_DOWN);
-                    return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                    _comm.SendKey(MythCom.VOLUME_UP);
-                    return true;
-            default:
-                    return super.onKeyDown(keyCode, event);
 
-            }
+	/**
+	 * Overridden to allow the hardware volume controls to influence the Myth front end 
+	 * volume control
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+			_comm.SendKey(KEY_VOLUME_DOWN);
+			return true;
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			_comm.SendKey(KEY_VOLUME_UP);
+			return true;
+		default:
+			return super.onKeyDown(keyCode, event);
 
-    }
+		}
+
+	}
     
     /** Called to create the options menu once.  **/
     @Override
@@ -213,25 +222,20 @@ public class MythMote extends TabActivity  implements
    
     /** Called when the selected tab page is changed **/
 	public void onTabChanged(String arg0) {
-		
-		//get tab tag
+		keyManager.loadKeys();
+		// get tab tag
 		String tabTag = _tabHost.getCurrentTabTag();
-		
-		//check for which tab has been selected
-		if(tabTag.equals(NAME_NAV_TAB))
-		{
-			//setup navigation tab button events
-			setupNavigationPanelButtonEvents();
-		}
-		else if(tabTag.equals(NAME_MEDIA_TAB))
-		{
-			//setup media tab button events
-			setupMediaPanelButtonEvents();
-		}
-		else if(tabTag.equals(NAME_NUMPAD_TAB))
-		{
-			//setup number pad button events
-			setupNumberPadButtonEvents();
+
+		// check for which tab has been selected
+		if (tabTag.equals(NAME_NAV_TAB)) {
+			// setup navigation tab button events
+//			setupNavigationPanelButtonEvents();
+		} else if (tabTag.equals(NAME_MEDIA_TAB)) {
+			// setup media tab button events
+//			setupMediaPanelButtonEvents();
+		} else if (tabTag.equals(NAME_NUMPAD_TAB)) {
+			// setup number pad button events
+//			setupNumberPadButtonEvents();
 		}
 	}
 	
@@ -264,28 +268,30 @@ public class MythMote extends TabActivity  implements
    
     /** Called when a tab is selected. Returns the layout for the selected tab. 
     * Default is navigation tab */
+
+	/**
+	 * Called when a tab is selected. Returns the layout for the selected tab.
+	 * Default is navigation tab
+	 */
 	public View createTabContent(String tag) {
-		
-		//check which tab content to return
-		if(tag == NAME_NAV_TAB)
-		{
-			//get navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
-		}
-		else if(tag == NAME_MEDIA_TAB)
-		{
-			//return media tab view
-			return this.getLayoutInflater().inflate(R.layout.mediacontrol, this.getTabHost().getTabContentView(), false);
-		}
-		else if(tag == NAME_NUMPAD_TAB)
-		{
-			//return number pad view
-			return this.getLayoutInflater().inflate(R.layout.numberpad, this.getTabHost().getTabContentView(), false);
-		}
-		else
-		{
-			//default to navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation, this.getTabHost().getTabContentView(), false);
+
+		// check which tab content to return
+		if (tag == NAME_NAV_TAB) {
+			// get navigation tab view
+			return this.getLayoutInflater().inflate(R.layout.navigation,
+					this.getTabHost().getTabContentView(), false);
+		} else if (tag == NAME_MEDIA_TAB) {
+			// return media tab view
+			return this.getLayoutInflater().inflate(R.layout.mediacontrol,
+					this.getTabHost().getTabContentView(), false);
+		} else if (tag == NAME_NUMPAD_TAB) {
+			// return number pad view
+			return this.getLayoutInflater().inflate(R.layout.numberpad,
+					this.getTabHost().getTabContentView(), false);
+		} else {
+			// default to navigation tab view
+			return this.getLayoutInflater().inflate(R.layout.navigation,
+					this.getTabHost().getTabContentView(), false);
 		}
 	}
 
@@ -297,27 +303,20 @@ public class MythMote extends TabActivity  implements
     	if(this.setSelectedLocation())
     		_comm.Connect(_location);
 	}
-   
+
 	/** Called when MythCom status changes **/
-    public void StatusChanged(String StatusMsg, int statusCode) {
-		//set titleJUMPPOINT_guidegrid
+	public void StatusChanged(String StatusMsg, int statusCode) {
+		// set titleJUMPPOINT_guidegrid
 		setTitle(StatusMsg);
-		
-		//change color based on status code
-		if(statusCode == MythCom.STATUS_ERROR)
-		{
+
+		// change color based on status code
+		if (statusCode == MythCom.STATUS_ERROR) {
 			setTitleColor(Color.RED);
-		}
-		else if(statusCode == MythCom.STATUS_DISCONNECTED)
-		{
+		} else if (statusCode == MythCom.STATUS_DISCONNECTED) {
 			setTitleColor(Color.RED);
-		}
-		else if(statusCode == MythCom.STATUS_CONNECTED)
-		{
+		} else if (statusCode == MythCom.STATUS_CONNECTED) {
 			setTitleColor(Color.GREEN);
-		}
-		else if(statusCode == MythCom.STATUS_CONNECTING)
-		{
+		} else if (statusCode == MythCom.STATUS_CONNECTING) {
 			setTitleColor(Color.YELLOW);
 		}
 	}
@@ -327,202 +326,59 @@ public class MythMote extends TabActivity  implements
 		
 		//load shared preferences
 		this.loadSharedPreferences();
+		
+		//_location should be initialized
+		if(_location == null)
+		{
+		     Log.e(LOG_TAG, "Cannot set location. Location object not initialized.");
+		}
 
-		//create location database adapter
-        LocationDbAdapter dbAdapter = new LocationDbAdapter(this);
-        
-        //open connect
-        dbAdapter.open();
-        
-        //get the selected location information by it's ID
-        Cursor cursor = dbAdapter.fetchFrontendLocation(selected);
-        
-        //make sure returned cursor is valid
-        if(cursor != null && cursor.getCount() > 0)
-        {
-        	//set selected location from Cursor
-        	_location.ID = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
-        	_location.Name = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
-        	_location.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
-        	_location.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
-        }
-        else
-        {
-        	return false;
-        }
-        
-        //close cursor and db adapter
-        cursor.close();
-        dbAdapter.close();
-        return true;
-    	
+		// create location database adapter
+		MythMoteDbManager dbManager = new MythMoteDbManager(this);
+
+		// open connect
+		dbManager.open();
+
+		// get the selected location information by it's ID
+		Cursor cursor = dbManager.fetchFrontendLocation(selected);
+
+		// make sure returned cursor is valid
+		if (cursor == null || cursor.getCount() <= 0)
+		     return false;
+			// set selected location from Cursor
+			_location.ID = cursor.getInt(cursor
+					.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+			_location.Name = cursor.getString(cursor
+					.getColumnIndex(MythMoteDbHelper.KEY_NAME));
+			_location.Address = cursor.getString(cursor
+					.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS));
+			_location.Port = cursor.getInt(cursor
+					.getColumnIndex(MythMoteDbHelper.KEY_PORT));
+
+		// close cursor and db adapter
+		cursor.close();
+		dbManager.close();
+		// connect to location
+		_comm.Connect(_location);
+			
+	        return true;
 	}
-	
-	/** Sets up the navigation tab's button events **/
-    private void setupNavigationPanelButtonEvents()
-    {
-    	// jump buttons.
-    	// TODO: Make these user definable in a later release
-    	this.setupJumpButtonEvent(R.id.ButtonJump1, MythCom.JUMPPOINT_mainmenu);
-    	this.setupJumpButtonEvent(R.id.ButtonJump2, MythCom.JUMPPOINT_livetv);
-    	this.setupJumpButtonEvent(R.id.ButtonJump3, MythCom.JUMPPOINT_playbackrecordings);
-    	this.setupJumpButtonEvent(R.id.ButtonJump4, MythCom.JUMPPOINT_playmusic);
-    	this.setupJumpButtonEvent(R.id.ButtonJump5, MythCom.JUMPPOINT_videogallery);
-    	this.setupJumpButtonEvent(R.id.ButtonJump6, MythCom.JUMPPOINT_statusbox);
-    	
-	    //navigation buttons
-    	this.setupKeyButtonEvent(R.id.ButtonInfo, "i");
-    	this.setupKeyButtonEvent(R.id.ButtonGuide, "s");
-    	this.setupKeyButtonEvent(R.id.ButtonEsc, MythCom.KEY_esc);
-    	this.setupKeyButtonEvent(R.id.ButtonMenu, "m");
-	    this.setupKeyButtonEvent(R.id.ButtonUp, MythCom.KEY_up);
-	    this.setupKeyButtonEvent(R.id.ButtonDown, MythCom.KEY_down);
-	    this.setupKeyButtonEvent(R.id.ButtonLeft, MythCom.KEY_left);
-	    this.setupKeyButtonEvent(R.id.ButtonRight, MythCom.KEY_right);
-	    this.setupKeyButtonEvent(R.id.ButtonSelect, MythCom.KEY_enter);
-	    
-    }
-    
-    /** Sets up the Media playback tab's buttons **/
-    private void setupMediaPanelButtonEvents()
-    {
-    	// media playback
-    	this.setupKeyButtonEvent(R.id.ButtonRecord, "r");
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonStop, MythCom.PLAY_STOP);
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonPlay, MythCom.PLAY_PLAY);
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonRew, MythCom.PLAY_SEEK_BW);
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonFF, MythCom.PLAY_SEEK_FW);
-    	this.setupKeyButtonEvent(R.id.ButtonPause, "p");
-    	this.setupKeyButtonEvent(R.id.ButtonSkipBack, "home");
-    	this.setupKeyButtonEvent(R.id.ButtonSkipForward, "end");
-    	
-    	//volume
-    	this.setupKeyButtonEvent(R.id.ButtonVolUp, MythCom.VOLUME_UP);
-    	this.setupKeyButtonEvent(R.id.ButtonVolDown, MythCom.VOLUME_DOWN);
-    	this.setupKeyButtonEvent(R.id.ButtonMute, MythCom.VOLUME_MUTE);
-    	
-    	//ch
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonChUp, MythCom.PLAY_CH_UP);
-    	this.setupPlaybackCmdButtonEvent(R.id.ButtonChDown, MythCom.PLAY_CH_DW);
-	    this.setupKeyButtonEvent(R.id.ButtonChReturn, MythCom.CH_RETURN);
-    }
-    
-    /** Sets up the number pad tab's buttons **/
-    private void setupNumberPadButtonEvents()
-    {
-    	//numbers
-    	this.setupKeyButtonEvent(R.id.Button0, "0");
-	    this.setupKeyButtonEvent(R.id.Button1, "1");
-	    this.setupKeyButtonEvent(R.id.Button2, "2");
-	    this.setupKeyButtonEvent(R.id.Button3, "3");
-	    this.setupKeyButtonEvent(R.id.Button4, "4");
-	    this.setupKeyButtonEvent(R.id.Button5, "5");
-	    this.setupKeyButtonEvent(R.id.Button6, "6");
-	    this.setupKeyButtonEvent(R.id.Button7, "7");
-	    this.setupKeyButtonEvent(R.id.Button8, "8");
-	    this.setupKeyButtonEvent(R.id.Button9, "9");
-	    
-	    
-	    //control
-	    this.setupKeyButtonEvent(R.id.ButtonBackspace, MythCom.KEY_backspace);
-	    this.setupKeyButtonEvent(R.id.ButtonEnter, MythCom.KEY_enter);
-	    
-	    //send keyboard input
-	    final Button buttonJump = (Button) this.findViewById(R.id.ButtonSend);
-	    final EditText textBox = (EditText) this.findViewById(R.id.EditTextKeyboardInput);
-	    if(buttonJump != null && textBox != null)
-	    {
-		    buttonJump.setOnClickListener(new OnClickListener() {
-		        public void onClick(View v) {
-		            
-		        	//get send keyboard text
-		        	Editable text = textBox.getText();
-		        	int count = text.length();
-		        	
-		        	//for each character
-		        	for(int i=0; i<count; i++)
-		        	{
-		        		//get char
-		        		char c = text.charAt(i);
-		        		
-		        		//check if it's whitespace
-		        		if(Character.isWhitespace(c))
-		        		{
-		        			if(c == '\t')//tab
-		        			{
-		        				_comm.SendKey("tab");
-		        			}
-		        			else if(c == ' ')//space
-		        			{
-		        				_comm.SendKey("space");
-		        			}
-		        			else if(c == '\r')//enter/return
-		        			{
-		        				_comm.SendKey("enter");
-		        			}
-		        		}
-		        		else//not white space. Just send as is
-		        		{
-		        			_comm.SendKey(c);
-		        		}
-		        	}
-		        }
-		    });
-	    }
-	    
-    }
-    
-    /** Sets up a mythcom jump button click event  **/
-    private final void setupJumpButtonEvent(int buttonViewId, final String jumpPoint)
-    {
-    	final Button button = (Button) this.findViewById(buttonViewId);
-	    button.setOnClickListener(new OnClickListener() {
-	        public void onClick(View v) {
-	            // Perform action on clicks
-	            _comm.SendJumpCommand(jumpPoint);
-	            
-	            if(hapticFeedbackEnabled)
-	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-	        }
-	    });
-    }
-    
-    /** Sets up a mythcom keyboard button click event **/
-    private final void setupKeyButtonEvent(int buttonViewId, final String sendKey)
-    {
-    	final Button button = (Button) this.findViewById(buttonViewId);
-	    button.setOnClickListener(new OnClickListener() {
-	        public void onClick(View v) {
-	            // Perform action on clicks
-	            _comm.SendKey(sendKey);
-	            
-	            if(hapticFeedbackEnabled)
-	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-	        }
-	    });
-    }
-    
-    /** Sets up a mythcom playback command button click event **/
-    private final void setupPlaybackCmdButtonEvent(int buttonViewId, final String sendCmd)
-    {
-    	final Button button = (Button) this.findViewById(buttonViewId);
-	    button.setOnClickListener(new OnClickListener() {
-	        public void onClick(View v) {
-	            // Perform action on clicks
-	            _comm.SendPlaybackCmd(sendCmd);
-	            
-	            if(hapticFeedbackEnabled)
-	            	button.performHapticFeedback(1, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-	        }
-	    });
-    }
 
-
+	/**
+	 * Enable the long click and normal click actions where
+	 * a long click will configure the button, and a normal tap
+	 * will perform the command
+	 * 
+	 * This is the callback from the {@link KeyBindingManager}
+	 */
+	public View bind(KeyBindingEntry entry) {
+		View v = this.findViewById(entry.getMythKey().getButtonId());
+		if ( null == v )
+			return null;
+		v.setLongClickable(true);
+		v.setOnLongClickListener(keyManager);
+		v.setOnClickListener(keyManager);
+		return v;
+	}
 
 }
-
-
-
-
-
-

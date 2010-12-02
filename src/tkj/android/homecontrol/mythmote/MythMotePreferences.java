@@ -1,7 +1,7 @@
-
 package tkj.android.homecontrol.mythmote;
 
-
+import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
+import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,12 +28,12 @@ public class MythMotePreferences extends PreferenceActivity{
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
-	
+
 	private static int _idIndex;
 	private static int _addressIndex;
 	private static int _nameIndex;
 	private static int _portIndex;
-    
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +50,13 @@ public class MythMotePreferences extends PreferenceActivity{
     }
 	
 	@Override
-    public void onResume()
-    {
+	public void onResume()
+	{
 		super.onResume();
-        //configure all preferences
-        setupPreferences(this);
-    }
-	
+		// configure all preferences
+		setupPreferences(this);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -64,13 +64,13 @@ public class MythMotePreferences extends PreferenceActivity{
         menu.add(0, DELETE_LOCATION_ID, 0, R.string.delete_location_str).setIcon(R.drawable.menu_close_clear_cancel);
         return result;
 	}
-	
+
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-    	final PreferenceActivity context = this;
-    	
-		if(item.getItemId() == NEW_LOCATION_ID)
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		final PreferenceActivity context = this;
+
+		if (item.getItemId() == NEW_LOCATION_ID)
 		{
 			showLocationEditDialog(context, null);
 		}
@@ -79,7 +79,7 @@ public class MythMotePreferences extends PreferenceActivity{
 			showDeleteLocationList(context);
 		}
 		return true;
-    }
+	}
 
 	private static void setupPreferences(PreferenceActivity context)
 	{
@@ -128,17 +128,17 @@ public class MythMotePreferences extends PreferenceActivity{
         		false));
         
         //open DB
-        LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+        MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
         _dbAdapter.open();
         
         //get list of locations
         Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
         
         //get column indexes 
-        _idIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID);
-        _addressIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS);
-        _nameIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_NAME);
-        _portIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_PORT);
+        _idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
+        _addressIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
+        _nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
+        _portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
         
         //determine if we have locations saved
         int count = cursor.getCount();
@@ -175,16 +175,17 @@ public class MythMotePreferences extends PreferenceActivity{
                 					context, context.getString(R.string.selected_location_str), cursor.getString(_nameIndex)));
         		}
 
-        		cursor.moveToNext();
-        	}
-        	
-        	//the saved selected location was not found just pick the first one
-        	if(selectedCat.getPreferenceCount() <= 0)
-        	{
-        		cursor.moveToFirst();
-        		selectedCat.addPreference(
-            			MythMotePreferences.createSelectedLocationPreference(
-            					context, context.getString(R.string.selected_location_str), cursor.getString(_nameIndex)));
+				cursor.moveToNext();
+			}
+
+			// the saved selected location was not found just pick the first one
+			if (selectedCat.getPreferenceCount() <= 0)
+			{
+				cursor.moveToFirst();
+				selectedCat.addPreference(MythMotePreferences
+						.createSelectedLocationPreference(context, context
+								.getString(R.string.selected_location_str),
+								cursor.getString(_nameIndex)));
 
         		//save location ID so that it is for real
         		SaveSelectedLocationId(context, cursor.getInt(_idIndex));
@@ -219,59 +220,62 @@ public class MythMotePreferences extends PreferenceActivity{
 			intent.putExtra(FrontendLocation.STR_ADDRESS, location.Address);
 			intent.putExtra(FrontendLocation.STR_PORT, location.Port);
 		}
-		
-		//start activity
+
+		// start activity
 		context.startActivity(intent);
 	}
-	
-	private static void showDeleteLocationList(final Activity context) 
+
+	private static void showDeleteLocationList(final Activity context)
 	{
-		final LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+		final MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
 		_dbAdapter.open();
 		final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
-        
-        int count = cursor.getCount();
-        if(count > 0 && cursor.moveToFirst())
-        {
-        	final String[] names = new String[count];
-        	final int[] ids = new int[count];
-        	for(int i=0; i<count; i++)
-        	{
-        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
-        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
-        		cursor.moveToNext();
-        	}
-        	
-        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        	builder.setTitle(R.string.delete_location_str);
-        	builder.setItems(names, new DialogInterface.OnClickListener(){
 
-        		public void onClick(DialogInterface dialog,
-        				int which) {
-        			LocationDbAdapter dbAdapter = new LocationDbAdapter(context);
-        			dbAdapter.open();
-        			dbAdapter.deleteFrontendLocation(ids[which]);
-        			dbAdapter.close();
-        			
-        			setupPreferences((PreferenceActivity)context);
-        		}
+		int count = cursor.getCount();
+		if (count > 0 && cursor.moveToFirst())
+		{
+			final String[] names = new String[count];
+			final int[] ids = new int[count];
+			for (int i = 0; i < count; i++)
+			{
+				names[i] = cursor.getString(cursor
+						.getColumnIndex(MythMoteDbHelper.KEY_NAME));
+				ids[i] = cursor.getInt(cursor
+						.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+				cursor.moveToNext();
+			}
 
-				});
-        	builder.show();
-        }
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle(R.string.delete_location_str);
+			builder.setItems(names, new DialogInterface.OnClickListener()
+			{
+
+				public void onClick(DialogInterface dialog, int which)
+				{
+					MythMoteDbManager dbAdapter = new MythMoteDbManager(context);
+					dbAdapter.open();
+					dbAdapter.deleteFrontendLocation(ids[which]);
+					dbAdapter.close();
+
+					setupPreferences((PreferenceActivity) context);
+				}
+
+			});
+			builder.show();
+		}
 		cursor.close();
-        _dbAdapter.close();
+		_dbAdapter.close();
 	}
 	
 	private static CheckBoxPreference createCheckBox(Context context, String key, int title, int summary, Object defaultValue)
 	{
 		CheckBoxPreference pref = new CheckBoxPreference(context);
-        pref.setKey(key);
-        pref.setDefaultValue(defaultValue);
-        pref.setTitle(title);
-        pref.setSummary(summary);
-        pref.setPersistent(true);
-        return pref;
+		pref.setKey(key);
+		pref.setDefaultValue(defaultValue);
+		pref.setTitle(title);
+		pref.setSummary(summary);
+		pref.setPersistent(true);
+		return pref;
 	}
 	
 	private static IntegerListPreference createIntListPreference(Context context, String key, int titleID, int summaryID, int entrysID, int valuesID, Object defaultVal)
@@ -295,26 +299,28 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setDefaultValue(value);
 		pref.setEnabled(true);
 		pref.setSummary(value);
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
 
-			public boolean onPreferenceClick(Preference preference) {
-				//Open location edit dialog with a location loaded
+			public boolean onPreferenceClick(Preference preference)
+			{
+				// Open location edit dialog with a location loaded
 				FrontendLocation location = new FrontendLocation();
-				
-				
+
 				location.ID = Integer.parseInt(preference.getKey());
-				
-				LocationDbAdapter dbAdapter = new LocationDbAdapter(context);
+
+				MythMoteDbManager dbAdapter = new MythMoteDbManager(context);
 				dbAdapter.open();
 				Cursor cursor = dbAdapter.fetchFrontendLocation(location.ID);
-				
-				//get column indexes 
-		        _idIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID);
-		        _addressIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS);
-		        _nameIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_NAME);
-		        _portIndex = cursor.getColumnIndex(LocationDbAdapter.KEY_PORT);
-				
-				if(cursor != null && cursor.getCount() > 0)
+
+				// get column indexes
+				_idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
+				_addressIndex = cursor
+						.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
+				_nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
+				_portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+
+				if (cursor != null && cursor.getCount() > 0)
 				{
 					location.Name = cursor.getString(_nameIndex);
 					location.Address = cursor.getString(_addressIndex);
@@ -323,7 +329,7 @@ public class MythMotePreferences extends PreferenceActivity{
 				}
 				return false;
 			}
-			
+
 		});
 		return pref;
 	}
@@ -336,15 +342,17 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setDefaultValue(value);
 		pref.setEnabled(true);
 		pref.setSummary(value);
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
 
-			public boolean onPreferenceClick(Preference preference) {
-				
+			public boolean onPreferenceClick(Preference preference)
+			{
+
 				showLocationEditDialog(context, null);
-				
+
 				return false;
 			}
-			
+
 		});
 		return pref;
 	}
@@ -357,13 +365,15 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setDefaultValue(value);
 		pref.setEnabled(true);
 		pref.setSummary(value);
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
 
-			public boolean onPreferenceClick(Preference preference) {				
+			public boolean onPreferenceClick(Preference preference)
+			{
 				showDeleteLocationList(context);
 				return false;
 			}
-			
+
 		});
 		return pref;
 	}
@@ -376,7 +386,8 @@ public class MythMotePreferences extends PreferenceActivity{
 		pref.setDefaultValue(value);
 		pref.setEnabled(true);
 		pref.setSummary(value);
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
 
 			public boolean onPreferenceClick(Preference preference) {
 				
@@ -385,8 +396,9 @@ public class MythMotePreferences extends PreferenceActivity{
 				//even if the user selects the same location already selected.
 				SelectLocation(context, new LocationChangedEventListener()
 				{
-					public void LocationChanged() {
-						//reset preference list with updated selection
+					public void LocationChanged()
+					{
+						// reset preference list with updated selection
 						setupPreferences(context);
 					}
 
@@ -396,45 +408,50 @@ public class MythMotePreferences extends PreferenceActivity{
 		});
 		return pref;
 	}
-	
-	public static void SelectLocation(final Activity context, final LocationChangedEventListener listener)
+
+	public static void SelectLocation(final Activity context,
+			final LocationChangedEventListener listener)
 	{
-		LocationDbAdapter _dbAdapter = new LocationDbAdapter(context);
+		MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
 		_dbAdapter.open();
 		final Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
-        
-        int count = cursor.getCount();
-        if(count > 0 && cursor.moveToFirst())
-        {
-        	final String[] names = new String[count];
-        	final int[] ids = new int[count];
-        	for(int i=0; i<count; i++)
-        	{
-        		names[i] = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
-        		ids[i] = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
-        		cursor.moveToNext();
-        	}
-        	
-        	//show list of locations as a single selected list
-        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        	builder.setTitle(R.string.select_location_str);
-        	builder.setItems(names, new DialogInterface.OnClickListener(){
 
-        		public void onClick(DialogInterface dialog,
-        				int which) {
-        			
-        			//save selected location
-        			SaveSelectedLocationId(context, ids[which]);
-        			
-        			//notify that we selected a location
-        			listener.LocationChanged();
-        		}});
-        	builder.show();
-        }
+		int count = cursor.getCount();
+		if (count > 0 && cursor.moveToFirst())
+		{
+			final String[] names = new String[count];
+			final int[] ids = new int[count];
+			for (int i = 0; i < count; i++)
+			{
+				names[i] = cursor.getString(cursor
+						.getColumnIndex(MythMoteDbHelper.KEY_NAME));
+				ids[i] = cursor.getInt(cursor
+						.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+				cursor.moveToNext();
+			}
+
+			// show list of locations as a single selected list
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle(R.string.select_location_str);
+			builder.setItems(names, new DialogInterface.OnClickListener()
+			{
+
+				public void onClick(DialogInterface dialog, int which)
+				{
+
+					// save selected location
+					SaveSelectedLocationId(context, ids[which]);
+
+					// notify that we selected a location
+					listener.LocationChanged();
+				}
+			});
+			builder.show();
+		}
 		cursor.close();
-        _dbAdapter.close();
+		_dbAdapter.close();
 	}
-	
+
 	private static void SaveSelectedLocationId(Activity context, int id)
 	{
 		SharedPreferences settings = context.getSharedPreferences(MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE);
