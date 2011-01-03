@@ -37,15 +37,8 @@ public class MythMotePreferences extends PreferenceActivity{
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-//        //create base preference screen
-//        PreferenceScreen prefScreen = this.getPreferenceManager().createPreferenceScreen(this);
-//       
-//        //configure all preferences
-//        setupPreferences(prefScreen);
-//        
-//        //set preference screen
-//		this.setPreferenceScreen(prefScreen);
+       
+        //set shared preference name
         this.getPreferenceManager().setSharedPreferencesName(MYTHMOTE_SHARED_PREFERENCES_ID);
     }
 	
@@ -53,6 +46,7 @@ public class MythMotePreferences extends PreferenceActivity{
 	public void onResume()
 	{
 		super.onResume();
+		
 		// configure all preferences
 		setupPreferences(this);
 	}
@@ -119,13 +113,13 @@ public class MythMotePreferences extends PreferenceActivity{
         		R.array.status_Update_Interval_values,
         		"5000"));
         
-        //create haptic feedback shared preference
-        generalCat.addPreference(createCheckBox(
-        		context, 
-        		PREF_HAPTIC_FEEDBACK_ENABLED, 
-        		R.string.haptic_feedback_enabled_str,
-        		R.string.haptic_feedback_enabled_description_str,
-        		false));
+//        //create haptic feedback shared preference
+//        generalCat.addPreference(createCheckBox(
+//        		context, 
+//        		PREF_HAPTIC_FEEDBACK_ENABLED, 
+//        		R.string.haptic_feedback_enabled_str,
+//        		R.string.haptic_feedback_enabled_description_str,
+//        		false));
         
         //open DB
         MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
