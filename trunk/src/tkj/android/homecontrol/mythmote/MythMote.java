@@ -8,25 +8,18 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import android.app.AlertDialog;
 import android.app.TabActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
-import android.text.Editable;
 import android.util.Log;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		OnTabChangeListener, LocationChangedEventListener,
@@ -40,7 +33,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	public static final String LOG_TAG = "MythMote";
 	
-	
 	private static final String KEY_VOLUME_DOWN = "[";
 	private static final String KEY_VOLUME_UP = "]";
 	
@@ -50,12 +42,16 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	private static MythCom _comm;
 	private static FrontendLocation _location = new FrontendLocation();
 	private static int selected = -1;
-	private static boolean hapticFeedbackEnabled = false;
+	private static boolean IsScreenLarge = false;
 	
 	/** Called when the activity is first created.*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.main);
+        
+        //determine if large screen layouts are being used
+        IsScreenLarge = this.getResources().getString(R.string.screensize).equals("large");
         
         if(_comm==null) {
             //create comm class
@@ -68,7 +64,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
         _tabHost = getTabHost();
         
         //create tabs
-    	createTabs();
+    	this.createTabs();
 
 		// setup on tab change event
 		_tabHost.setOnTabChangedListener(this);
@@ -100,7 +96,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
     @Override
     public void onPause(){
     	super.onPause();
-    	
     }
     
     public void onDestroy(){
@@ -133,7 +128,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
     	_tabHost.clearAllTabs();
     	
     	//create tabs
-    	createTabs();
+    	this.createTabs();
         
         //set current tab back
         _tabHost.setCurrentTab(cTab);
@@ -172,7 +167,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
         menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
         
         //create select location menu item
-        menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
+        menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.selected_location);
         
         //return results
         return result;
@@ -223,20 +218,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
     /** Called when the selected tab page is changed **/
 	public void onTabChanged(String arg0) {
 		keyManager.loadKeys();
-		// get tab tag
-		String tabTag = _tabHost.getCurrentTabTag();
-
-		// check for which tab has been selected
-		if (tabTag.equals(NAME_NAV_TAB)) {
-			// setup navigation tab button events
-//			setupNavigationPanelButtonEvents();
-		} else if (tabTag.equals(NAME_MEDIA_TAB)) {
-			// setup media tab button events
-//			setupMediaPanelButtonEvents();
-		} else if (tabTag.equals(NAME_NUMPAD_TAB)) {
-			// setup number pad button events
-//			setupNumberPadButtonEvents();
-		}
 	}
 	
 	/**
@@ -244,26 +225,26 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	 */
 	private void createTabs()
 	{
-		//recreate tabs
-    	_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(
-        		this.getString(R.string.navigation_str),
-        		this.getResources().getDrawable(R.drawable.starsmall)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(
-        		this.getString(R.string.media_str),
-        		this.getResources().getDrawable(R.drawable.media)).setContent(this));
-        _tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(
-        		this.getString(R.string.numpad_str),
-        		this.getResources().getDrawable(R.drawable.numberpad)).setContent(this));
+		//create tabs. Media tab is only used when large layouts are inactive
+		_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(this.getString(R.string.navigation_str)).setContent(this));
+		if(!IsScreenLarge)
+			_tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(this.getString(R.string.media_str)).setContent(this));
+		_tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(this.getString(R.string.numpad_str)).setContent(this));
+		
+		//resize tabs to remove useless space
+		final int count = _tabHost.getTabWidget().getChildCount();
+		for(int i=0; i<count; i++)
+			_tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 50;
 	}
 	
 	private void loadSharedPreferences()
 	{
-		//get selected frontend id
+		//get selected frontend id 
 		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
         	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
 		
-		hapticFeedbackEnabled = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-			.getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
+		//hapticFeedbackEnabled = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+		//	.getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
 	}
    
     /** Called when a tab is selected. Returns the layout for the selected tab. 
