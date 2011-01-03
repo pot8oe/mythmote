@@ -27,8 +27,6 @@ import android.util.Log;
 
 public class MythMoteDbManager
 {
-	private static final String TAG = "MythMoteDbManager";
-
 	private SQLiteDatabase db;
 	private MythMoteDbHelper dbHelper;
 	private final Context context;
