@@ -1,6 +1,5 @@
 package tkj.android.homecontrol.mythmote;
 
-import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 import android.app.Activity;
 import android.app.AlertDialog;
