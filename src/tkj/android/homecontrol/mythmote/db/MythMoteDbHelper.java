@@ -1,15 +1,9 @@
 package tkj.android.homecontrol.mythmote.db;
 
-import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEYBINDINGS_COMMAND;
-import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEYBINDINGS_FRIENDLY_NAME;
-import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_BINDINGS_TABLE;
-import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEYBINDINGS_REQUIRE_CONFIRMATION;
-import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEYBINDINGS_UI_KEY;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
