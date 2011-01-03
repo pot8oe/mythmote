@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="tkj.android.homecontrol.mythmote"
-      android:versionName="1.4.0" android:versionCode="8">
+      android:versionName="1.5.0" android:versionCode="9">
       
+      <supports-screens android:smallScreens="true"
+      					android:normalScreens="true"
+      					android:largeScreens="true" 
+                  		android:anyDensity="true"/>
+                  		
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    <activity android:name=".MythMotePreferences" android:label="preferences"></activity>
-<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
-</application>
+	<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
+	<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
+	</application>
 <uses-sdk android:minSdkVersion="3"></uses-sdk>
 </manifest> 
