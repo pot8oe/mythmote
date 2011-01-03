@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 import tkj.android.homecontrol.mythmote.MythCom;
+import tkj.android.homecontrol.mythmote.MythMote;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 
 import android.app.AlertDialog;
@@ -55,6 +56,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -246,9 +248,8 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	public KeyBindingManager(final Context ctx, final KeyMapBinder binder,
 			final MythCom communicator)
 	{
-		Log.d("KBM", "Created KeyBindingManager with ctx " + ctx + " binder "
-				+ binder + " comm " + communicator);
-		this.context = context;
+		Log.d(MythMote.LOG_TAG, "Created KeyBindingManager with ctx " + ctx + " binder " + binder + " comm " + communicator);
+		this.context = ctx;
 		this.databaseAdapter = new MythMoteDbManager(ctx);
 
 		this.binder = binder;
@@ -258,7 +259,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 	public void loadKeys()
 	{
-		Log.d("KBM", "loadKeys with dba " + databaseAdapter);
+		Log.d(MythMote.LOG_TAG, "loadKeys with dba " + databaseAdapter);
 		databaseAdapter.open();
 		databaseAdapter.loadKeyMapEntries(this);
 		databaseAdapter.close();
@@ -266,8 +267,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 	public View bind(KeyBindingEntry entry)
 	{
-		Log.d("KBM",
-				"Bind " + entry.getFriendlyName() + " to " + entry.getCommand());
+		Log.d(MythMote.LOG_TAG, "Bind " + entry.getFriendlyName() + " to " + entry.getCommand());
 		View v = binder.bind(entry);
 		viewToEntryMap.put(v, entry);
 		return v;
@@ -285,7 +285,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 		if (null != entry && null != communicator)
 		{
-			Log.d("KBM", "onClick " + entry.getFriendlyName()+" command "+entry.getCommand());
+			Log.d(MythMote.LOG_TAG, "onClick " + entry.getFriendlyName()+" command "+entry.getCommand());
 			communicator.SendCommand(entry.getCommand());
 		}
 
@@ -313,7 +313,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 				KeyBindingEntry oldEntry = viewToEntryMap.get(v);
 				if (null != oldEntry && null != communicator)
 				{
-					Log.d("KBM", "onLongClick " + oldEntry.getFriendlyName());
+					Log.d(MythMote.LOG_TAG, "onLongClick " + oldEntry.getFriendlyName());
 					KeyBindingEntry entry = new KeyBindingEntry(oldEntry
 							.getRowID(), oldEntry.getFriendlyName(), oldEntry
 							.getMythKey(), value.toString(), oldEntry
