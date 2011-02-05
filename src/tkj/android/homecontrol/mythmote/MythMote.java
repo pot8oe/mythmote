@@ -98,12 +98,16 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onResume() {
 		super.onResume();
 
+		//Check existing connection state
     	if(!_comm.IsConnected() && !_comm.IsConnecting()) {
+    		
+    		//force disconnected state
     		_comm.Disconnect();
     		
-        	if(this.setSelectedLocation())
-        		_comm.Connect(_location);
+    		//set selected location and connect
+        	this.setSelectedLocation();
     	}else{
+    		//already connecte, set status
     		this.StatusChanged(_location.Name + " - Connected", MythCom.STATUS_CONNECTED);
     	}
     }
