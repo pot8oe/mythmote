@@ -1,0 +1,1351 @@
+Index: AndroidManifest.xml
+===================================================================
+--- AndroidManifest.xml	(revision 142)
++++ AndroidManifest.xml	(working copy)
+@@ -1,14 +1,16 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+       package="tkj.android.homecontrol.mythmote"
+-      android:versionName="1.4.0" android:versionCode="8">
++      android:versionName="1.4.0" android:versionCode="8"
++      android:installLocation="auto">
+       
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
++    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+     <uses-permission android:name="android.permission.INTERNET" />
+     
+-    <application android:icon="@drawable/mythmote" android:label="@string/app_name">  <!-- android:debuggable="true" -->
+-        <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation">
++    <application android:icon="@drawable/mythmote" android:label="@string/app_name"   android:debuggable="true" >
++        <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation" android:launchMode="singleTask">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
+Index: src/tkj/android/homecontrol/mythmote/MythCom.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythCom.java	(revision 142)
++++ src/tkj/android/homecontrol/mythmote/MythCom.java	(working copy)
+@@ -1,26 +1,24 @@
+ package tkj.android.homecontrol.mythmote;
+ 
+-import java.io.BufferedReader;
+-import java.io.BufferedWriter;
+-import java.io.IOException;
+-import java.io.InputStreamReader;
+-import java.io.OutputStreamWriter;
+-import java.net.InetSocketAddress;
+-import java.net.Socket;
+-import java.net.UnknownHostException;
+ import java.util.EventListener;
+-import java.util.Timer;
+-import java.util.TimerTask;
+-
+ import android.app.Activity;
++import android.app.Notification;
++import android.app.NotificationManager;
++import android.app.PendingIntent;
+ import android.content.Context;
+ import android.net.ConnectivityManager;
+-import android.os.Handler;
+ import android.view.Gravity;
+ import android.widget.Toast;
+ import android.util.Log;
++import android.net.NetworkInfo;
++import android.net.wifi.WifiInfo;
++import android.net.wifi.WifiManager;
++import android.content.BroadcastReceiver;
++import android.content.Intent;
++import android.content.IntentFilter;
+ 
+-/** Class that handles network communication with mythtvfrontend **/
++/** Class that handles the state of the network connection
++ * and initialises the send queue thread **/
+ public class MythCom {
+ 
+ 	public interface StatusChangedEventListener extends EventListener {
+@@ -71,6 +69,11 @@
+ 	public static final String JUMPPOINT_zoneminderevents = "zoneminderevents";     //- ZoneMinder Events
+ 	public static final String JUMPPOINT_zoneminderliveview = "zoneminderliveview";   //- ZoneMinder Live View
+ 	
++	public static final int STATUS_DISCONNECTED = 0;
++	public static final int STATUS_CONNECTED = 1;
++	public static final int STATUS_CONNECTING = 3;
++	public static final int STATUS_ERROR = 99;
++	
+ 	public static final String KEY_up = "up";
+ 	public static final String KEY_down = "down";
+ 	public static final String KEY_left = "left";
+@@ -90,348 +93,305 @@
+ 	public static final String PLAY_SEEK_FW = "seek forward";
+ 	public static final String PLAY_SEEK_BW = "seek backward";
+ 	public static final String EXIT = "exit";
+-	
++
+ 	public static final int DEFAULT_MYTH_PORT = 6546;
+-	public static final int SOCKET_TIMEOUT = 10000;
+-	public static final int ENABLE_WIFI = 0;
+-	public static final int CANCEL = 1;
+-	public static final int STATUS_DISCONNECTED = 0;
+-	public static final int STATUS_CONNECTED = 1;
+-	public static final int STATUS_CONNECTING = 3;
+-	public static final int STATUS_ERROR = 99;
+-	
+-	private static Timer _timer;
++
++	private static SendQueueThread _queueThread;
+ 	private static Toast _toast;
+-	private static Socket _socket;
+-	private static BufferedWriter _outputStream;
+-	private static BufferedReader  _inputStream;
++
+ 	private static Activity _parent;
+-	private static ConnectivityManager _conMgr;
+-	private static String _status;
++	private static Boolean _wifiConnected = false;
++	private static Boolean _mobileConnected = false;
++	private static StatusChangedEventListener _mythConnStatusListener;
++	private static NotificationManager _manager;
++	private static Notification _notification = null;
++	private static FrontendLocation _frontend = null;
+ 	private static int _statusCode;
+-	private static StatusChangedEventListener _statusListener;
+-	private static FrontendLocation _frontend;
++	private static ConnectivityManager _conMgr; 
++	private static String _ssid = "none";
++	private static String _tag = MythMote.TAG;
+ 	
+-	private final Handler mHandler = new Handler();
+-	private final Runnable mSocketActionComplete = new Runnable()
+-	{
+-		public void run()
+-		{
+-			setStatus(_status, _statusCode);
+-			if(_statusCode!=STATUS_CONNECTING)
+-			    _toast.cancel();
++	private ConnectivityReceiver _receiver;
++
++	public class updateStatusCode implements Runnable{
++		private int mycode;
++		
++		public updateStatusCode(int code){
++			mycode = code;
+ 		}
+ 		
+-	};
++		public void run() {
++			String location = "";
++			if(mycode == STATUS_DISCONNECTED) 
++				location = _parent.getResources().getString(R.string.disconnected_str);
++			if(mycode == STATUS_CONNECTED) 
++				location = _parent.getResources().getString(R.string.connected_str);
++			setStatus(location, mycode);
++		}
++	}
+ 	
+-	/** TimerTask that probes the current connection for its mythtv screen.  **/
+-	private final TimerTask timerTaskCheckStatus = new TimerTask()
+-	{
+-		//Run at every timer tick
+-		public void run() 
+-		{
+-			//only if socket is connected
+-			if(IsConnected() && !IsConnecting())
+-			{
+-				//set disconnected status if nothing is returned.
+-				if(queryMythScreen() == null)
+-				{
+-					setStatus("Disconnected", STATUS_DISCONNECTED);
+-				}
+-				else
+-				{
+-					setStatus(_frontend.Name + " - Connected", STATUS_CONNECTED);
+-				}
+-			}
++	public class updateLocation implements Runnable{
++		private String reply;
++		
++		public updateLocation(String location){
++			reply = location;
+ 		}
+-	};
+-
++		
++		public void run() {
++			String location = "";
++			if(!"".equals(reply))
++				location = parsemenu(reply);
++			setStatus(location, STATUS_CONNECTED);
++		}
++	}
+ 	
+ 	/** Parent activity is used to get context */
+ 	public MythCom(Activity parentActivity)
+ 	{
+ 		_parent = parentActivity;
+-		_statusCode=STATUS_DISCONNECTED;
+-        _timer = new Timer();
+-        _timer.schedule(timerTaskCheckStatus, 5000, 5000);
+-		
++	    _conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
++	    try{
++		    if(_conMgr.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI){
++		    	_wifiConnected = true;
++		    	_ssid = getSSID();
++		    	Log.i(_tag, "SSID: " + _ssid);
++		    }
++		    if(_conMgr.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_MOBILE){
++		    	_mobileConnected = true;
++		    }
++	    }catch(NullPointerException e){
++	    	_wifiConnected = false;
++	    	_mobileConnected = false;
++	    }
++	    if(_receiver == null){
++	    	_receiver = new ConnectivityReceiver();
++	    	_parent.registerReceiver(_receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
++	    }
++	    if(_manager == null){
++	    	_manager = (NotificationManager) _parent.getSystemService(Context.NOTIFICATION_SERVICE);
++
++	    }
+ 	}
+ 	
+-	/** Connects to the given address and port. Any existing connection will be broken first **/
+-	public void Connect(FrontendLocation frontend)
++	/** Asks the message queue to connect  **/
++	public void Connect()
+ 	{
+-		    //get connection manager
+-		    _conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+-		    
+-			//set address and port
+-			_frontend = frontend;
+-			
+-			//create toast for all to eat and enjoy
+-			_toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
+-			_toast.setGravity(Gravity.CENTER, 0, 0);
+-			_toast.show();
+-
+-			this.setStatus("Connecting", STATUS_CONNECTING);
+-			
+-			//create a socket connecting to the address on the requested port
+-			this.connectSocket();
++		if(_toast != null) _toast.cancel();
++		if(_frontend != null){
++			if(!_wifiConnected && !_mobileConnected){
++				_toast = Toast.makeText(_parent.getApplicationContext(), R.string.no_network, Toast.LENGTH_SHORT);
++				_toast.setGravity(Gravity.CENTER, 0, 0);
++				_toast.show();
++			}else{
++				if((_queueThread == null) || (!_queueThread.isAlive())
++						|| (_statusCode != STATUS_CONNECTED)
++						|| (_statusCode != STATUS_CONNECTING)){
++					_toast = Toast.makeText(_parent.getApplicationContext(), 
++							_parent.getResources().getString(R.string.attempting_to_connect_str) + " " + _frontend.Name, Toast.LENGTH_LONG);
++					_toast.setGravity(Gravity.CENTER, 0, 0);
++					_toast.show();
++				
++					this.setStatus(_parent.getResources().getString(R.string.connecting_str), STATUS_CONNECTING);
++					Log.i(_tag, "Connecting to: " + _frontend.Name);
++					
++					_queueThread = new SendQueueThread(this);
++					_queueThread.setAddress(_frontend.Address);
++					_queueThread.setPort(_frontend.Port);
++	
++					_queueThread.start();
++				}
++			}
++		}
+ 	}
+ 	
+ 	/** Closes the socket if it exists and it is already connected **/
+ 	public void Disconnect()
+ 	{
+-        _statusCode=STATUS_DISCONNECTED;
+-		try
+-		{
+-			//send exit if connected
+-			if(this.IsConnected())
+-				this.sendData("exit\n");
+-			
+-			//check if output stream exists
+-			if(_outputStream != null)
+-			{
+-				_outputStream.close();
+-				_outputStream = null;
++		if(_queueThread != null){
++			Log.i(_tag, "Disconnecting");
++			this.setStatus(_parent.getResources().getString(R.string.disconnected_str), STATUS_DISCONNECTED);
++			_queueThread.Disconnect();
++			try {
++				_queueThread.join(500);
++			} catch (InterruptedException e) {
++				e.printStackTrace();
+ 			}
+-			
+-			//check if input stream exists
+-			if(_inputStream != null)
+-			{
+-				//close input stream
+-				_inputStream.close();
+-				_inputStream = null;
+-			}
+-			if(_socket != null)
+-			{
+-			    if(!_socket.isClosed())
+-				    _socket.close();
+-			
+-				_socket = null;
+-			}
+-			if(_conMgr != null)
+-				_conMgr = null;
++			_queueThread = null;
+ 		}
+-		catch(IOException ex)
+-		{
+-			this.setStatus("Disconnect I/O error", STATUS_ERROR);
+-		}
+ 	}
+ 	
++	/** Connects to the given address and port. Any existing connection will be broken first **/
++	public void SetFrontend(FrontendLocation frontend)
++	{
++		_frontend = frontend;
++		Log.i(_tag, "Frontend set to " + frontend.Name);
++	}
++	
+ 	public void SendJumpCommand(String jumpPoint)
+ 	{
+-		//send command data
+-		this.sendData(String.format("jump %s\n", jumpPoint));
++		this.addCommand(String.format("jump %s\n", jumpPoint));	
+ 	}
+ 	
+ 	public void SendKey(String key)
+ 	{
+-		//send command data
+-		this.sendData(String.format("key %s\n", key));
++		this.addCommand(String.format("key %s\n", key));
+ 	}
+ 	
+ 	public void SendKey(char key)
+ 	{
+-		//send command data
+-		this.sendData(String.format("key %s\n", key));
++		this.addCommand(String.format("key %s\n", key));
+ 	}
+ 	
+ 	public void SendPlaybackCmd(String cmd)
+ 	{
+-		//send command data
+-		this.sendData(String.format("play %s\n", cmd));
++		this.addCommand(String.format("play %s\n", cmd));
+ 	}
+ 	
+ 	public void SetOnStatusChangeHandler(StatusChangedEventListener listener)
+ 	{
+-		_statusListener = listener;
++		_mythConnStatusListener = listener;
+ 	}
+ 	
+-	public String GetStatusStr()
++	public int GetStatusCode()
+ 	{
+-		return _status;
++		return _statusCode;
+ 	}
+-	
+-	public boolean IsNetworkReady()
+-	{
+-		if(_conMgr != null && _conMgr.getActiveNetworkInfo().isConnected())
+-			return true;
+-		return false;
+-	}
+-	
+ 	public boolean IsConnected()
+ 	{
+-		if(_statusCode==STATUS_CONNECTED) return true;
+-		return false;
++		if(_queueThread == null) return false;
++		return ((_statusCode == STATUS_CONNECTED) && (_wifiConnected || _mobileConnected));
+ 	}
+ 
+ 	public boolean IsConnecting()
+ 	{
+-		if(_statusCode==STATUS_CONNECTING) return true;
+-		return false;
++		if(_queueThread == null) return false;
++		return (_statusCode == STATUS_CONNECTING);
+ 	}
+ 	
+-	/** Connects _socket to _frontend using a separate thread  **/
+-	private void connectSocket()
++	/** Adds command to send queue **/
++	private void addCommand(String mycommand){
++		if(_queueThread != null)
++			_queueThread.AddCommand(mycommand);
++	}
++	
++	/** Fires the StatusChanged event.
++	 *  Updates the notification. **/
++	private void setStatus(final String StatusMsg, final int code)
+ 	{
+-		if(_socket==null)
+-		    _socket = new Socket();
++		_statusCode = code;
++    	if(code != STATUS_CONNECTING)
++	        _toast.cancel();
++    	if(code == STATUS_CONNECTED)
++    	{
++    		if(_notification == null){
++	    		Intent intent = new Intent(_parent, MythMote.class);
++	    		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
++	    		_notification = new Notification(R.drawable.mythmote, _frontend.Name + ": " +
++	    				_parent.getResources().getString(R.string.connected_str), System.currentTimeMillis());
++	    		_notification.flags = Notification.FLAG_ONGOING_EVENT;
++	    		_notification.setLatestEventInfo(_parent, "MythMote", _frontend.Name + ": " +
++	    				_parent.getResources().getString(R.string.connected_str), PendingIntent.getActivity(_parent.getBaseContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
++	    		_manager.notify(0, _notification);
++    		}
++    	}
++    	if(code != STATUS_CONNECTED){
++    		_manager.cancelAll();
++    		_notification = null;
++    	}
+ 		
+-		Thread thread = new Thread()
+-		{
+-			public void run()
+-			{
+-				try
+-				{
+-					_socket.connect(new InetSocketAddress(_frontend.Address, _frontend.Port));
+-					
+-					if(_socket.isConnected())
+-					{
+-					    _outputStream = new BufferedWriter(new OutputStreamWriter(_socket.getOutputStream()));
+-					    _inputStream = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
+-					}
+-					else
+-					{
+-						_status = "Could not open socket.";
+-						_statusCode = STATUS_ERROR;
+-					}
++		_parent.runOnUiThread(new Runnable(){
+ 
+-					//check if everything was connected OK
+-					if(!_socket.isConnected() || _outputStream == null)
+-					{
+-						_status = "Unknown error getting output stream.";
+-						_statusCode = STATUS_ERROR;
+-					}
+-					else
+-					{
+-						_status = _frontend.Name + " - Connected";
+-						_statusCode = STATUS_CONNECTED;
+-					}
+-
+-				}
+-				catch (UnknownHostException e)
+-				{
+-					_status = "Unknown host: " + _frontend.Address;
+-					_statusCode = STATUS_ERROR;
+-				}
+-				catch (IOException e)
+-				{
+-					_status = "IO Except: " + e.getLocalizedMessage() + ": " + _frontend.Address;
+-					_statusCode = STATUS_ERROR;
+-					if(_inputStream!=null)
+-					{
+-						_inputStream=null;
+-					}
+-					if(_socket!=null)
+-					{
+-						if(!_socket.isClosed())
+-						{
+-							try { _socket.close(); } 
+-							catch (IOException e1) { }
+-							_socket = null;
+-						}
+-					}
+-				}
+-				
+-				//post results
+-				mHandler.post(mSocketActionComplete);
++			public void run() 
++			{
++				if(_mythConnStatusListener != null)
++					_mythConnStatusListener.StatusChanged(StatusMsg, code);
+ 			}
+-		};
+-		
+-		thread.start();
++			
++		});
+ 	}
+ 	
+-	/** Sends data to the output stream of the socket.
+-	 * Attempts to reconnect socket if connection does not already exist. **/
+-	private boolean sendData(String data)
++	/** Looks up the SSID for the network **/
++	private String getSSID()
+ 	{
+-		if(this.IsConnected() && _outputStream != null)
+-		{
+-			try
+-			{
+-				if(!data.endsWith("\n")) 
+-					data = String.format("%s\n", data);
+-				
+-				_outputStream.write(data);
+-				_outputStream.flush();
+-				return true;
+-			}
+-			catch (IOException e)
+-			{
+-				e.printStackTrace();
+-				this.setStatus(e.getLocalizedMessage() + ": " + _frontend.Address , STATUS_ERROR);
+-				this.Disconnect();
+-				return false;
+-			}
+-		}
+-		return false;
++		WifiManager wifiMan = (WifiManager) _parent.getSystemService(Context.WIFI_SERVICE);
++		WifiInfo wifiInfo = wifiMan.getConnectionInfo();
++		Log.i(_tag, "winfo: " + wifiInfo.toString());
++		return wifiInfo.getSSID();
+ 	}
+ 	
+-	/** Reads data from the input stream of the socket.
+-	 * Returns null if no data in received **/
+-	private String readData()
++	/** Lookup menu string from xml **/
++	private String parsemenu(String statusmsg)
+ 	{
+-		String outString = "";
+-		if(this.IsConnected() && _inputStream != null )
+-		{
+-			
+-			try 
+-			{
+-				if(_inputStream.ready())
+-					outString =_inputStream.readLine() ;
+-
+-			} 
+-			catch (IOException e) 
+-			{
+-				e.printStackTrace();
+-				this.setStatus(e.getLocalizedMessage() + ": " + _frontend.Address , STATUS_ERROR);
+-				this.Disconnect();
+-				return null;
+-			}
+-		}
+-		if(outString!=""){
+-			return outString;
++		int statusid = _parent.getResources().getIdentifier(statusmsg, "string", _parent.getPackageName());
++		if(statusid>0){
++			return _parent.getString(statusid);
+ 		}else{
+-			Log.e	(_status, "Null outstring");
+-			return null;
++			return statusmsg;
+ 		}
+ 	}
+ 	
+-	/** Sets _status and fires the StatusChanged event **/
+-	private void setStatus(final String StatusMsg, final int code)
+-	{
+-		_parent.runOnUiThread(new Runnable(){
++	private class ConnectivityReceiver extends BroadcastReceiver{
+ 
+-			public void run() 
+-			{
+-				_status = StatusMsg;
+-				if(_statusListener != null)
+-					_statusListener.StatusChanged(StatusMsg, code);
+-			}
++		/** This detects hopping to other networks and caters for it. **/ 
++		public void onReceive(Context context, Intent intent) {
++			NetworkInfo netInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+ 			
+-		});
+-	}
+-	
+-	/** Returns the string representation of the current mythfrontend
+-	 * screen location. Returns null on error **/
+-	private String queryMythScreen()
+-	{
++			if(netInfo != null)
++			{
++				Log.i(_tag, netInfo.toString());
+ 
+-		if(this.sendData("query location"))
+-		{
+-		    if(this.IsConnected()){
+-		    	return this.readData();
+-		    	
+-		    }else{
+-				Log.e(_status, "Not connected on receive");
+-				return null;
+-		    }
++				if(netInfo.getType() == ConnectivityManager.TYPE_WIFI){
++					if(netInfo.getState() == NetworkInfo.State.CONNECTED){
++						String ssid = getSSID();
++						if(ssid != null){
++							if(!ssid.equals(_ssid)){
++								Log.i(_tag, "Wifi network changed to " + ssid + " from " + _ssid);
++								_manager.cancelAll();
++								Disconnect();
++								Connect();
++							}else{
++								Log.i(_tag, "Same network connected alert " + ssid + " and " + _ssid);
++								if(!((_statusCode == STATUS_CONNECTED) || 
++										(_statusCode == STATUS_CONNECTING) )){
++									_manager.cancelAll();
++									Disconnect();
++									Connect();
++								}
++							}
++							_ssid = ssid;
++							_wifiConnected = true;
++						}
++					}else{
++						Log.i(_tag, "WIFI Disconnected from " + _ssid);
++						_wifiConnected = false;
++						_ssid = null;
++					}
++				}
++				if(netInfo.getType() == ConnectivityManager.TYPE_MOBILE){
++					if(netInfo.getState() == NetworkInfo.State.CONNECTED){
++						Log.i(_tag, "Mobile Connected");
++						if(_mobileConnected == false && _wifiConnected == false){
++							Log.i(_tag, "Mobile network connected");
++							_manager.cancelAll();
++							Disconnect();
++							Connect();
++						}
++						_mobileConnected = true;
++					}else{
++						Log.i(_tag, "Mobile Disconnected");
++						_mobileConnected = false;
++					}
++					
++				}
++			}
++			if(!_mobileConnected && !_wifiConnected){
++				Log.i(_tag, "No network available.");
++				_manager.cancelAll();
++				Disconnect();
++			}
+ 		}
+-		else
+-		{
+-			Log.e(_status, "Send failed");
+-			return null;
+-		}
+-
+-	}
++    }
+ 	
+ }
++
++
+Index: src/tkj/android/homecontrol/mythmote/MythMote.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythMote.java	(revision 142)
++++ src/tkj/android/homecontrol/mythmote/MythMote.java	(working copy)
+@@ -14,6 +14,7 @@
+ import android.widget.TabHost;
+ import android.widget.TabHost.OnTabChangeListener;
+ import android.text.Editable;
++import android.util.Log;
+ import android.view.HapticFeedbackConstants;
+ import android.view.KeyEvent;
+ import android.view.Menu;
+@@ -22,7 +23,6 @@
+ import android.view.View.OnClickListener;
+ 
+ 
+-
+ public class MythMote extends TabActivity  implements 
+ 	TabHost.TabContentFactory, 
+ 	OnTabChangeListener, 
+@@ -33,14 +33,16 @@
+ 
+ 	public static final int SETTINGS_ID = Menu.FIRST;
+ 	public static final int RECONNECT_ID = Menu.FIRST + 1;
+-	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
++	public static final int DISCONNECT_ID = Menu.FIRST + 2;
++	public static final int SELECTLOCATION_ID = Menu.FIRST + 3;
+ 	public static final String NAME_NAV_TAB = "TabNavigation";
+ 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
+ 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
++	public static final String TAG = "MythMote";
+ 	
+ 	private static TabHost _tabHost;
+ 	private static MythCom _comm;
+-	private static FrontendLocation _location = new FrontendLocation();
++	private static FrontendLocation _frontend = new FrontendLocation();
+ 	private static int selected = -1;
+ 	private static boolean hapticFeedbackEnabled = false;
+ 	
+@@ -49,16 +51,12 @@
+     public void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         
+-        if(_comm==null) {
+-            //create comm class
++        if(_comm == null) {
+             _comm = new MythCom(this);
+         }
+         //set status changed event handler
+         _comm.SetOnStatusChangeHandler(this);
+-        
+-        
+-        //this.setSelectedLocation();
+-        
++
+         //create tab UI
+         _tabHost = getTabHost();
+         
+@@ -80,13 +78,15 @@
+     public void onResume(){
+     	super.onResume();
+ 
+-    	if(!_comm.IsConnected() && !_comm.IsConnecting()) {
+-    		_comm.Disconnect();
+-    		
+-        	if(this.setSelectedLocation())
+-        		_comm.Connect(_location);
++    	if(!_comm.IsConnected()){
++    		if(!_comm.IsConnecting()){
++    			Log.i(TAG, "Not connected in onResume.");
++    			if(this.setSelectedLocation()) 
++    				_comm.SetFrontend(_frontend);
++    			_comm.Connect();
++    		}
+     	}else{
+-    		this.StatusChanged(_location.Name + " - Connected", MythCom.STATUS_CONNECTED);
++    		this.StatusChanged(_frontend.Name + " - Connected", MythCom.STATUS_CONNECTED);
+     	}
+     }
+     
+@@ -100,8 +100,6 @@
+     public void onDestroy(){
+     	super.onDestroy();
+     	
+-    	if(_comm.IsConnected())
+-    		_comm.Disconnect();
+     	_tabHost = null;
+     	
+     }
+@@ -114,6 +112,7 @@
+     	super.onConfigurationChanged(config);
+     	
+     	//get current tab index
++    	if(_tabHost == null) _tabHost =  getTabHost();
+     	int cTab = _tabHost.getCurrentTab();
+     	
+     	//set current tab to 0. Clear seems to fail when set to anything else
+@@ -160,6 +159,9 @@
+         //create reconnect menu item
+         menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
+         
++        //create disconnect menu item
++        menu.add(0, DISCONNECT_ID, 0, R.string.disconnected_str).setIcon(R.drawable.menu_refresh);
++        
+         //create select location menu item
+         menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
+         
+@@ -182,11 +184,12 @@
+ 				   	break;
+ 
+ 		   		case RECONNECT_ID:
+-		   			if(_comm.IsConnected())
+-		   			    _comm.Disconnect();
++	   			    _comm.Disconnect();
++	   			    _comm.Connect();
++		   			break;
+ 		   			
+-		   	    	if(this.setSelectedLocation())
+-		   	    		_comm.Connect(_location);
++		   		case DISCONNECT_ID:
++	   			    _comm.Disconnect();
+ 		   			break;
+ 		   			
+ 		   		case SELECTLOCATION_ID:
+@@ -289,16 +292,16 @@
+ 
+ 	/** Called when the frontend location is changed */
+ 	public void LocationChanged() {
+-		if(_comm.IsConnected())
+-		    _comm.Disconnect();
+-		
++		Log.i(TAG, "Location changed.");
+     	if(this.setSelectedLocation())
+-    		_comm.Connect(_location);
++    		_comm.SetFrontend(_frontend);
++    	
++	    _comm.Disconnect();
++		_comm.Connect();
+ 	}
+    
+ 	/** Called when MythCom status changes **/
+     public void StatusChanged(String StatusMsg, int statusCode) {
+-		//set titleJUMPPOINT_guidegrid
+ 		setTitle(StatusMsg);
+ 		
+ 		//change color based on status code
+@@ -320,7 +323,7 @@
+ 		}
+ 	}
+ 	
+-    /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
++    /** Reads the selected frontend from preferences and sets the InetAddress **/
+ 	private boolean setSelectedLocation() {
+ 		
+ 		//load shared preferences
+@@ -339,17 +342,17 @@
+         if(cursor != null && cursor.getCount() > 0)
+         {
+         	//set selected location from Cursor
+-        	_location.ID = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
+-        	_location.Name = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
+-        	_location.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
+-        	_location.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
++        	_frontend.ID = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_ROWID));
++        	_frontend.Name = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_NAME));
++        	_frontend.Address = cursor.getString(cursor.getColumnIndex(LocationDbAdapter.KEY_ADDRESS));
++        	_frontend.Port = cursor.getInt(cursor.getColumnIndex(LocationDbAdapter.KEY_PORT));
+         }
+         else
+         {
++            cursor.close();
++            dbAdapter.close();
+         	return false;
+         }
+-        
+-        //close cursor and db adapter
+         cursor.close();
+         dbAdapter.close();
+         return true;
+Index: src/tkj/android/homecontrol/mythmote/SendQueueThread.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/SendQueueThread.java	(revision 0)
++++ src/tkj/android/homecontrol/mythmote/SendQueueThread.java	(revision 0)
+@@ -0,0 +1,404 @@
++package tkj.android.homecontrol.mythmote;
++
++import java.io.BufferedReader;
++import java.io.BufferedWriter;
++import java.io.IOException;
++import java.io.InputStreamReader;
++import java.io.OutputStreamWriter;
++import java.net.InetSocketAddress;
++import java.net.Socket;
++import java.net.SocketTimeoutException;
++import java.util.ArrayList;
++import java.util.LinkedList;
++
++import tkj.android.homecontrol.mythmote.MythCom.updateStatusCode;
++import tkj.android.homecontrol.mythmote.MythCom.updateLocation;
++
++import android.util.Log;
++
++/** This is the thread which reads commands and waits for output 
++ *  Is responsible for the socket and all comms**/
++public class SendQueueThread extends Thread{
++
++	
++	private static final int SOCKET_TIMEOUT = 5000;  
++	private static final int RECONNECT_RETRIES = 3;
++	private static final int READ_TIMEOUT = 400;  //Short read timeout, all reads block for this long minimum.
++	private static final int LONG_READ_MULTIPLE = 50;  //READ_TIMEOUT_SHORT x LONG_READ_MULTIPLE for long timeout
++	private static final int MSG_QUEUE_SLEEP_TIME = 50;        //Message queue sleep time
++	private static final int KEEPALIVE_MULTIPLE = 20;   //Message queue interval = KEEPALIVE_MULTIPLE x MSG_QUEUE_SLEEP_TIME
++	
++	private static String _tag = "MythMote";
++	
++	private MythCom _parent;
++	private String _frontendAddress;
++	private int _frontendPort = MythCom.DEFAULT_MYTH_PORT;
++	private Socket _socket = null;
++	private BufferedReader  _bReader = null;
++	private BufferedWriter _bWriter = null;
++	private LinkedList<String> _commandList = new LinkedList<String>();
++	private int _statusCode = MythCom.STATUS_DISCONNECTED;
++	private boolean _awaitingreply = false;
++	private ArrayList<String> _reply;
++	
++	public SendQueueThread(MythCom parent) {
++		super();
++		_parent = parent;
++	}
++	public void run() {
++		int keepalivecount = KEEPALIVE_MULTIPLE;
++		this.connect();
++		//Send command/keepalive if connected
++		while((_statusCode == MythCom.STATUS_CONNECTED || _statusCode == MythCom.STATUS_CONNECTING) 
++				&& (_socket!= null && _socket.isConnected()) )
++		{
++			if(_commandList.isEmpty()) 
++			{
++				if(keepalivecount > 1)
++				{
++					keepalivecount--;
++				}else{
++					ArrayList<String> temparraylist = sendAndWait("query location");
++					if(temparraylist != null){
++						String mylocation = temparraylist.get(0);
++						if(!"".equals(mylocation))
++							if(!processLocationReply(mylocation)) break;
++						keepalivecount = KEEPALIVE_MULTIPLE;
++					}else{
++						break;
++					}
++				}
++			}else{
++				ArrayList<String> tempreply = sendAndWait(_commandList.removeLast());
++				if(tempreply == null){ 
++					break;
++				}else{
++					this.processCommandReply(tempreply);
++				}
++			}
++			try {
++                synchronized(this) {
++                    wait(MSG_QUEUE_SLEEP_TIME);
++                }
++			} catch (InterruptedException e) {
++				e.printStackTrace();
++			}
++		}
++		this.updateStatusCode(MythCom.STATUS_DISCONNECTED);
++		this.disconnect();
++	}
++
++	public void setAddress(String address){
++		_frontendAddress = address;
++	}
++	public void setPort(int port){
++		_frontendPort = port;
++	}
++	
++	/** Send 'exit' and flag thread to stop **/
++	public void Disconnect()
++	{
++		if(_statusCode == MythCom.STATUS_CONNECTED){
++			this.sendLine("exit\n");
++		}
++		_statusCode = MythCom.STATUS_DISCONNECTED;
++	}
++
++	/** Adds command to fifo **/
++	public void AddCommand(String mycommand){
++		_commandList.addFirst(mycommand);
++	}
++	
++	/**Adds command to fifo and blocks until a reply is received **/
++	public ArrayList<String> ExecuteForReply(String mycommand){
++		_commandList.addFirst(mycommand);
++		_awaitingreply = true;
++		try {
++			this.wait();
++		} catch (InterruptedException e) {
++			e.printStackTrace();
++		}
++		_awaitingreply = false;
++		if(_reply.isEmpty()){
++			return null;
++		}else{
++			return _reply;
++		}
++	}
++	
++	/** parse the location reply from frontend, format
++	 * and update the parent 'location' 
++	 * returns false if error occurred */
++	private boolean processLocationReply(String mylocation) 
++	{
++		String locationstring = "";
++		if(mylocation != null){
++			//Strip prompt "# " if it is prefixed
++			if(mylocation.startsWith("# ")) mylocation = mylocation.substring(2);
++			if(!mylocation.equals("OK")){
++				if(mylocation.startsWith("Playback Recorded")){
++					String[] stringArray;
++					stringArray = mylocation.split(" ");
++					try{
++						ArrayList<String> temparraylist = sendAndWait("query recording " + stringArray[6] + " " + stringArray[7]);
++						if(temparraylist != null){
++							String[] recordedstring = temparraylist.get(0).split(" ");
++							String tempstring = "";
++							for(int i=2;i<recordedstring.length;i++){
++								tempstring += recordedstring[i] + " ";
++							}
++							locationstring = tempstring + " - " + stringArray[2] + " " +
++									stringArray[3] + " " + stringArray[4];
++						}else{
++							return false;
++						}
++						temparraylist = null;
++					}catch(NullPointerException e){
++						Log.i(_tag, "Query recorded program failed");
++					}
++				}else if(mylocation.startsWith("Playback LiveTV")){
++					String[] stringArray;
++					stringArray = mylocation.split(" ");
++					try{
++						ArrayList<String> temparraylist = sendAndWait("query LiveTV " + stringArray[6]);
++						if(temparraylist != null){
++							String[] playbackstring = temparraylist.get(0).split(" "); 
++							String tempstring = "";
++							for(int i=3;i<playbackstring.length;i++){
++								tempstring += playbackstring[i] + " ";
++							}
++							locationstring =  tempstring + " - " +
++									stringArray[2] + " " + stringArray[3] + " " + stringArray[4];
++						}else{
++							return false;
++						}
++						temparraylist = null;
++					}catch(NullPointerException e){
++						Log.i(_tag, "Query liveTV failed");
++					}
++				} else if(mylocation.startsWith("ERROR")){
++					Log.i(_tag, mylocation);
++					return true; //Conn is still OK
++				}else {
++					locationstring = mylocation;
++				}
++				if(!"".equals(locationstring) && _statusCode == MythCom.STATUS_CONNECTED){
++					this.updateLocation(locationstring);
++					return true;
++				}
++			}
++		}
++		return false;
++	}
++	/** Parse the command reply from frontend, format *
++	 * and send reply to parent *
++	 * returns false if error occurred */
++	private boolean processCommandReply(ArrayList<String> arraylist) 
++	{
++		if(arraylist != null && arraylist.size() > 0 ){
++			String reply = arraylist.get(0);
++			//Strip prompt "# " if it is prefixed
++			if(reply.startsWith("# ")) reply = reply.substring(2);
++			if(!reply.equals("OK") && _awaitingreply == true){
++				_reply = arraylist;
++				this.notifyAll();
++			}
++			return true;
++		}
++		return false;
++	}
++		
++	/** Sends data to the output stream of the socket. 
++	 *  If false is returned frontend is not connected.**/
++	private boolean sendLine(String data)
++	{
++		Log.i(_tag,"sendLine: " + data);
++		if(_bWriter != null)
++		{
++			try
++			{
++				if(!data.endsWith("\n")) 
++					data = String.format("%s\n", data);
++				
++				_bWriter.write(data);
++				_bWriter.flush();
++				return true;
++			}
++			catch (IOException e)
++			{
++				e.printStackTrace();
++			}
++		}
++		return false;
++	}
++	
++	/** Reads data from the input stream of the socket.
++	 *  Waits until READ_TIMEOUT_SHORT for line read. 
++	 *  May block or return empty string **/
++	private String readLine()
++	{
++		String outString = "";
++		if(_bReader != null)
++		{
++			try 
++			{
++				outString = _bReader.readLine();
++				Log.i(_tag,"readLine: " + outString);
++			} 
++			catch (SocketTimeoutException e)
++			{
++				//Nothing
++			}
++			catch (IOException e) 
++			{
++				e.printStackTrace();
++			}
++			catch (NullPointerException e)
++			{
++				Log.i(_tag, e.getLocalizedMessage());
++			}
++		}
++		return outString;
++	}
++
++	/** Sends a line to the frontend and returns result.
++	 * May return null. If null is returned the connection is dead.
++	 * Waits READ_TIMEOUT_SHORT * READ_TIMEOUT ms **/
++	private ArrayList<String> sendAndWait(String string)
++	{
++		int loop = 0;
++		if(sendLine(string)){
++			ArrayList<String> returnarray = new ArrayList<String>();
++			String tempstring = this.waitReplyLong(); 
++			returnarray.add(tempstring);
++			try {
++				while(_bReader != null && _bReader.ready() && 		//If there is more keep going
++						!("".equals(tempstring) || "OK".equals(tempstring) || "# ".equals(tempstring)) ) { 
++					tempstring = this.readLine();
++					returnarray.add(tempstring);
++					loop++;
++				}
++				return returnarray;
++			} catch (IOException e) {
++				e.printStackTrace();
++			}
++		}else{
++			Log.e(_tag, "Send failed: Disconnected");
++		}
++		Log.e(_tag, "sendAndWait failed.");
++		return null;
++	}
++	
++	/** Blocks for 
++	 * LONG_READ_MULTIPLE * READ_TIMEOUT ms  */
++	private String waitReplyLong()
++	{
++		int count = LONG_READ_MULTIPLE;
++		String returnstring = "";
++		while(count > 0){
++			returnstring = this.readLine(); //Blocks till timeout
++			if(!"".equals(returnstring)) {
++				return returnstring;
++			}
++			count--;
++		}
++		return returnstring;
++	}
++	
++	/** Sends location string to parent if connected **/
++	private void updateLocation(String string){
++		if(_statusCode == MythCom.STATUS_CONNECTED){
++			updateLocation updateThread = _parent.new updateLocation(string);
++			updateThread.run();
++		}
++	}
++	/** Update parent's status code **/
++	private void updateStatusCode(int code){
++		updateStatusCode updateThread = _parent.new updateStatusCode(code);
++		updateThread.run();
++	}
++	
++	/** Connects _socket to _frontend  **/
++	private void connect()
++	{
++		_statusCode = MythCom.STATUS_CONNECTING;
++		int retry_count = 1;
++		while(RECONNECT_RETRIES >= retry_count && _statusCode == MythCom.STATUS_CONNECTING){
++			if(_socket == null)
++				_socket = new Socket();
++			Log.i(_tag, "Connecting try " + retry_count);
++			try{
++				_socket.connect(new InetSocketAddress(_frontendAddress, _frontendPort), SOCKET_TIMEOUT);
++			}catch(SocketTimeoutException e){
++				if(_statusCode != MythCom.STATUS_CONNECTING) break; //Just quit if disconnect has been called
++				Log.i(_tag, "Socket timeout: " + e.getLocalizedMessage());
++				_socket = null;
++			}catch(Exception e){
++				//Error
++				e.printStackTrace();
++				this.updateStatusCode(MythCom.STATUS_DISCONNECTED);
++				_socket = null;
++				break;
++			}
++			
++			if(_socket != null && _socket.isConnected() && _statusCode == MythCom.STATUS_CONNECTING){	
++				Log.i(_tag, "Socket connected");
++				try
++				{
++					_socket.setSoTimeout(READ_TIMEOUT);
++					_socket.setKeepAlive(true);
++					_bWriter = new BufferedWriter(new OutputStreamWriter(_socket.getOutputStream()));
++					_bReader = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
++		
++					//Get 3 lines for login headers
++					//This can take up to 20 seconds for initial connect.
++					String tempstring = "";
++					for(int i=0;i<3;i++){
++						tempstring = this.waitReplyLong();
++					}
++					if("".equals(tempstring)){
++						this.updateStatusCode(MythCom.STATUS_DISCONNECTED);
++					}else{
++						this.updateStatusCode(MythCom.STATUS_CONNECTED);
++					}
++				}
++				catch (Exception e)
++				{
++					this.updateStatusCode(MythCom.STATUS_DISCONNECTED);
++					e.printStackTrace();
++				}
++				_statusCode = MythCom.STATUS_CONNECTED;
++				break;
++			}
++			retry_count++;
++		}
++		if(_statusCode!=MythCom.STATUS_CONNECTED){
++			this.updateStatusCode(MythCom.STATUS_DISCONNECTED);
++			_statusCode=MythCom.STATUS_DISCONNECTED;
++		}
++	}
++	/** Close reader/writer and socket **/
++	private void disconnect()
++	{
++		try
++		{
++			if(_bWriter != null){
++				_bWriter.close();
++				_bWriter = null;
++			}
++			if(_bReader != null){
++				_bReader.close();
++				_bReader = null;
++			}
++			if(_socket != null){
++				if(_socket.isConnected())
++					_socket.close();
++				_socket = null;
++			}
++		}
++		catch(Exception e)
++		{
++			//Nothing
++		}
++	}
++}
+Index: src/tkj/android/homecontrol/mythmote/MythMotePreferences.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythMotePreferences.java	(revision 142)
++++ src/tkj/android/homecontrol/mythmote/MythMotePreferences.java	(working copy)
+@@ -297,6 +297,8 @@
+ 					location.Port = cursor.getInt(_portIndex);
+ 					showLocationEditDialog(context, location);
+ 				}
++				cursor.close();
++				dbAdapter.close();
+ 				return false;
+ 			}
+ 			
+@@ -401,14 +403,14 @@
+         			
+         			//save selected location
+         			SaveSelectedLocationId(context, ids[which]);
+-        			
++        			dialog.cancel();
+         			//notify that we selected a location
+         			listener.LocationChanged();
+         		}});
+         	builder.show();
+         }
+ 		cursor.close();
+-        _dbAdapter.close();
++		_dbAdapter.close();
+ 	}
+ 	
+ 	private static void SaveSelectedLocationId(Activity context, int id)
+@@ -419,4 +421,4 @@
+ 		editor.commit();
+ 	}
+ 
+-}
+\ No newline at end of file
++}
+Index: res/values/strings.xml
+===================================================================
+--- res/values/strings.xml	(revision 142)
++++ res/values/strings.xml	(working copy)
+@@ -3,14 +3,14 @@
+ <string name="next_str">Next</string>
+ <string name="previous_str">Prev</string>
+ <string name="port_example_string">default: 6546</string>
+-<string name="ip_Address_str">IP Address</string>
++<string name="ip_Address_str">IP Address/hostname</string>
+ <string name="location_name_str">Location Name</string>
+ <string name="cancel_str">Cancel</string>
+ <string name="save_str">Save</string>
+ <string name="port_str">Port</string>
+ <string name="address_str">Address</string>
+ <string name="name_str">Name</string>
+-<string name="app_name">mythmote</string>
++<string name="app_name">MythMote</string>
+ <string name="settings_menu_str">Settings</string>
+ <string name="rec_str">Rec</string>
+ <string name="play_str">Play</string>
+@@ -34,8 +34,10 @@
+ <string name="ok_str">OK</string>
+ <string name="no_route_to_host_str">No route to host</string>
+ <string name="connected_str">Connected</string>
++<string name="connecting_str">Connecting</string>
+ <string name="reconnect_str">Reconnect</string>
+-<string name="attempting_to_connect_str">Attempting to connect to host</string>
++<string name="disconnected_str">Disconnected</string>
++<string name="attempting_to_connect_str">Attempting to connect to </string>
+ <string name="selected_location_str">Selected Location</string>
+ <string name="select_location_str">Select Location</string>
+ <string name="location_list_str">Location List</string>
+@@ -58,4 +60,39 @@
+ <string name="general_preferences_str">General Preferences</string>
+ <string name="haptic_feedback_enabled_str">Haptic Feedback Enabled</string>
+ <string name="haptic_feedback_enabled_description_str">Perform haptic feedback on button press</string>
++<string name="no_network">No network connection</string>
++<string name="watching">Watching</string>
++<string name="livetv">Watching LiveTV</string>
++
++<!--Menu Locations-->
++<string name="mainmenu">Main Menu</string>
++<string name="manage_recordings.xml">Manage Recordings</string>
++<string name="library.xml">Media Library</string>
++<string name="playbackbox">Watch Recordings</string>
++<string name="mythvideo">Watch Videos</string>
++<string name="tv_schedule.xml">Schedule Recordings</string>
++<string name="guidegrid">Program Guide</string>
++<string name="ScheduleEditor">Schedule Editor</string>
++<string name="progdetails">Program Details</string>
++<string name="ProgFinder">Program Finder</string>
++<string name="ProgLister">Search</string>
++<string name="tv_search.xml">Search Words</string>
++<string name="tv_lists.xml">Search Lists</string>
++<string name="CustomEdit">Custom Recording Rule</string>
++<string name="ManualSchedule">Manual Schedule</string>
++<string name="ManageRecRules">Recording Rules</string>
++<string name="ViewScheduled">Upcoming Recordings</string>
++<string name="PreviousList">Previously Recorded</string>
++<string name="ProgramRecPriority">Set Priorities</string>
++<string name="info_menu.xml">Information Centre</string>
++<string name="StatusBox">Status Centre</string>
++<string name="optical_menu.xml">Optical Disks</string>
++<string name="playdvd">Play DVD</string>
++<string name="util_menu.xml">Utilities/Setup</string>
++<string name="mythcontrols">Edit Keys</string>
++<string name="main_settings.xml">Setup</string>
++<string name="ThemeChoose">Theme Chooser</string>
++<string name="tv_settings.xml">TV Settings</string>
++<string name="media_settings.xml">Media Settings</string>
++<string name="menuPopup">System Menu</string>
+ </resources>
