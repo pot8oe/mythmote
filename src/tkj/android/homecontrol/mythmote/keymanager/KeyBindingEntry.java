@@ -25,8 +25,7 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager.MythKey;
  * @author rob elsner
  * 
  */
-public class KeyBindingEntry
-{
+public class KeyBindingEntry {
 
 	/**
 	 * The user shown name of this key, for editing
@@ -45,9 +44,9 @@ public class KeyBindingEntry
 	private boolean requiresConfirmation = false;
 	private int rowId;
 
-	public KeyBindingEntry(final int rowId, final String friendlyName, final MythKey mythKey,
-			final String command, final boolean requiresConfirm)
-	{
+	public KeyBindingEntry(final int rowId, final String friendlyName,
+			final MythKey mythKey, final String command,
+			final boolean requiresConfirm) {
 		this.rowId = rowId;
 		this.command = command;
 		this.mythKey = mythKey;
@@ -56,33 +55,27 @@ public class KeyBindingEntry
 	}
 
 	public KeyBindingEntry(String command, MythKey mythKey,
-			String friendlyName, boolean requiresConfirm)
-	{
+			String friendlyName, boolean requiresConfirm) {
 		this(-1, command, mythKey, friendlyName, requiresConfirm);
 	}
 
-	public String getFriendlyName()
-	{
+	public String getFriendlyName() {
 		return friendlyName;
 	}
 
-	public MythKey getMythKey()
-	{
+	public MythKey getMythKey() {
 		return mythKey;
 	}
 
-	public String getCommand()
-	{
+	public String getCommand() {
 		return command;
 	}
 
-	public boolean requiresConfirmation()
-	{
+	public boolean requiresConfirmation() {
 		return requiresConfirmation;
 	}
 
-	public int getRowID()
-	{
+	public int getRowID() {
 		return rowId;
 	}
 

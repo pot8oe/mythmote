@@ -41,25 +41,21 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class MythMoteDbManager
-{
+public class MythMoteDbManager {
 	private SQLiteDatabase db;
 	private MythMoteDbHelper dbHelper;
 	private final Context context;
 
-	public MythMoteDbManager(final Context ctx)
-	{
+	public MythMoteDbManager(final Context ctx) {
 		this.context = ctx;
 	}
 
-	public void open()
-	{
+	public void open() {
 		this.dbHelper = new MythMoteDbHelper(context);
 		this.db = this.dbHelper.getWritableDatabase();
 	}
 
-	public void close()
-	{
+	public void close() {
 		dbHelper.close();
 	}
 
@@ -74,8 +70,7 @@ public class MythMoteDbManager
 	 *            the body of the note
 	 * @return rowId or -1 if failed
 	 */
-	public long createFrontendLocation(String name, String address, int port)
-	{
+	public long createFrontendLocation(String name, String address, int port) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
 		initialValues.put(KEY_ADDRESS, address);
@@ -91,8 +86,7 @@ public class MythMoteDbManager
 	 *            id of note to delete
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deleteFrontendLocation(long rowId)
-	{
+	public boolean deleteFrontendLocation(long rowId) {
 
 		return db.delete(FRONTEND_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
@@ -102,12 +96,10 @@ public class MythMoteDbManager
 	 * 
 	 * @return Cursor over all notes
 	 */
-	public Cursor fetchAllFrontendLocations()
-	{
+	public Cursor fetchAllFrontendLocations() {
 
-		return db.query(FRONTEND_TABLE, new String[]
-		{ KEY_ROWID, KEY_NAME, KEY_ADDRESS, KEY_PORT }, null, null, null, null,
-				null);
+		return db.query(FRONTEND_TABLE, new String[] { KEY_ROWID, KEY_NAME,
+				KEY_ADDRESS, KEY_PORT }, null, null, null, null, null);
 	}
 
 	/**
@@ -117,28 +109,22 @@ public class MythMoteDbManager
 	 *            id of note to retrieve
 	 * @return Cursor positioned to matching note, if found
 	 */
-	public Cursor fetchFrontendLocation(long rowId)
-	{
+	public Cursor fetchFrontendLocation(long rowId) {
 		Cursor mCursor = null;
-		try
-		{
-			mCursor = db.query(true, FRONTEND_TABLE, new String[]
-			{ KEY_ROWID, KEY_NAME, KEY_ADDRESS, KEY_PORT }, KEY_ROWID + "="
-					+ rowId, null, null, null, null, null);
-			if (mCursor != null)
-			{
+		try {
+			mCursor = db.query(true, FRONTEND_TABLE, new String[] { KEY_ROWID,
+					KEY_NAME, KEY_ADDRESS, KEY_PORT }, KEY_ROWID + "=" + rowId,
+					null, null, null, null, null);
+			if (mCursor != null) {
 				mCursor.moveToFirst();
 			}
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setTitle("DataBase Error");
 			builder.setMessage(e.getLocalizedMessage());
-			builder.setNeutralButton(R.string.ok_str, new OnClickListener()
-			{
+			builder.setNeutralButton(R.string.ok_str, new OnClickListener() {
 
-				public void onClick(DialogInterface dialog, int which)
-				{
+				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 
 				}
@@ -163,8 +149,7 @@ public class MythMoteDbManager
 	 * @return true if the note was successfully updated, false otherwise
 	 */
 	public boolean updateFrontendLocation(long rowId, String name,
-			String address, int port)
-	{
+			String address, int port) {
 		open();
 		ContentValues args = new ContentValues();
 		args.put(KEY_NAME, name);
@@ -177,8 +162,7 @@ public class MythMoteDbManager
 		return rows > 0;
 	}
 
-	public boolean save(final KeyBindingEntry entry)
-	{
+	public boolean save(final KeyBindingEntry entry) {
 		open();
 		ContentValues values = new ContentValues();
 		values.put(KEYBINDINGS_COMMAND, entry.getCommand());
@@ -190,31 +174,27 @@ public class MythMoteDbManager
 				+ entry.getCommand());
 		boolean success = false;
 		if (entry.getRowID() != -1)
-			success= db.update(KEY_BINDINGS_TABLE, values, MythMoteDbHelper.KEYBINDINGS_ROWID + " = ?", new String[]
-			{ String.format("%d", entry.getRowID()) }) == 1;
+			success = db.update(KEY_BINDINGS_TABLE, values,
+					MythMoteDbHelper.KEYBINDINGS_ROWID + " = ?",
+					new String[] { String.format("%d", entry.getRowID()) }) == 1;
 		else
-			success= db.insert(KEY_BINDINGS_TABLE, null, values) != -1;
+			success = db.insert(KEY_BINDINGS_TABLE, null, values) != -1;
 		close();
 		return success;
 	}
 
-	public void loadKeyMapEntries(final KeyMapBinder binder)
-	{
+	public void loadKeyMapEntries(final KeyMapBinder binder) {
 		Cursor mCursor = null;
-		try
-		{
+		try {
 			mCursor = db.query(true, KEY_BINDINGS_TABLE,
-					new String[]
-					{ KEYBINDINGS_ROWID, KEYBINDINGS_COMMAND,
+					new String[] { KEYBINDINGS_ROWID, KEYBINDINGS_COMMAND,
 							KEYBINDINGS_UI_KEY, KEYBINDINGS_FRIENDLY_NAME,
 							KEYBINDINGS_REQUIRE_CONFIRMATION }, null, null,
 					null, null, null, null);
-			if (mCursor != null)
-			{
+			if (mCursor != null) {
 				mCursor.moveToFirst();
 			}
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setTitle("DataBase Error");
 			builder.setMessage(e.getLocalizedMessage());
@@ -222,8 +202,7 @@ public class MythMoteDbManager
 		}
 		if (null == mCursor)
 			return;
-		do
-		{
+		do {
 			String friendlyName = mCursor.getString(mCursor
 					.getColumnIndex(KEYBINDINGS_FRIENDLY_NAME));
 			String mythKeyName = mCursor.getString(mCursor
