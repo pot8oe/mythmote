@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package tkj.android.homecontrol.mythmote.db;
 
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
@@ -25,8 +24,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class MythMoteDbHelper extends SQLiteOpenHelper
-{
+public class MythMoteDbHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "mythmotedata";
 	public static final int DATABASE_VERSION = 2;
 	public static final String TAG = "MythMoteDB";
@@ -62,43 +60,36 @@ public class MythMoteDbHelper extends SQLiteOpenHelper
 			+ KEYBINDINGS_FRIENDLY_NAME + " text not null, "
 			+ KEYBINDINGS_REQUIRE_CONFIRMATION + " INTEGER not null );";
 
-	public MythMoteDbHelper(Context context)
-	{
+	public MythMoteDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase db)
-	{
+	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_FRONTENDS_TABLE);
 		db.execSQL(CREATE_KEY_BINDINGS_TABLE);
 		createDefaultEntries(db);
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-	{
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 				+ newVersion + ", which will destroy all old data");
-		if (1 == oldVersion && 2 == newVersion)
-		{
+		if (1 == oldVersion && 2 == newVersion) {
 			// we are just adding key bindings in this case
 			db.execSQL(CREATE_KEY_BINDINGS_TABLE);
 			createDefaultEntries(db);
 			db.setVersion(newVersion);
-		} else
-		{
+		} else {
 			db.execSQL("DROP TABLE IF EXISTS frontends");
 			db.execSQL("DROP TABLE IF EXISTS keybindings");
 			onCreate(db);
 		}
 	}
 
-	private static void createDefaultEntries(SQLiteDatabase db)
-	{
+	private static void createDefaultEntries(SQLiteDatabase db) {
 		for (KeyBindingEntry entry : KeyBindingManager.MythKey
-				.createDefaultList())
-		{
+				.createDefaultList()) {
 			ContentValues values = new ContentValues();
 			values.put(KEYBINDINGS_COMMAND, entry.getCommand());
 			values.put(KEYBINDINGS_UI_KEY, entry.getMythKey().name());

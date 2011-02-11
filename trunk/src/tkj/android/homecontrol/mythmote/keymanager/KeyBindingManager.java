@@ -79,8 +79,7 @@ import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 
 public class KeyBindingManager implements KeyMapBinder, OnClickListener,
-		OnLongClickListener
-{
+		OnLongClickListener {
 
 	/**
 	 * Add a value here which is the button name (preferably similar to the
@@ -89,81 +88,60 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	 * @author robelsner
 	 * 
 	 */
-	public enum MythKey
-	{
-		BUTTON_0("key 0", Button0),
-		BUTTON_1("key 1", Button1),
-		BUTTON_2("key 2", Button2),
-		BUTTON_3("key 3", Button3),
-		BUTTON_4("key 4", Button4),
-		BUTTON_5("key 5", Button5),
-		BUTTON_6("key 6", Button6),
-		BUTTON_7("key 7", Button7),
-		BUTTON_8("key 8", Button8),
-		BUTTON_9("key 9", Button9),
-		BUTTON_BACKSPACE("key backspace", ButtonBackspace),
-		BUTTON_CHANNEL_DOWN("play channel down", ButtonChDown),
-		BUTTON_CHANNEL_UP("play channel up", ButtonChUp),
-		BUTTON_CHANNEL_RECALL("key h", ButtonChReturn),
-		BUTTON_ESCAPE("key escape", ButtonEsc),
-		BUTTON_ENTER("key enter", ButtonEnter),
-		BUTTON_RECORD("key r", ButtonRecord),
-		BUTTON_STOP("play stop", ButtonStop),
-		BUTTON_PLAY("play speed normal", ButtonPlay),
-		BUTTON_PAUSE("play speed pause", ButtonPause),
-		BUTTON_DOWN("key down", ButtonDown),
-		BUTTON_UP("key up", ButtonUp),
-		BUTTON_LEFT("key left", ButtonLeft),
-		BUTTON_RIGHT("key right", ButtonRight),
-		BUTTON_SELECT("key enter", ButtonSelect),
-		BUTTON_FAST_FORWARD("play seek forward", ButtonFF),
-		BUTTON_REWIND("play seek backward", ButtonRew),
-		BUTTON_SKIP_FORWARD("key end", ButtonSkipForward),
-		BUTTON_SKIP_BACKWARD("key home", ButtonSkipBack),
-		BUTTON_GUIDE("key s", ButtonGuide),
-		BUTTON_INFO("key i", ButtonInfo),
-		BUTTON_JUMP_1("jump mainmenu", ButtonJump1),
-		BUTTON_JUMP_2("jump livetv", ButtonJump2),
-		BUTTON_JUMP_3("jump playbackrecordings", ButtonJump3),
-		BUTTON_JUMP_4("jump playmusic", ButtonJump4),
-		BUTTON_JUMP_5("jump videogallery", ButtonJump5),
-		BUTTON_JUMP_6("jump statusbox", ButtonJump6),
-		BUTTON_MENU("key m", ButtonMenu),
-		BUTTON_MUTE("key |", ButtonMute),
-		BUTTON_VOLUME_UP("key ]", ButtonVolUp),
-		BUTTON_VOLUME_DOWN("key [", ButtonVolDown);
+	public enum MythKey {
+		BUTTON_0("key 0", Button0), BUTTON_1("key 1", Button1), BUTTON_2(
+				"key 2", Button2), BUTTON_3("key 3", Button3), BUTTON_4(
+				"key 4", Button4), BUTTON_5("key 5", Button5), BUTTON_6(
+				"key 6", Button6), BUTTON_7("key 7", Button7), BUTTON_8(
+				"key 8", Button8), BUTTON_9("key 9", Button9), BUTTON_BACKSPACE(
+				"key backspace", ButtonBackspace), BUTTON_CHANNEL_DOWN(
+				"play channel down", ButtonChDown), BUTTON_CHANNEL_UP(
+				"play channel up", ButtonChUp), BUTTON_CHANNEL_RECALL("key h",
+				ButtonChReturn), BUTTON_ESCAPE("key escape", ButtonEsc), BUTTON_ENTER(
+				"key enter", ButtonEnter), BUTTON_RECORD("key r", ButtonRecord), BUTTON_STOP(
+				"play stop", ButtonStop), BUTTON_PLAY("play speed normal",
+				ButtonPlay), BUTTON_PAUSE("play speed pause", ButtonPause), BUTTON_DOWN(
+				"key down", ButtonDown), BUTTON_UP("key up", ButtonUp), BUTTON_LEFT(
+				"key left", ButtonLeft), BUTTON_RIGHT("key right", ButtonRight), BUTTON_SELECT(
+				"key enter", ButtonSelect), BUTTON_FAST_FORWARD(
+				"play seek forward", ButtonFF), BUTTON_REWIND(
+				"play seek backward", ButtonRew), BUTTON_SKIP_FORWARD(
+				"key end", ButtonSkipForward), BUTTON_SKIP_BACKWARD("key home",
+				ButtonSkipBack), BUTTON_GUIDE("key s", ButtonGuide), BUTTON_INFO(
+				"key i", ButtonInfo), BUTTON_JUMP_1("jump mainmenu",
+				ButtonJump1), BUTTON_JUMP_2("jump livetv", ButtonJump2), BUTTON_JUMP_3(
+				"jump playbackrecordings", ButtonJump3), BUTTON_JUMP_4(
+				"jump playmusic", ButtonJump4), BUTTON_JUMP_5(
+				"jump videogallery", ButtonJump5), BUTTON_JUMP_6(
+				"jump statusbox", ButtonJump6), BUTTON_MENU("key m", ButtonMenu), BUTTON_MUTE(
+				"key |", ButtonMute), BUTTON_VOLUME_UP("key ]", ButtonVolUp), BUTTON_VOLUME_DOWN(
+				"key [", ButtonVolDown);
 
 		private final String defaultCommand;
 		private final int layoutId;
 
-		private MythKey(final String command, final int layoutId)
-		{
+		private MythKey(final String command, final int layoutId) {
 			this.defaultCommand = command;
 			this.layoutId = layoutId;
 		}
 
-		public final String getDefaultCommand()
-		{
+		public final String getDefaultCommand() {
 			return defaultCommand;
 		}
 
-		public final int getButtonId()
-		{
+		public final int getButtonId() {
 			return layoutId;
 		}
 
-		public static MythKey getByName(final String name)
-		{
-			for (MythKey key : MythKey.values())
-			{
+		public static MythKey getByName(final String name) {
+			for (MythKey key : MythKey.values()) {
 				if (key.name().equals(name))
 					return key;
 			}
 			return MythKey.BUTTON_0;
 		}
 
-		public static List<KeyBindingEntry> createDefaultList()
-		{
+		public static List<KeyBindingEntry> createDefaultList() {
 			ArrayList<KeyBindingEntry> entries = new ArrayList<KeyBindingEntry>();
 			entries.add(new KeyBindingEntry("0", BUTTON_0,
 					BUTTON_0.defaultCommand, false));
@@ -262,9 +240,9 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	private Context context;
 
 	public KeyBindingManager(final Context ctx, final KeyMapBinder binder,
-			final MythCom communicator)
-	{
-		Log.d(MythMote.LOG_TAG, "Created KeyBindingManager with ctx " + ctx + " binder " + binder + " comm " + communicator);
+			final MythCom communicator) {
+		Log.d(MythMote.LOG_TAG, "Created KeyBindingManager with ctx " + ctx
+				+ " binder " + binder + " comm " + communicator);
 		this.context = ctx;
 		this.databaseAdapter = new MythMoteDbManager(ctx);
 
@@ -273,42 +251,38 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 	}
 
-	public void loadKeys()
-	{
+	public void loadKeys() {
 		Log.d(MythMote.LOG_TAG, "loadKeys with dba " + databaseAdapter);
 		databaseAdapter.open();
 		databaseAdapter.loadKeyMapEntries(this);
 		databaseAdapter.close();
 	}
 
-	public View bind(KeyBindingEntry entry)
-	{
-		Log.d(MythMote.LOG_TAG, "Bind " + entry.getFriendlyName() + " to " + entry.getCommand());
+	public View bind(KeyBindingEntry entry) {
+		Log.d(MythMote.LOG_TAG, "Bind " + entry.getFriendlyName() + " to "
+				+ entry.getCommand());
 		View v = binder.bind(entry);
 		viewToEntryMap.put(v, entry);
 		return v;
 	}
 
-	public KeyBindingEntry getCommand(final View initiatingView)
-	{
+	public KeyBindingEntry getCommand(final View initiatingView) {
 		return viewToEntryMap.get(initiatingView);
 	}
 
-	public void onClick(View v)
-	{
+	public void onClick(View v) {
 
 		KeyBindingEntry entry = viewToEntryMap.get(v);
 
-		if (null != entry && null != communicator)
-		{
-			Log.d(MythMote.LOG_TAG, "onClick " + entry.getFriendlyName()+" command "+entry.getCommand());
+		if (null != entry && null != communicator) {
+			Log.d(MythMote.LOG_TAG, "onClick " + entry.getFriendlyName()
+					+ " command " + entry.getCommand());
 			communicator.SendCommand(entry.getCommand());
 		}
 
 	}
 
-	public boolean onLongClick(final View v)
-	{
+	public boolean onLongClick(final View v) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
 
 		alert.setTitle("Command");
@@ -317,19 +291,17 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		// Set an EditText view to get user input
 		final EditText input = new EditText(v.getContext());
 		KeyBindingEntry currentEntry = viewToEntryMap.get(v);
-		if ( null != currentEntry )
+		if (null != currentEntry)
 			input.setText(currentEntry.getCommand());
 		alert.setView(input);
 
-		alert.setPositiveButton("Save", new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int whichButton)
-			{
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
 				Editable value = input.getText();
 				KeyBindingEntry oldEntry = viewToEntryMap.get(v);
-				if (null != oldEntry && null != communicator)
-				{
-					Log.d(MythMote.LOG_TAG, "onLongClick " + oldEntry.getFriendlyName());
+				if (null != oldEntry && null != communicator) {
+					Log.d(MythMote.LOG_TAG,
+							"onLongClick " + oldEntry.getFriendlyName());
 					KeyBindingEntry entry = new KeyBindingEntry(oldEntry
 							.getRowID(), oldEntry.getFriendlyName(), oldEntry
 							.getMythKey(), value.toString(), oldEntry
@@ -340,13 +312,12 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 			}
 		});
 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int whichButton)
-			{
-				// Canceled.
-			}
-		});
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
 
 		alert.show();
 		return true;
