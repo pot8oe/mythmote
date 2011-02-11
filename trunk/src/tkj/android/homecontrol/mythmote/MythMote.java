@@ -29,13 +29,17 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		OnTabChangeListener, LocationChangedEventListener,
@@ -48,125 +52,136 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	public static final String LOG_TAG = "MythMote";
-	
+
 	private static final String KEY_VOLUME_DOWN = "[";
 	private static final String KEY_VOLUME_UP = "]";
-	
-	private KeyBindingManager keyManager;
 
-	private static TabHost _tabHost;
-	private static MythCom _comm;
-	private static FrontendLocation _location = new FrontendLocation();
-	private static int selected = -1;
-	private static boolean IsScreenLarge = false;
-	
-	/** Called when the activity is first created.*/
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.main);
-        
-        //determine if large screen layouts are being used
-        IsScreenLarge = this.getResources().getString(R.string.screensize).equals("large");
-        
-        if(_comm==null) {
-            //create comm class
-            _comm = new MythCom(this);
-        }
-        //set status changed event handler
-        _comm.SetOnStatusChangeHandler(this);
+	private KeyBindingManager mKeyManager;
 
-        //create tab UI
-        _tabHost = getTabHost();
-        
-        //create tabs
-    	this.createTabs();
+	private static TabHost sTabHost;
+	private static MythCom sComm;
+	private static FrontendLocation sLocation = new FrontendLocation();
+	private static int sSelected = -1;
+	private static boolean sIsScreenLarge = false;
+
+	/**
+	 * Called when the activity is first created.
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.main);
+
+		// determine if large screen layouts are being used
+		sIsScreenLarge = this.getResources().getString(R.string.screensize)
+				.equals("large");
+
+		if (sComm == null) {
+			// create comm class
+			sComm = new MythCom(this);
+		}
+		// set status changed event handler
+		sComm.SetOnStatusChangeHandler(this);
+
+		// create tab UI
+		sTabHost = getTabHost();
+
+		// create tabs
+		this.createTabs();
 
 		// setup on tab change event
-		_tabHost.setOnTabChangedListener(this);
+		sTabHost.setOnTabChangedListener(this);
 
 		// set navigation tab and setup events
-		_tabHost.setCurrentTab(0);
-		
+		sTabHost.setCurrentTab(0);
+
 		// create key manager and load keys from DB
-		keyManager = new KeyBindingManager(this, this, _comm);
-		keyManager.loadKeys();
+		mKeyManager = new KeyBindingManager(this, this, sComm);
+		mKeyManager.loadKeys();
 	}
 
-	/** Called when the activity is resumed **/
+	/**
+	 * Called when the activity is resumed
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 
-		//Check existing connection state
-    	if(!_comm.IsConnected() && !_comm.IsConnecting()) {
-    		
-    		//force disconnected state
-    		_comm.Disconnect();
-    		
-    		//set selected location and connect
-        	this.setSelectedLocation();
-    	}else{
-    		//already connecte, set status
-    		this.StatusChanged(_location.Name + " - Connected", MythCom.STATUS_CONNECTED);
-    	}
-    }
-    
-	/** Called when the activity is paused **/
-    @Override
-    public void onPause(){
-    	super.onPause();
-    }
-    
-    public void onDestroy(){
-    	super.onDestroy();
-    	
-    	if(_comm.IsConnected())
-    		_comm.Disconnect();
-    	_tabHost = null;
-    	
-    }
-    
-    /** Called when device configuration changes occur. Configuration 
-     * changes that cause this function to be called must be 
-     * registered in AndroidManifest.xml **/
-    public void onConfigurationChanged(Configuration config)
-    {
-    	super.onConfigurationChanged(config);
-    	
-    	//make sure tabhost has been set
-    	if(_tabHost == null)
-    		_tabHost = this.getTabHost();
-    	
-    	//get current tab index
-    	int cTab = _tabHost.getCurrentTab();
-    	
-    	//set current tab to 0. Clear seems to fail when set to anything else
-    	_tabHost.setCurrentTab(0);
-    	
-    	//clear all tabs
-    	_tabHost.clearAllTabs();
-    	
-    	//create tabs
-    	this.createTabs();
-        
-        //set current tab back
-        _tabHost.setCurrentTab(cTab);
-    }
-    
+		// Check existing connection state
+		if (!sComm.IsConnected() && !sComm.IsConnecting()) {
+
+			// force disconnected state
+			sComm.Disconnect();
+
+			// set selected location and connect
+			this.setSelectedLocation();
+		} else {
+			// already connecte, set status
+			this.StatusChanged(sLocation.Name + " - Connected",
+					MythCom.STATUS_CONNECTED);
+		}
+	}
 
 	/**
-	 * Overridden to allow the hardware volume controls to influence the Myth front end 
-	 * volume control
+	 * Called when the activity is paused 
+	 */
+	@Override
+	public void onPause() {
+		super.onPause();
+	}
+
+	/**
+	 * Called when the activity is being destroyed
+	 */
+	public void onDestroy() {
+		super.onDestroy();
+
+		if (sComm != null && sComm.IsConnected())
+			sComm.Disconnect();
+		sTabHost = null;
+
+	}
+
+	/**
+	 * Called when device configuration changes occur. Configuration changes
+	 * that cause this function to be called must be registered in
+	 * AndroidManifest.xml
+	 */
+	public void onConfigurationChanged(Configuration config) {
+		super.onConfigurationChanged(config);
+
+		// make sure tabhost has been set
+		if (sTabHost == null)
+			sTabHost = this.getTabHost();
+
+		// get current tab index
+		int cTab = sTabHost.getCurrentTab();
+
+		// set current tab to 0. Clear seems to fail when set to anything else
+		sTabHost.setCurrentTab(0);
+
+		// clear all tabs
+		sTabHost.clearAllTabs();
+
+		// create tabs
+		this.createTabs();
+
+		// set current tab back
+		sTabHost.setCurrentTab(cTab);
+	}
+
+	/**
+	 * Overridden to allow the hardware volume controls to influence the Myth
+	 * front end volume control
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
-			_comm.SendKey(KEY_VOLUME_DOWN);
+			sComm.SendKey(KEY_VOLUME_DOWN);
 			return true;
 		case KeyEvent.KEYCODE_VOLUME_UP:
-			_comm.SendKey(KEY_VOLUME_UP);
+			sComm.SendKey(KEY_VOLUME_UP);
 			return true;
 		default:
 			return super.onKeyDown(keyCode, event);
@@ -174,101 +189,86 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 
 	}
-    
-    /** Called to create the options menu once.  **/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        
-        //create settings  menu item
-        menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(R.drawable.settings);
-        
-        //create reconnect menu item
-        menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(R.drawable.menu_refresh);
-        
-        //create select location menu item
-        menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.selected_location);
-        
-        //return results
-        return result;
-    }
-    
-    /** Called when a menu item is selected **/
-   @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-	   try
-	   {
-		   //Check which menu item was selected
-		   switch(item.getItemId())
-		   {
-		   		case SETTINGS_ID:
-		   			//Create mythmote preferences intent and start the activity
-		   			Intent intent = new Intent(this, tkj.android.homecontrol.mythmote.MythMotePreferences.class);
-				   	this.startActivity(intent);
-				   	break;
 
-		   		case RECONNECT_ID:
-		   			if(_comm.IsConnected())
-		   			    _comm.Disconnect();
-		   			
-		   	    	if(this.setSelectedLocation())
-		   	    		_comm.Connect(_location);
-		   			break;
-		   			
-		   		case SELECTLOCATION_ID:
-		   			//Displays the list of configured frontend locations.
-					//Fires the locationChanged event when the user selects a location
-					//even if the user selects the same location already selected.
-					MythMotePreferences.SelectLocation(this, this);
-		   			break;
-		   };
-	   }
-	   catch(android.content.ActivityNotFoundException ex)
-	   {
-		   //Show error when activity is not found
-		   AlertDialog.Builder diag = new AlertDialog.Builder(this);
-		   diag.setMessage(ex.getMessage());
-		   diag.setTitle("Error");
-		   diag.setNeutralButton("OK", null);
-		   diag.show();
-	   }
-    	return false;
-    }
-   
-    /** Called when the selected tab page is changed **/
-	public void onTabChanged(String arg0) {
-		keyManager.loadKeys();
-	}
-	
 	/**
-	 * Called to create and add tabs to the tabhost
+	 * Called to create the options menu once.
 	 */
-	private void createTabs()
-	{
-		//create tabs. Media tab is only used when large layouts are inactive
-		_tabHost.addTab(_tabHost.newTabSpec(NAME_NAV_TAB).setIndicator(this.getString(R.string.navigation_str)).setContent(this));
-		if(!IsScreenLarge)
-			_tabHost.addTab(_tabHost.newTabSpec(NAME_MEDIA_TAB).setIndicator(this.getString(R.string.media_str)).setContent(this));
-		_tabHost.addTab(_tabHost.newTabSpec(NAME_NUMPAD_TAB).setIndicator(this.getString(R.string.numpad_str)).setContent(this));
-		
-		//resize tabs to remove useless space
-		final int count = _tabHost.getTabWidget().getChildCount();
-		for(int i=0; i<count; i++)
-			_tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 50;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+
+		// create settings menu item
+		menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(
+				R.drawable.settings);
+
+		// create reconnect menu item
+		menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(
+				R.drawable.menu_refresh);
+
+		// create select location menu item
+		menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
+				.setIcon(R.drawable.selected_location);
+
+		// return results
+		return result;
 	}
-	
-	private void loadSharedPreferences()
-	{
-		//get selected frontend id 
-		selected = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-        	.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
-		
-		//hapticFeedbackEnabled = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-		//	.getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
+
+	/**
+	 * Called when a menu item is selected
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try {
+			// Check which menu item was selected
+			switch (item.getItemId()) {
+			case SETTINGS_ID:
+				// Create mythmote preferences intent and start the activity
+				Intent intent = new Intent(
+						this,
+						tkj.android.homecontrol.mythmote.MythMotePreferences.class);
+				this.startActivity(intent);
+				break;
+
+			case RECONNECT_ID:
+				if (sComm.IsConnected())
+					sComm.Disconnect();
+
+				if (this.setSelectedLocation())
+					sComm.Connect(sLocation);
+				break;
+
+			case SELECTLOCATION_ID:
+				// Displays the list of configured frontend locations.
+				// Fires the locationChanged event when the user selects a
+				// location
+				// even if the user selects the same location already selected.
+				MythMotePreferences.SelectLocation(this, this);
+				break;
+			}
+			;
+		} catch (android.content.ActivityNotFoundException ex) {
+			// Show error when activity is not found
+			AlertDialog.Builder diag = new AlertDialog.Builder(this);
+			diag.setMessage(ex.getMessage());
+			diag.setTitle("Error");
+			diag.setNeutralButton("OK", null);
+			diag.show();
+		}
+		return false;
 	}
-   
-    /** Called when a tab is selected. Returns the layout for the selected tab. 
-    * Default is navigation tab */
+
+	/**
+	 * Called when the selected tab page is changed
+	 */
+	public void onTabChanged(String arg0) {
+		// load keybindings
+		mKeyManager.loadKeys();
+
+		// setup the media tab's send keyboard input button
+		if (sTabHost.getCurrentTabTag().equals(NAME_MEDIA_TAB)){
+			setupSendKeyboardInputButton();
+		}
+	}
 
 	/**
 	 * Called when a tab is selected. Returns the layout for the selected tab.
@@ -296,16 +296,20 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 	}
 
-	/** Called when the frontend location is changed */
+	/**
+	 * Called when the frontend location is changed
+	 */
 	public void LocationChanged() {
-		if(_comm.IsConnected())
-		    _comm.Disconnect();
-		
-    	if(this.setSelectedLocation())
-    		_comm.Connect(_location);
+		if (sComm.IsConnected())
+			sComm.Disconnect();
+
+		if (this.setSelectedLocation())
+			sComm.Connect(sLocation);
 	}
 
-	/** Called when MythCom status changes **/
+	/**
+	 * Called when MythCom status changes
+	 */
 	public void StatusChanged(String StatusMsg, int statusCode) {
 		// set titleJUMPPOINT_guidegrid
 		setTitle(StatusMsg);
@@ -322,16 +326,35 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 	}
 	
-    /** Reads the selected frontend from preferences and attempts to connect with MythCom.Connect() **/
+	/**
+	 * Enable the long click and normal click actions where a long click will
+	 * configure the button, and a normal tap will perform the command
+	 * 
+	 * This is the callback from the {@link KeyBindingManager}
+	 */
+	public View bind(KeyBindingEntry entry) {
+		View v = this.findViewById(entry.getMythKey().getButtonId());
+		if (null == v)
+			return null;
+		v.setLongClickable(true);
+		v.setOnLongClickListener(mKeyManager);
+		v.setOnClickListener(mKeyManager);
+		return v;
+	}
+
+	/**
+	 * Reads the selected frontend from preferences and attempts to connect with
+	 * MythCom.Connect()
+	 */
 	private boolean setSelectedLocation() {
-		
-		//load shared preferences
+
+		// load shared preferences
 		this.loadSharedPreferences();
-		
-		//_location should be initialized
-		if(_location == null)
-		{
-		     Log.e(LOG_TAG, "Cannot set location. Location object not initialized.");
+
+		// _location should be initialized
+		if (sLocation == null) {
+			Log.e(LOG_TAG,
+					"Cannot set location. Location object not initialized.");
 		}
 
 		// create location database adapter
@@ -341,45 +364,111 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		dbManager.open();
 
 		// get the selected location information by it's ID
-		Cursor cursor = dbManager.fetchFrontendLocation(selected);
+		Cursor cursor = dbManager.fetchFrontendLocation(sSelected);
 
 		// make sure returned cursor is valid
 		if (cursor == null || cursor.getCount() <= 0)
-		     return false;
-			// set selected location from Cursor
-			_location.ID = cursor.getInt(cursor
-					.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
-			_location.Name = cursor.getString(cursor
-					.getColumnIndex(MythMoteDbHelper.KEY_NAME));
-			_location.Address = cursor.getString(cursor
-					.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS));
-			_location.Port = cursor.getInt(cursor
-					.getColumnIndex(MythMoteDbHelper.KEY_PORT));
+			return false;
+		// set selected location from Cursor
+		sLocation.ID = cursor.getInt(cursor
+				.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+		sLocation.Name = cursor.getString(cursor
+				.getColumnIndex(MythMoteDbHelper.KEY_NAME));
+		sLocation.Address = cursor.getString(cursor
+				.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS));
+		sLocation.Port = cursor.getInt(cursor
+				.getColumnIndex(MythMoteDbHelper.KEY_PORT));
 
 		// close cursor and db adapter
 		cursor.close();
 		dbManager.close();
 		// connect to location
-		_comm.Connect(_location);
-			
-	        return true;
+		sComm.Connect(sLocation);
+
+		return true;
+	}
+	
+	/**
+	 * Creates and defines the OnClickListener for media tab's send keyboard
+	 * input button.
+	 */
+	private void setupSendKeyboardInputButton() {
+		// send keyboard input
+		final Button buttonJump = (Button) this.findViewById(R.id.ButtonSend);
+		final EditText textBox = (EditText) this
+				.findViewById(R.id.EditTextKeyboardInput);
+		if (buttonJump != null && textBox != null) {
+			buttonJump.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+
+					// get send keyboard text
+					Editable text = textBox.getText();
+					int count = text.length();
+
+					// for each character
+					for (int i = 0; i < count; i++) {
+						// get char
+						char c = text.charAt(i);
+
+						// check if it's whitespace
+						if (Character.isWhitespace(c)) {
+							if (c == '\t')// tab
+							{
+								sComm.SendKey("tab");
+							} else if (c == ' ')// space
+							{
+								sComm.SendKey("space");
+							} else if (c == '\r')// enter/return
+							{
+								sComm.SendKey("enter");
+							}
+						} else// not white space. Just send as is
+						{
+							sComm.SendKey(c);
+						}
+					}
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Called to create and add tabs to the tabhost
+	 */
+	private void createTabs() {
+		// create tabs. Media tab is only used when large layouts are inactive
+		sTabHost.addTab(sTabHost.newTabSpec(NAME_NAV_TAB)
+				.setIndicator(this.getString(R.string.navigation_str))
+				.setContent(this));
+		if (!sIsScreenLarge)
+			sTabHost.addTab(sTabHost.newTabSpec(NAME_MEDIA_TAB)
+					.setIndicator(this.getString(R.string.media_str))
+					.setContent(this));
+		sTabHost.addTab(sTabHost.newTabSpec(NAME_NUMPAD_TAB)
+				.setIndicator(this.getString(R.string.numpad_str))
+				.setContent(this));
+
+		// resize tabs to remove useless space
+		final int count = sTabHost.getTabWidget().getChildCount();
+		for (int i = 0; i < count; i++)
+			sTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 50;
 	}
 
 	/**
-	 * Enable the long click and normal click actions where
-	 * a long click will configure the button, and a normal tap
-	 * will perform the command
-	 * 
-	 * This is the callback from the {@link KeyBindingManager}
+	 * Reads the mythmote shared preferences and sets local
+	 * members accordingly.
 	 */
-	public View bind(KeyBindingEntry entry) {
-		View v = this.findViewById(entry.getMythKey().getButtonId());
-		if ( null == v )
-			return null;
-		v.setLongClickable(true);
-		v.setOnLongClickListener(keyManager);
-		v.setOnClickListener(keyManager);
-		return v;
+	private void loadSharedPreferences() {
+		// get selected frontend id
+		sSelected = this.getSharedPreferences(
+				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
+				MODE_PRIVATE).getInt(
+				MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+
+		// hapticFeedbackEnabled =
+		// this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
+		// MODE_PRIVATE)
+		// .getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
 	}
 
 }
