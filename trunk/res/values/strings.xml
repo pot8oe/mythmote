@@ -60,6 +60,11 @@
 <string name="haptic_feedback_enabled_description_str">Perform haptic feedback on button press</string>
 <string name="status_update_interval_str">Status Update Interval</string>
 <string name="status_update_interval_description_str">Frequency mythfrontend status is checked in seconds.</string>
+<string name="send_wol_str">Send WakeOnLan</string>
+<string name="send_str">Send</string>
+<string name="send_keyboard_input_str">Send keyboard input</string>
+<string name="backspace_str">Backspace</string>
+<string name="enter_str">Enter</string>
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
 <item>1sec</item>

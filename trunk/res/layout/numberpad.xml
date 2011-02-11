@@ -19,7 +19,7 @@
 
 
 </TableRow><TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<LinearLayout android:id="@+id/LinearLayout01" android:layout_span="3"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1"><Button android:layout_height="wrap_content" android:text="Backspace" android:layout_width="wrap_content" android:layout_weight=".45" android:id="@+id/ButtonBackspace"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enter" android:layout_weight=".55" android:id="@+id/ButtonEnter"></Button></LinearLayout>
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_span="3"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1"><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight=".45" android:id="@+id/ButtonBackspace" android:text="@string/backspace_str"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight=".55" android:id="@+id/ButtonEnter" android:text="@string/enter_str"></Button></LinearLayout>
 </TableRow>
 <TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content">
 
@@ -28,8 +28,8 @@
 <TableLayout android:id="@+id/TableLayout02" android:layout_span="3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:stretchColumns="0"><TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
 </TableRow><TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Send Keyboard Input" android:layout_span="2"></TextView>
-</TableRow><TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content"><EditText android:singleLine="true" android:typeface="normal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextKeyboardInput"></EditText><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Send" android:id="@+id/ButtonSend"></Button></TableRow>
+<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_span="2" android:text="@string/send_keyboard_input_str"></TextView>
+</TableRow><TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content"><EditText android:singleLine="true" android:typeface="normal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextKeyboardInput"></EditText><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ButtonSend" android:text="@string/send_str"></Button></TableRow>
 
 </TableLayout>
 </TableRow>
