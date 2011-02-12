@@ -265,7 +265,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		mKeyManager.loadKeys();
 
 		// setup the media tab's send keyboard input button
-		if (sTabHost.getCurrentTabTag().equals(NAME_MEDIA_TAB)){
+		if (sTabHost.getCurrentTabTag().equals(NAME_NUMPAD_TAB)){
 			setupSendKeyboardInputButton();
 		}
 	}
