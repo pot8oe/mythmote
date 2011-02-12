@@ -65,6 +65,7 @@ import java.util.Map;
 
 import tkj.android.homecontrol.mythmote.MythCom;
 import tkj.android.homecontrol.mythmote.MythMote;
+import tkj.android.homecontrol.mythmote.R;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 
 import android.app.AlertDialog;
@@ -236,14 +237,15 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	private MythCom communicator;
 
 	private MythMoteDbManager databaseAdapter;
-
-	private Context context;
+	
+	private boolean mHapticFeedbackEnabled = false;
+	
+	private boolean mEditingEnabled = true;
 
 	public KeyBindingManager(final Context ctx, final KeyMapBinder binder,
 			final MythCom communicator) {
 		Log.d(MythMote.LOG_TAG, "Created KeyBindingManager with ctx " + ctx
 				+ " binder " + binder + " comm " + communicator);
-		this.context = ctx;
 		this.databaseAdapter = new MythMoteDbManager(ctx);
 
 		this.binder = binder;
@@ -269,6 +271,22 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	public KeyBindingEntry getCommand(final View initiatingView) {
 		return viewToEntryMap.get(initiatingView);
 	}
+	
+	public boolean getHapticFeedbackEnabled(){
+		return mHapticFeedbackEnabled;
+	}
+	
+	public void setHapticFeedbackEnabled(boolean enabled){
+		mHapticFeedbackEnabled = enabled;
+	}
+	
+	public boolean getEditingEnabled(){
+		return mEditingEnabled;
+	}
+	
+	public void setEditingEnabled(boolean enabled){
+		mEditingEnabled = enabled;
+	}
 
 	public void onClick(View v) {
 
@@ -277,16 +295,31 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		if (null != entry && null != communicator) {
 			Log.d(MythMote.LOG_TAG, "onClick " + entry.getFriendlyName()
 					+ " command " + entry.getCommand());
+			
+			//send command
 			communicator.SendCommand(entry.getCommand());
+			
+			//perform haptic feedback if enabled
+			if(mHapticFeedbackEnabled){
+			v.performHapticFeedback(
+					HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING,
+					HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+			}
 		}
 
 	}
 
 	public boolean onLongClick(final View v) {
+		
+		//do not consume the onLongClick event if editing is disabled
+		if(!mEditingEnabled)return false;
+		
+		//create alert dialog 
 		AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
 
-		alert.setTitle("Command");
-		alert.setMessage("Type the command to send to MythTV");
+		//set alert title and message
+		alert.setTitle(R.string.command_edit_title_str);
+		alert.setMessage(R.string.command_edit_msg_str);
 
 		// Set an EditText view to get user input
 		final EditText input = new EditText(v.getContext());
@@ -295,6 +328,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 			input.setText(currentEntry.getCommand());
 		alert.setView(input);
 
+		//set positive action button
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Editable value = input.getText();
@@ -312,6 +346,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 			}
 		});
 
+		//set negative action button
 		alert.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
@@ -319,7 +354,10 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 					}
 				});
 
+		//present alert dialog to user
 		alert.show();
+		
+		//return true, we consumed the long-press
 		return true;
 	}
 }
