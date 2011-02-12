@@ -65,6 +65,10 @@
 <string name="send_keyboard_input_str">Send keyboard input</string>
 <string name="backspace_str">Backspace</string>
 <string name="enter_str">Enter</string>
+<string name="keybindings_editable_str">Key-bindings Editable</string>
+<string name="keybindings_editable_descriptions_str">Enabled/Disables editing of mythfrontend commands when long-pressing buttons</string>
+<string name="command_edit_title_str">Command</string>
+<string name="command_edit_msg_str">Type the command to send to MythTV</string>
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
 <item>1sec</item>
