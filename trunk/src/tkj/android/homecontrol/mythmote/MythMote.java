@@ -25,6 +25,7 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -107,23 +108,22 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onResume() {
 		super.onResume();
 
-		// Check existing connection state
-		if (!sComm.IsConnected() && !sComm.IsConnecting()) {
-
+		//Here we disconnect if connected because the selected location
+		//may have changed from the preference activity. setSelectedLocation() will also trigger 
+		//loading any other changed preferences
+		
+		// disconnect if connected
+		if (sComm != null && (sComm.IsConnected() || sComm.IsConnecting())) {
 			// force disconnected state
 			sComm.Disconnect();
-
-			// set selected location and connect
-			this.setSelectedLocation();
-		} else {
-			// already connecte, set status
-			this.StatusChanged(sLocation.Name + " - Connected",
-					MythCom.STATUS_CONNECTED);
 		}
+
+		// set selected location and connect
+		this.setSelectedLocation();
 	}
 
 	/**
-	 * Called when the activity is paused 
+	 * Called when the activity is paused
 	 */
 	@Override
 	public void onPause() {
@@ -265,7 +265,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		mKeyManager.loadKeys();
 
 		// setup the media tab's send keyboard input button
-		if (sTabHost.getCurrentTabTag().equals(NAME_NUMPAD_TAB)){
+		if (sTabHost.getCurrentTabTag().equals(NAME_NUMPAD_TAB)) {
 			setupSendKeyboardInputButton();
 		}
 	}
@@ -325,7 +325,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			setTitleColor(Color.YELLOW);
 		}
 	}
-	
+
 	/**
 	 * Enable the long click and normal click actions where a long click will
 	 * configure the button, and a normal tap will perform the command
@@ -336,7 +336,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		View v = this.findViewById(entry.getMythKey().getButtonId());
 		if (null == v)
 			return null;
-		v.setLongClickable(true);
 		v.setOnLongClickListener(mKeyManager);
 		v.setOnClickListener(mKeyManager);
 		return v;
@@ -387,7 +386,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		return true;
 	}
-	
+
 	/**
 	 * Creates and defines the OnClickListener for media tab's send keyboard
 	 * input button.
@@ -431,7 +430,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			});
 		}
 	}
-	
+
 	/**
 	 * Called to create and add tabs to the tabhost
 	 */
@@ -455,20 +454,27 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	}
 
 	/**
-	 * Reads the mythmote shared preferences and sets local
-	 * members accordingly.
+	 * Reads the mythmote shared preferences and sets local members accordingly.
 	 */
 	private void loadSharedPreferences() {
-		// get selected frontend id
-		sSelected = this.getSharedPreferences(
+		// get shared preferences reference
+		SharedPreferences pref = this.getSharedPreferences(
 				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
-				MODE_PRIVATE).getInt(
-				MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+				MODE_PRIVATE);
 
-		// hapticFeedbackEnabled =
-		// this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
-		// MODE_PRIVATE)
-		// .getBoolean(MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
+		// get selected frontend id
+		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+
+		// get keybindings editable preference
+		this.mKeyManager.setEditingEnabled(pref.getBoolean(
+				MythMotePreferences.PREF_KEYBINDINGS_EDITABLE, true));
+
+		// set the hapticfeedback setting in keymanager
+		this.mKeyManager.setHapticFeedbackEnabled(pref.getBoolean(
+				MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false));
+
+		// done with pref ref
+		pref = null;
 	}
 
 }
