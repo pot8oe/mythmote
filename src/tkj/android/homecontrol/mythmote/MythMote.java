@@ -16,6 +16,8 @@
 
 package tkj.android.homecontrol.mythmote;
 
+import java.util.ArrayList;
+
 import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
@@ -29,6 +31,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,16 +47,18 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
-		OnTabChangeListener, LocationChangedEventListener,
+		OnTabChangeListener, LocationChangedEventListener, OnGesturePerformedListener,
 		MythCom.StatusChangedEventListener, KeyMapBinder {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
+	public static final int DONATE_ID = Menu.FIRST + 3;
 	public static final String NAME_NAV_TAB = "TabNavigation";
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
@@ -61,6 +71,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	private static TabHost sTabHost;
 	private static MythCom sComm;
+	private static GestureOverlayView sGestureOverlayView;
+	private static GestureLibrary sGestureLib;
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
@@ -81,6 +93,15 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			// create comm class
 			sComm = new MythCom(this);
 		}
+		
+		//get gesture overlay view
+		sGestureOverlayView = (GestureOverlayView)this.findViewById(R.id.gestureGestureOverlayView);
+		sGestureOverlayView.addOnGesturePerformedListener(this);
+		
+		//get gesture library
+		sGestureLib = GestureLibraries.fromRawResource(this, R.raw.tab_swipe_gestures);
+		sGestureLib.load();
+		
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
 
@@ -208,6 +229,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// create select location menu item
 		menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
 				.setIcon(R.drawable.selected_location);
+		
+		// create donate menu item
+		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);//.setIcon();
 
 		// return results
 		return result;
@@ -476,5 +500,51 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// done with pref ref
 		pref = null;
 	}
+
+	@Override
+	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+		
+		//Leave if gesture lib has not been initialized
+		if(sGestureLib == null) return;
+
+		//attempt to recognize the gesture
+		ArrayList<Prediction> predictions = sGestureLib.recognize(gesture);
+
+		//get prediction size
+		final int pCount = predictions.size();
+
+		//at least 1 prediction
+		if(pCount > 0){
+			
+			//prediction reference
+			Prediction p;
+
+			//for each prediction
+			for(int i=0; i<pCount; i++){
+
+				//get prediction
+				p = predictions.get(i);
+
+				//High score and has a name
+				if (p.score > 10.0 && p.name != null) {
+
+					//determine which action to take
+					if(p.name.equalsIgnoreCase("swipe_left")){
+						sTabHost.setCurrentTab(sTabHost.getCurrentTab()+1);
+						return;
+					}
+					else if(p.name.equalsIgnoreCase("swipe_right")){
+						sTabHost.setCurrentTab(sTabHost.getCurrentTab()-1);
+						return;
+					}
+
+				}
+			}
+		}
+
+	}
+
+	
+
 
 }
