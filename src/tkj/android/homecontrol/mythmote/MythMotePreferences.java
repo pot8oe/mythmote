@@ -46,10 +46,10 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 
-	private static int _idIndex;
-	private static int _addressIndex;
-	private static int _nameIndex;
-	private static int _portIndex;
+	private static int sIdIndex;
+	private static int sAddressIndex;
+	private static int sNameIndex;
+	private static int sPortIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,10 +144,10 @@ public class MythMotePreferences extends PreferenceActivity {
 		Cursor cursor = _dbAdapter.fetchAllFrontendLocations();
 
 		// get column indexes
-		_idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
-		_addressIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
-		_nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
-		_portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+		sIdIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
+		sAddressIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
+		sNameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
+		sPortIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
 
 		// determine if we have locations saved
 		int count = cursor.getCount();
@@ -160,7 +160,7 @@ public class MythMotePreferences extends PreferenceActivity {
 			// if selected failed
 			if (selected == -1) {
 				// set to first in list
-				selected = cursor.getInt(_idIndex);
+				selected = cursor.getInt(sIdIndex);
 				// save (defaulted) selected location
 				SaveSelectedLocationId(context, selected);
 			}
@@ -169,16 +169,16 @@ public class MythMotePreferences extends PreferenceActivity {
 			for (int i = 0; i < count; i++) {
 				locationListCat.addPreference(MythMotePreferences
 						.createLocationPreference(context,
-								cursor.getString(_idIndex),
-								cursor.getString(_nameIndex),
-								cursor.getString(_addressIndex)));
+								cursor.getString(sIdIndex),
+								cursor.getString(sNameIndex),
+								cursor.getString(sAddressIndex)));
 
-				if (cursor.getInt(_idIndex) == selected) {
+				if (cursor.getInt(sIdIndex) == selected) {
 					// create preference for selected location
 					selectedCat.addPreference(MythMotePreferences
 							.createSelectedLocationPreference(context, context
 									.getString(R.string.selected_location_str),
-									cursor.getString(_nameIndex)));
+									cursor.getString(sNameIndex)));
 				}
 
 				cursor.moveToNext();
@@ -190,10 +190,10 @@ public class MythMotePreferences extends PreferenceActivity {
 				selectedCat.addPreference(MythMotePreferences
 						.createSelectedLocationPreference(context, context
 								.getString(R.string.selected_location_str),
-								cursor.getString(_nameIndex)));
+								cursor.getString(sNameIndex)));
 
 				// save location ID so that it is for real
-				SaveSelectedLocationId(context, cursor.getInt(_idIndex));
+				SaveSelectedLocationId(context, cursor.getInt(sIdIndex));
 			}
 		} else {
 			selectedCat
@@ -311,16 +311,16 @@ public class MythMotePreferences extends PreferenceActivity {
 
 				if (cursor != null && cursor.getCount() > 0) {
 					// get column indexes
-					_idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
-					_addressIndex = cursor
+					sIdIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
+					sAddressIndex = cursor
 					.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
-					_nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
-					_portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+					sNameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
+					sPortIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
 
 					//get data
-					location.Name = cursor.getString(_nameIndex);
-					location.Address = cursor.getString(_addressIndex);
-					location.Port = cursor.getInt(_portIndex);
+					location.Name = cursor.getString(sNameIndex);
+					location.Address = cursor.getString(sAddressIndex);
+					location.Port = cursor.getInt(sPortIndex);
 
 					//show location editor
 					showLocationEditDialog(context, location);
