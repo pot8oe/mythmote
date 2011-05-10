@@ -231,7 +231,8 @@ public class MythCom {
 						// set status and code
 						sStatus = "Unknown host: " + sFrontend.Address;
 						sStatusCode = STATUS_ERROR;
-
+						
+						//clean up
 						disconnectSocket();
 					} catch (IOException e) {
 						// set status and code
@@ -239,6 +240,7 @@ public class MythCom {
 								+ ": " + sFrontend.Address;
 						sStatusCode = STATUS_ERROR;
 
+						//clean up
 						disconnectSocket();
 					}
 				}
