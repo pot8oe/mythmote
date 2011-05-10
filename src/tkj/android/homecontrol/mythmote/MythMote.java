@@ -140,7 +140,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 
 		// set selected location and connect
-		this.setSelectedLocation();
+		if(this.setSelectedLocation()) sComm.Connect(sLocation);
 	}
 
 	/**
@@ -254,11 +254,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				break;
 
 			case RECONNECT_ID:
-				if (sComm.IsConnected())
+				if (sComm.IsConnected() || sComm.IsConnecting())
 					sComm.Disconnect();
 
-				if (this.setSelectedLocation())
-					sComm.Connect(sLocation);
+				// set selected location and connect
+				if(this.setSelectedLocation()) sComm.Connect(sLocation);
 				break;
 
 			case SELECTLOCATION_ID:
@@ -324,11 +324,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	 * Called when the frontend location is changed
 	 */
 	public void LocationChanged() {
-		if (sComm.IsConnected())
+		if (sComm.IsConnected() || sComm.IsConnecting())
 			sComm.Disconnect();
 
-		if (this.setSelectedLocation())
-			sComm.Connect(sLocation);
+		// set selected location and connect
+		if(this.setSelectedLocation()) sComm.Connect(sLocation);
 	}
 
 	/**
@@ -366,8 +366,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	}
 
 	/**
-	 * Reads the selected frontend from preferences and attempts to connect with
-	 * MythCom.Connect()
+	 * Reads the selected frontend from preferences and sets sLocation values.
 	 */
 	private boolean setSelectedLocation() {
 
@@ -405,8 +404,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// close cursor and db adapter
 		cursor.close();
 		dbManager.close();
-		// connect to location
-		sComm.Connect(sLocation);
 
 		return true;
 	}

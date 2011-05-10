@@ -104,6 +104,9 @@ public class MythCom {
 		// set address and port
 		sFrontend = frontend;
 
+		//cancel any previous toasts
+		if(sToast!=null) sToast.cancel();
+		
 		//create toast for all to eat and enjoy
 		sToast = Toast.makeText(sParent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
 		sToast.setGravity(Gravity.CENTER, 0, 0);
@@ -119,38 +122,12 @@ public class MythCom {
 	public void Disconnect()
 	{
         sStatusCode=STATUS_DISCONNECTED;
-		try
-		{
-			//send exit if connected
-			if(this.IsConnected())
-				this.sendData("exit\n");
 
-			// check if output stream exists
-			if (sOutputStream != null) {
-				sOutputStream.close();
-				sOutputStream = null;
-			}
+        //send exit if connected
+        if(this.IsConnected())
+        	this.sendData("exit\n");
 
-			// check if input stream exists
-			if (sInputStream != null) {
-				// close input stream
-				sInputStream.close();
-				sInputStream = null;
-			}
-			if(sSocket != null)
-			{
-			    if(!sSocket.isClosed())
-				    sSocket.close();
-			
-				sSocket = null;
-			}
-			if(sConMgr != null)
-				sConMgr = null;
-		}
-		catch(IOException ex)
-		{
-			this.setStatus("Disconnect I/O error", STATUS_ERROR);
-		}
+        disconnectSocket();
 	}
 
 	public void SendCommand(String jumpPoint) {
@@ -194,28 +171,31 @@ public class MythCom {
 	
 	public boolean IsConnected()
 	{
-		if(sStatusCode==STATUS_CONNECTED) return true;
-		return false;
+		return sStatusCode==STATUS_CONNECTED;
 	}
 
 	public boolean IsConnecting()
 	{
-		if(sStatusCode==STATUS_CONNECTING) return true;
-		return false;
+		return sStatusCode==STATUS_CONNECTING;
 	}
 	
 	/** Connects _socket to _frontend using a separate thread  **/
 	private void connectSocket()
 	{
-		if(sSocket==null)
-		    sSocket = new Socket();
-		
+		//Create a new thread to open socket on
 		Thread thread = new Thread()
 		{
+			/**
+			 * Thread worker function
+			 */
 			public void run()
 			{
 				try
 				{
+					//create socket if it does not exist
+					if(sSocket==null)
+					    sSocket = new Socket();
+					
 					//connect
 					sSocket.connect(new InetSocketAddress(sFrontend.Address, sFrontend.Port));
 					
@@ -227,6 +207,7 @@ public class MythCom {
 					}
 					else
 					{
+						//set status text and code
 						sStatus = "Could not open socket.";
 						sStatusCode = STATUS_ERROR;
 					}
@@ -234,38 +215,30 @@ public class MythCom {
 					//check if everything was connected OK
 					if(!sSocket.isConnected() || sOutputStream == null)
 					{
+						//set status text and code
 						sStatus = "Unknown error getting output stream.";
 						sStatusCode = STATUS_ERROR;
 					}
 					else
 					{
+						//set status text and code
 						sStatus = sFrontend.Name + " - Connected";
 						sStatusCode = STATUS_CONNECTED;
 					}
-
 				}
 				catch (UnknownHostException e)
 				{
+					//set status and code
 					sStatus = "Unknown host: " + sFrontend.Address;
 					sStatusCode = STATUS_ERROR;
 				}
 				catch (IOException e)
 				{
+					//set status and code
 					sStatus = "IO Except: " + e.getLocalizedMessage() + ": " + sFrontend.Address;
 					sStatusCode = STATUS_ERROR;
-					if(sInputStream!=null)
-					{
-						sInputStream=null;
-					}
-					if(sSocket!=null)
-					{
-						if(!sSocket.isClosed())
-						{
-							try { sSocket.close(); } 
-							catch (IOException e1) { }
-							sSocket = null;
-						}
-					}
+					
+					disconnectSocket();
 				}
 
 				// post results
@@ -275,6 +248,61 @@ public class MythCom {
 
 		// run thread
 		thread.start();
+	}
+	
+	/** 
+	 * 
+	 * @throws IOException
+	 */
+	private void disconnectSocket() {
+
+		// check if output stream exists
+		if (sOutputStream != null) {
+
+			//try to close output stream
+			try { 
+				sOutputStream.close(); 
+			}catch(IOException e){ 
+				Log.e(MythMote.LOG_TAG, e.getMessage());
+				this.setStatus("Disconnect I/O error", STATUS_ERROR);
+			}
+
+			//set output stream null
+			sOutputStream = null;
+		}
+
+		// check if input stream exists
+		if (sInputStream != null) {
+
+			// try to close input stream
+			try { 
+				sInputStream.close(); 
+			}catch(IOException e){ 
+				Log.e(MythMote.LOG_TAG, e.getMessage());
+				this.setStatus("Disconnect I/O error", STATUS_ERROR);
+			}
+
+			//set input stream to null
+			sInputStream = null;
+		}
+
+		//check if socket exists
+		if(sSocket != null)
+		{
+			//try to close socket
+			try { 
+				if(!sSocket.isClosed()) sSocket.close();
+			}catch(IOException e){ 
+				Log.e(MythMote.LOG_TAG, e.getMessage());
+				this.setStatus("Disconnect I/O error", STATUS_ERROR);
+			}
+
+			//set socket to null
+			sSocket = null;
+		}
+
+		//set connection manager to null if exists
+		if(sConMgr != null) sConMgr = null;
 	}
 	
 	/** Sends data to the output stream of the socket.
