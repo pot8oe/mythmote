@@ -80,6 +80,7 @@ public class LocationEditor extends Activity
 
 	private boolean Save()
 	{
+		boolean retVal = false;
 		if (this._location == null)
 			this._location = new FrontendLocation();
 		this._location.Name = this.GetName();
@@ -121,18 +122,19 @@ public class LocationEditor extends Activity
 				this._location.ID = (int) adapter.createFrontendLocation(
 						this._location.Name, this._location.Address,
 						this._location.Port);
+				retVal = true;
 			} else
 			{
-				return adapter.updateFrontendLocation(this._location.ID,
+				retVal = adapter.updateFrontendLocation(this._location.ID,
 						this._location.Name, this._location.Address,
 						this._location.Port);
 			}
 			adapter.close();
 
-			return true;
+			return retVal;
 		}
 
-		return false;
+		return retVal;
 	}
 
 	private void SaveAndExit()
