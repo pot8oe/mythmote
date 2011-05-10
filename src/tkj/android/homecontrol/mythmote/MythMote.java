@@ -52,8 +52,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
-		OnTabChangeListener, LocationChangedEventListener, OnGesturePerformedListener,
-		MythCom.StatusChangedEventListener, KeyMapBinder {
+		OnTabChangeListener, LocationChangedEventListener,
+		OnGesturePerformedListener, MythCom.StatusChangedEventListener,
+		KeyMapBinder {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
@@ -93,15 +94,17 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			// create comm class
 			sComm = new MythCom(this);
 		}
-		
-		//get gesture overlay view
-		sGestureOverlayView = (GestureOverlayView)this.findViewById(R.id.gestureGestureOverlayView);
+
+		// get gesture overlay view
+		sGestureOverlayView = (GestureOverlayView) this
+				.findViewById(R.id.gestureGestureOverlayView);
 		sGestureOverlayView.addOnGesturePerformedListener(this);
-		
-		//get gesture library
-		sGestureLib = GestureLibraries.fromRawResource(this, R.raw.tab_swipe_gestures);
+
+		// get gesture library
+		sGestureLib = GestureLibraries.fromRawResource(this,
+				R.raw.tab_swipe_gestures);
 		sGestureLib.load();
-		
+
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
 
@@ -129,10 +132,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onResume() {
 		super.onResume();
 
-		//Here we disconnect if connected because the selected location
-		//may have changed from the preference activity. setSelectedLocation() will also trigger 
-		//loading any other changed preferences
-		
+		// Here we disconnect if connected because the selected location
+		// may have changed from the preference activity. setSelectedLocation()
+		// will also trigger
+		// loading any other changed preferences
+
 		// disconnect if connected
 		if (sComm != null && (sComm.IsConnected() || sComm.IsConnecting())) {
 			// force disconnected state
@@ -140,7 +144,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 
 		// set selected location and connect
-		if(this.setSelectedLocation()) sComm.Connect(sLocation);
+		if (this.setSelectedLocation())
+			sComm.Connect(sLocation);
 	}
 
 	/**
@@ -229,9 +234,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// create select location menu item
 		menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
 				.setIcon(R.drawable.selected_location);
-		
+
 		// create donate menu item
-		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);//.setIcon();
+		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
 
 		// return results
 		return result;
@@ -258,7 +263,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 					sComm.Disconnect();
 
 				// set selected location and connect
-				if(this.setSelectedLocation()) sComm.Connect(sLocation);
+				if (this.setSelectedLocation())
+					sComm.Connect(sLocation);
 				break;
 
 			case SELECTLOCATION_ID:
@@ -328,7 +334,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			sComm.Disconnect();
 
 		// set selected location and connect
-		if(this.setSelectedLocation()) sComm.Connect(sLocation);
+		if (this.setSelectedLocation())
+			sComm.Connect(sLocation);
 	}
 
 	/**
@@ -500,38 +507,38 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	@Override
 	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-		
-		//Leave if gesture lib has not been initialized
-		if(sGestureLib == null) return;
 
-		//attempt to recognize the gesture
+		// Leave if gesture lib has not been initialized
+		if (sGestureLib == null)
+			return;
+
+		// attempt to recognize the gesture
 		ArrayList<Prediction> predictions = sGestureLib.recognize(gesture);
 
-		//get prediction size
+		// get prediction size
 		final int pCount = predictions.size();
 
-		//at least 1 prediction
-		if(pCount > 0){
-			
-			//prediction reference
+		// at least 1 prediction
+		if (pCount > 0) {
+
+			// prediction reference
 			Prediction p;
 
-			//for each prediction
-			for(int i=0; i<pCount; i++){
+			// for each prediction
+			for (int i = 0; i < pCount; i++) {
 
-				//get prediction
+				// get prediction
 				p = predictions.get(i);
 
-				//High score and has a name
+				// High score and has a name
 				if (p.score > 10.0 && p.name != null) {
 
-					//determine which action to take
-					if(p.name.equalsIgnoreCase("swipe_left")){
-						sTabHost.setCurrentTab(sTabHost.getCurrentTab()+1);
+					// determine which action to take
+					if (p.name.equalsIgnoreCase("swipe_left")) {
+						sTabHost.setCurrentTab(sTabHost.getCurrentTab() + 1);
 						return;
-					}
-					else if(p.name.equalsIgnoreCase("swipe_right")){
-						sTabHost.setCurrentTab(sTabHost.getCurrentTab()-1);
+					} else if (p.name.equalsIgnoreCase("swipe_right")) {
+						sTabHost.setCurrentTab(sTabHost.getCurrentTab() - 1);
 						return;
 					}
 
@@ -540,8 +547,5 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		}
 
 	}
-
-	
-
 
 }
