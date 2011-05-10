@@ -309,19 +309,28 @@ public class MythMotePreferences extends PreferenceActivity {
 				dbAdapter.open();
 				Cursor cursor = dbAdapter.fetchFrontendLocation(location.ID);
 
-				// get column indexes
-				_idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
-				_addressIndex = cursor
-						.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
-				_nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
-				_portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
-
 				if (cursor != null && cursor.getCount() > 0) {
+					// get column indexes
+					_idIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID);
+					_addressIndex = cursor
+					.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
+					_nameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
+					_portIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+
+					//get data
 					location.Name = cursor.getString(_nameIndex);
 					location.Address = cursor.getString(_addressIndex);
 					location.Port = cursor.getInt(_portIndex);
+
+					//show location editor
 					showLocationEditDialog(context, location);
+					
+					//close cursor
+					cursor.close();
 				}
+				
+				//close db adapter
+				dbAdapter.close();
 				return false;
 			}
 
