@@ -53,26 +53,26 @@ public class MythCom {
 	public static final int STATUS_CONNECTING = 3;
 	public static final int STATUS_ERROR = 99;
 
-	private static Timer _timer;
-	private static Toast _toast;
-	private static Socket _socket;
-	private static BufferedWriter _outputStream;
-	private static BufferedReader  _inputStream;
-	private static Activity _parent;
-	private static ConnectivityManager _conMgr;
-	private static String _status;
-	private static int _statusCode;
-	private static StatusChangedEventListener _statusListener;
-	private static FrontendLocation _frontend;
+	private static Timer sTimer;
+	private static Toast sToast;
+	private static Socket sSocket;
+	private static BufferedWriter sOutputStream;
+	private static BufferedReader  sInputStream;
+	private static Activity sParent;
+	private static ConnectivityManager sConMgr;
+	private static String sStatus;
+	private static int sStatusCode;
+	private static StatusChangedEventListener sStatusListener;
+	private static FrontendLocation sFrontend;
 
 	private final Handler mHandler = new Handler();
 	private final Runnable mSocketActionComplete = new Runnable()
 	{
 		public void run()
 		{
-			setStatus(_status, _statusCode);
-			if(_statusCode!=STATUS_CONNECTING)
-			    _toast.cancel();
+			setStatus(sStatus, sStatusCode);
+			if(sStatusCode!=STATUS_CONNECTING)
+			    sToast.cancel();
 		}
 
 	};
@@ -84,30 +84,30 @@ public class MythCom {
 	/** Parent activity is used to get context */
 	public MythCom(Activity parentActivity)
 	{
-		_parent = parentActivity;
-		_statusCode=STATUS_DISCONNECTED;
+		sParent = parentActivity;
+		sStatusCode=STATUS_DISCONNECTED;
 	}
 	
 	/** Connects to the given address and port. Any existing connection will be broken first **/
 	public void Connect(FrontendLocation frontend)
 	{
 		//read status update interval preference
-		int updateInterval = _parent.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, Context.MODE_PRIVATE)
+		int updateInterval = sParent.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, Context.MODE_PRIVATE)
 		.getInt(MythMotePreferences.PREF_STATUS_UPDATE_INTERVAL, 5000);
 		
 		//schedule update timer
 		scheduleUpdateTimer(updateInterval);
 
 		//get connection manager
-		_conMgr = (ConnectivityManager) _parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+		sConMgr = (ConnectivityManager) sParent.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		// set address and port
-		_frontend = frontend;
+		sFrontend = frontend;
 
 		//create toast for all to eat and enjoy
-		_toast = Toast.makeText(_parent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
-		_toast.setGravity(Gravity.CENTER, 0, 0);
-		_toast.show();
+		sToast = Toast.makeText(sParent.getApplicationContext(), R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
+		sToast.setGravity(Gravity.CENTER, 0, 0);
+		sToast.show();
 
 		this.setStatus("Connecting", STATUS_CONNECTING);
 
@@ -118,7 +118,7 @@ public class MythCom {
 	/** Closes the socket if it exists and it is already connected **/
 	public void Disconnect()
 	{
-        _statusCode=STATUS_DISCONNECTED;
+        sStatusCode=STATUS_DISCONNECTED;
 		try
 		{
 			//send exit if connected
@@ -126,26 +126,26 @@ public class MythCom {
 				this.sendData("exit\n");
 
 			// check if output stream exists
-			if (_outputStream != null) {
-				_outputStream.close();
-				_outputStream = null;
+			if (sOutputStream != null) {
+				sOutputStream.close();
+				sOutputStream = null;
 			}
 
 			// check if input stream exists
-			if (_inputStream != null) {
+			if (sInputStream != null) {
 				// close input stream
-				_inputStream.close();
-				_inputStream = null;
+				sInputStream.close();
+				sInputStream = null;
 			}
-			if(_socket != null)
+			if(sSocket != null)
 			{
-			    if(!_socket.isClosed())
-				    _socket.close();
+			    if(!sSocket.isClosed())
+				    sSocket.close();
 			
-				_socket = null;
+				sSocket = null;
 			}
-			if(_conMgr != null)
-				_conMgr = null;
+			if(sConMgr != null)
+				sConMgr = null;
 		}
 		catch(IOException ex)
 		{
@@ -179,36 +179,36 @@ public class MythCom {
 	}
 
 	public void SetOnStatusChangeHandler(StatusChangedEventListener listener) {
-		_statusListener = listener;
+		sStatusListener = listener;
 	}
 
 	public String GetStatusStr() {
-		return _status;
+		return sStatus;
 	}
 
 	public boolean IsNetworkReady() {
-		if (_conMgr != null && _conMgr.getActiveNetworkInfo().isConnected())
+		if (sConMgr != null && sConMgr.getActiveNetworkInfo().isConnected())
 			return true;
 		return false;
 	}
 	
 	public boolean IsConnected()
 	{
-		if(_statusCode==STATUS_CONNECTED) return true;
+		if(sStatusCode==STATUS_CONNECTED) return true;
 		return false;
 	}
 
 	public boolean IsConnecting()
 	{
-		if(_statusCode==STATUS_CONNECTING) return true;
+		if(sStatusCode==STATUS_CONNECTING) return true;
 		return false;
 	}
 	
 	/** Connects _socket to _frontend using a separate thread  **/
 	private void connectSocket()
 	{
-		if(_socket==null)
-		    _socket = new Socket();
+		if(sSocket==null)
+		    sSocket = new Socket();
 		
 		Thread thread = new Thread()
 		{
@@ -216,52 +216,54 @@ public class MythCom {
 			{
 				try
 				{
-					_socket.connect(new InetSocketAddress(_frontend.Address, _frontend.Port));
+					//connect
+					sSocket.connect(new InetSocketAddress(sFrontend.Address, sFrontend.Port));
 					
-					if(_socket.isConnected())
+					//check if connected
+					if(sSocket.isConnected())
 					{
-					    _outputStream = new BufferedWriter(new OutputStreamWriter(_socket.getOutputStream()));
-					    _inputStream = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
+					    sOutputStream = new BufferedWriter(new OutputStreamWriter(sSocket.getOutputStream()));
+					    sInputStream = new BufferedReader(new InputStreamReader(sSocket.getInputStream()));
 					}
 					else
 					{
-						_status = "Could not open socket.";
-						_statusCode = STATUS_ERROR;
+						sStatus = "Could not open socket.";
+						sStatusCode = STATUS_ERROR;
 					}
 
 					//check if everything was connected OK
-					if(!_socket.isConnected() || _outputStream == null)
+					if(!sSocket.isConnected() || sOutputStream == null)
 					{
-						_status = "Unknown error getting output stream.";
-						_statusCode = STATUS_ERROR;
+						sStatus = "Unknown error getting output stream.";
+						sStatusCode = STATUS_ERROR;
 					}
 					else
 					{
-						_status = _frontend.Name + " - Connected";
-						_statusCode = STATUS_CONNECTED;
+						sStatus = sFrontend.Name + " - Connected";
+						sStatusCode = STATUS_CONNECTED;
 					}
 
 				}
 				catch (UnknownHostException e)
 				{
-					_status = "Unknown host: " + _frontend.Address;
-					_statusCode = STATUS_ERROR;
+					sStatus = "Unknown host: " + sFrontend.Address;
+					sStatusCode = STATUS_ERROR;
 				}
 				catch (IOException e)
 				{
-					_status = "IO Except: " + e.getLocalizedMessage() + ": " + _frontend.Address;
-					_statusCode = STATUS_ERROR;
-					if(_inputStream!=null)
+					sStatus = "IO Except: " + e.getLocalizedMessage() + ": " + sFrontend.Address;
+					sStatusCode = STATUS_ERROR;
+					if(sInputStream!=null)
 					{
-						_inputStream=null;
+						sInputStream=null;
 					}
-					if(_socket!=null)
+					if(sSocket!=null)
 					{
-						if(!_socket.isClosed())
+						if(!sSocket.isClosed())
 						{
-							try { _socket.close(); } 
+							try { sSocket.close(); } 
 							catch (IOException e1) { }
-							_socket = null;
+							sSocket = null;
 						}
 					}
 				}
@@ -279,21 +281,21 @@ public class MythCom {
 	 * Attempts to reconnect socket if connection does not already exist. **/
 	private boolean sendData(String data)
 	{
-		if(this.IsConnected() && _outputStream != null)
+		if(this.IsConnected() && sOutputStream != null)
 		{
 			try
 			{
 				if(!data.endsWith("\n")) 
 					data = String.format("%s\n", data);
 				
-				_outputStream.write(data);
-				_outputStream.flush();
+				sOutputStream.write(data);
+				sOutputStream.flush();
 				return true;
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
-				this.setStatus(e.getLocalizedMessage() + ": " + _frontend.Address , STATUS_ERROR);
+				this.setStatus(e.getLocalizedMessage() + ": " + sFrontend.Address , STATUS_ERROR);
 				this.Disconnect();
 				return false;
 			}
@@ -306,19 +308,19 @@ public class MythCom {
 	private String readData()
 	{
 		String outString = "";
-		if(this.IsConnected() && _inputStream != null )
+		if(this.IsConnected() && sInputStream != null )
 		{
 			
 			try 
 			{
-				if(_inputStream.ready())
-					outString =_inputStream.readLine() ;
+				if(sInputStream.ready())
+					outString =sInputStream.readLine() ;
 
 			} 
 			catch (IOException e) 
 			{
 				Log.e(MythMote.LOG_TAG, "IO Error reading data", e);
-				this.setStatus(e.getLocalizedMessage() + ": " + _frontend.Address , STATUS_ERROR);
+				this.setStatus(e.getLocalizedMessage() + ": " + sFrontend.Address , STATUS_ERROR);
 				this.Disconnect();
 				return null;
 			}
@@ -336,13 +338,13 @@ public class MythCom {
 	/** Sets _status and fires the StatusChanged event **/
 	private void setStatus(final String StatusMsg, final int code)
 	{
-		_parent.runOnUiThread(new Runnable(){
+		sParent.runOnUiThread(new Runnable(){
 
 			public void run() 
 			{
-				_status = StatusMsg;
-				if (_statusListener != null)
-					_statusListener.StatusChanged(StatusMsg, code);
+				sStatus = StatusMsg;
+				if (sStatusListener != null)
+					sStatusListener.StatusChanged(StatusMsg, code);
 			}
 
 		});
@@ -359,13 +361,13 @@ public class MythCom {
 		    	return this.readData();
 		    else
 		    {
-				Log.e(MythMote.LOG_TAG, _status + ": Not connected on receive");
+				Log.e(MythMote.LOG_TAG, sStatus + ": Not connected on receive");
 				return null;
 		    }
 		}
 		else
 		{
-			Log.e(MythMote.LOG_TAG, _status + ": Send failed");
+			Log.e(MythMote.LOG_TAG, sStatus + ": Send failed");
 			return null;
 		}
 
@@ -378,11 +380,11 @@ public class MythCom {
 		try
 		{
 			//close down the existing timer.
-			if(_timer != null)
+			if(sTimer != null)
 			{
-				_timer.cancel();
-				_timer.purge();
-				_timer = null;
+				sTimer.cancel();
+				sTimer.purge();
+				sTimer = null;
 			}
 			
 			//clear timer task
@@ -411,14 +413,14 @@ public class MythCom {
 							}
 							else
 							{
-								setStatus(_frontend.Name + " - Connected", STATUS_CONNECTED);
+								setStatus(sFrontend.Name + " - Connected", STATUS_CONNECTED);
 							}
 						}
 					}
 				};
 					
-				_timer = new Timer();
-				_timer.schedule(timerTaskCheckStatus, updateInterval, updateInterval);
+				sTimer = new Timer();
+				sTimer.schedule(timerTaskCheckStatus, updateInterval, updateInterval);
 			}
 		}
 		catch(Exception ex)
