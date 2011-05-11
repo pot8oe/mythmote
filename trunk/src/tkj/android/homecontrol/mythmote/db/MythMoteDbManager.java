@@ -200,7 +200,7 @@ public class MythMoteDbManager {
 			builder.setMessage(e.getLocalizedMessage());
 			builder.show();
 		}
-		if (null == mCursor)
+		if (mCursor == null)
 			return;
 		do {
 			String friendlyName = mCursor.getString(mCursor

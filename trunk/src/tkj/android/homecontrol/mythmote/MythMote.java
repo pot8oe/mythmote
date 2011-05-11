@@ -154,6 +154,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	@Override
 	public void onPause() {
 		super.onPause();
+		
+		if (sComm != null && sComm.IsConnected())
+			sComm.Disconnect();
 	}
 
 	/**
@@ -164,6 +167,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		if (sComm != null && sComm.IsConnected())
 			sComm.Disconnect();
+		
 		sTabHost = null;
 
 	}
