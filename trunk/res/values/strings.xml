@@ -70,6 +70,11 @@
 <string name="command_edit_title_str">Command</string>
 <string name="command_edit_msg_str">Type the command to send to MythTV</string>
 <string name="donate_menu_item_str">Donate</string>
+<string name="MAC_example_string">MAC as:"##:##:##:##:##:##"</string>
+<string name="MAC_str">MAC</string>
+<string name="send_wol_re_str">Send RE WakeOnLan</string>
+<string name="send_wol_pj_str">Send PJ WakeOnLan</string>
+<string name="wifi_only_str">WiFi Only</string>
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
 <item>1sec</item>
