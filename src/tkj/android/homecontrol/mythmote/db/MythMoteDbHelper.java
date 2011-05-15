@@ -26,7 +26,7 @@ import android.util.Log;
 
 public class MythMoteDbHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "mythmotedata";
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 3;
 	public static final String TAG = "MythMoteDB";
 
 	/**
@@ -36,6 +36,8 @@ public class MythMoteDbHelper extends SQLiteOpenHelper {
 	public static final String KEY_ADDRESS = "address";
 	public static final String KEY_PORT = "port";
 	public static final String KEY_ROWID = "_id";
+	public static final String KEY_MAC = "MAC";
+	public static final String KEY_WIFIONLY = "wifionly";
 	public static final String KEYBINDINGS_ROWID = "_id";
 	public static final String KEYBINDINGS_COMMAND = "myth_command";
 	public static final String KEYBINDINGS_UI_KEY = "ui_key";
@@ -50,8 +52,12 @@ public class MythMoteDbHelper extends SQLiteOpenHelper {
 	 * Table declarations
 	 */
 	private static final String CREATE_FRONTENDS_TABLE = "create table "
-			+ FRONTEND_TABLE + " (_id integer primary key autoincrement, "
-			+ "name text not null, address text not null, port int);";
+			+ FRONTEND_TABLE + " (" + KEY_ROWID + " integer primary key autoincrement, "
+			+ KEY_NAME + " text not null,"
+			+ KEY_ADDRESS + " text not null, "
+			+ KEY_PORT + " int, "
+			+ KEY_MAC + " text, "
+			+ KEY_WIFIONLY + " int);";
 
 	private static final String CREATE_KEY_BINDINGS_TABLE = "create table "
 			+ KEY_BINDINGS_TABLE + " (" + KEYBINDINGS_ROWID
@@ -80,6 +86,10 @@ public class MythMoteDbHelper extends SQLiteOpenHelper {
 			db.execSQL(CREATE_KEY_BINDINGS_TABLE);
 			createDefaultEntries(db);
 			db.setVersion(newVersion);
+		} else if ((oldVersion == 1 || oldVersion == 2) && newVersion == 3){ 
+			//Add mac and wifi only columns to frontend table
+			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + "ADD COLUMN " + KEY_MAC + " text;");
+			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + "ADD COLUMN " + KEY_WIFIONLY + " int;");
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS frontends");
 			db.execSQL("DROP TABLE IF EXISTS keybindings");

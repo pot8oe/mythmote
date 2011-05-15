@@ -27,6 +27,9 @@ import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_BINDINGS_
 import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_NAME;
 import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_PORT;
 import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_ROWID;
+import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_MAC;
+import static tkj.android.homecontrol.mythmote.db.MythMoteDbHelper.KEY_WIFIONLY;
+import tkj.android.homecontrol.mythmote.FrontendLocation;
 import tkj.android.homecontrol.mythmote.R;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager.MythKey;
@@ -70,11 +73,13 @@ public class MythMoteDbManager {
 	 *            the body of the note
 	 * @return rowId or -1 if failed
 	 */
-	public long createFrontendLocation(String name, String address, int port) {
+	public long createFrontendLocation(FrontendLocation location) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_NAME, name);
-		initialValues.put(KEY_ADDRESS, address);
-		initialValues.put(KEY_PORT, port);
+		initialValues.put(KEY_NAME, location.Name);
+		initialValues.put(KEY_ADDRESS, location.Address);
+		initialValues.put(KEY_PORT, location.Port);
+		initialValues.put(KEY_MAC, location.Port);
+		initialValues.put(KEY_WIFIONLY, location.WifiOnly);
 
 		return db.insert(FRONTEND_TABLE, null, initialValues);
 	}
@@ -99,7 +104,7 @@ public class MythMoteDbManager {
 	public Cursor fetchAllFrontendLocations() {
 
 		return db.query(FRONTEND_TABLE, new String[] { KEY_ROWID, KEY_NAME,
-				KEY_ADDRESS, KEY_PORT }, null, null, null, null, null);
+				KEY_ADDRESS, KEY_PORT, KEY_MAC, KEY_WIFIONLY }, null, null, null, null, null);
 	}
 
 	/**
@@ -113,7 +118,7 @@ public class MythMoteDbManager {
 		Cursor mCursor = null;
 		try {
 			mCursor = db.query(true, FRONTEND_TABLE, new String[] { KEY_ROWID,
-					KEY_NAME, KEY_ADDRESS, KEY_PORT }, KEY_ROWID + "=" + rowId,
+					KEY_NAME, KEY_ADDRESS, KEY_PORT, KEY_MAC, KEY_WIFIONLY }, KEY_ROWID + "=" + rowId,
 					null, null, null, null, null);
 			if (mCursor != null) {
 				mCursor.moveToFirst();
@@ -140,23 +145,20 @@ public class MythMoteDbManager {
 	 * specified using the rowId, and it is altered to use the title and body
 	 * values passed in
 	 * 
-	 * @param rowId
-	 *            id of note to update
-	 * @param title
-	 *            value to set note title to
-	 * @param body
-	 *            value to set note body to
+	 * @param location
+	 * 				FrontendLocation object containing values to save to DB
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateFrontendLocation(long rowId, String name,
-			String address, int port) {
+	public boolean updateFrontendLocation(FrontendLocation location) {
 		open();
 		ContentValues args = new ContentValues();
-		args.put(KEY_NAME, name);
-		args.put(KEY_ADDRESS, address);
-		args.put(KEY_PORT, port);
+		args.put(KEY_NAME, location.Name);
+		args.put(KEY_ADDRESS, location.Address);
+		args.put(KEY_PORT, location.Port);
+		args.put(KEY_MAC, location.MAC);
+		args.put(KEY_WIFIONLY, location.WifiOnly);
 
-		int rows = db.update(FRONTEND_TABLE, args, KEY_ROWID + "=" + rowId,
+		int rows = db.update(FRONTEND_TABLE, args, KEY_ROWID + "=" + location.ID,
 				null);
 		close();
 		return rows > 0;

@@ -26,12 +26,16 @@ public class FrontendLocation {
 	public static String STR_NAME = "NAME";
 	public static String STR_ADDRESS = "ADDRESS";
 	public static String STR_PORT = "PORT";
+	public static String STR_MAC = "MAC";
+	public static String STR_WIFIONLY = "WIFIONLY";
 	
 	
 	public int ID = -1;
 	public String Name = "";
 	public String Address = "";
 	public int Port = 6456;
+	public String MAC = "";
+	public int WifiOnly = 1;
 	
 	
 	

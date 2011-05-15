@@ -100,8 +100,7 @@ public class MythCom {
 		scheduleUpdateTimer(updateInterval);
 
 		// get connection manager
-		sConMgr = (ConnectivityManager) sParent
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		sConMgr = (ConnectivityManager)sParent.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		// set address and port
 		sFrontend = frontend;
@@ -109,7 +108,7 @@ public class MythCom {
 		// cancel any previous toasts
 		if (sToast != null)
 			sToast.cancel();
-
+		
 		// create toast for all to eat and enjoy
 		sToast = Toast.makeText(sParent.getApplicationContext(),
 				R.string.attempting_to_connect_str, Toast.LENGTH_SHORT);
@@ -196,6 +195,19 @@ public class MythCom {
 					sStatusCode = STATUS_ERROR;
 				} else {
 					try {
+						
+						//check if wifi only frontend
+						if(sFrontend.WifiOnly == 1){
+							//check wifi network availability
+							if(!sConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isAvailable()){
+								setStatus("WIFI Not available.", STATUS_ERROR);
+								return;
+							}else if(!sConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()){
+								setStatus("WIFI Not Connected.", STATUS_ERROR);
+								return;
+							}
+						}
+						
 						// connect
 						sSocket.connect(new InetSocketAddress(
 								sFrontend.Address, sFrontend.Port),
@@ -306,8 +318,7 @@ public class MythCom {
 		}
 
 		// set connection manager to null if exists
-		if (sConMgr != null)
-			sConMgr = null;
+		if (sConMgr != null) sConMgr = null;
 	}
 
 	/**
@@ -322,6 +333,7 @@ public class MythCom {
 
 				sOutputStream.write(data);
 				sOutputStream.flush();
+
 				return true;
 			} catch (IOException e) {
 				e.printStackTrace();

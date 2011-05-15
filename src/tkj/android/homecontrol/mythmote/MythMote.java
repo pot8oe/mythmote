@@ -16,6 +16,7 @@
 
 package tkj.android.homecontrol.mythmote;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
@@ -47,7 +48,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -60,6 +60,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
 	public static final int DONATE_ID = Menu.FIRST + 3;
+	public static final int SENDWOL_ID = Menu.FIRST + 4;
+	public static final int SENDWOL_RE_ID = Menu.FIRST + 5;
+	public static final int SENDWOL_PJ_ID = Menu.FIRST + 6;
 	public static final String NAME_NAV_TAB = "TabNavigation";
 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
@@ -238,7 +241,12 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// create select location menu item
 		menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
 				.setIcon(R.drawable.selected_location);
-
+		
+		//create wake on lan menu item
+		//menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
+		menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
+		menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
+		
 		// create donate menu item
 		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
 
@@ -278,8 +286,27 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				// even if the user selects the same location already selected.
 				MythMotePreferences.SelectLocation(this, this);
 				break;
-			}
-			;
+
+			case SENDWOL_ID:
+				//Place holder for working WOL
+				break;
+			case SENDWOL_RE_ID:
+				try {
+					//Rob Elsner WOL
+					WOLPowerManager.sendWOL(sLocation.MAC, this);
+				} catch (IOException e) {
+					Log.d(LOG_TAG, e.getMessage());
+				}
+				break;
+			case SENDWOL_PJ_ID:
+				try {
+					//PJRS WOL
+					WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
+				} catch (IOException e) {
+					Log.d(LOG_TAG, e.getMessage());
+				}
+				break;
+			};
 		} catch (android.content.ActivityNotFoundException ex) {
 			// Show error when activity is not found
 			AlertDialog.Builder diag = new AlertDialog.Builder(this);
@@ -411,6 +438,10 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS));
 		sLocation.Port = cursor.getInt(cursor
 				.getColumnIndex(MythMoteDbHelper.KEY_PORT));
+		sLocation.MAC = cursor.getString(cursor
+				.getColumnIndex(MythMoteDbHelper.KEY_MAC));
+		sLocation.WifiOnly = cursor.getInt(cursor.
+				getColumnIndex(MythMoteDbHelper.KEY_WIFIONLY));
 
 		// close cursor and db adapter
 		cursor.close();
