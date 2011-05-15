@@ -50,6 +50,8 @@ public class MythMotePreferences extends PreferenceActivity {
 	private static int sAddressIndex;
 	private static int sNameIndex;
 	private static int sPortIndex;
+	private static int sMacIndex;
+	private static int sWifiOnlyIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +150,8 @@ public class MythMotePreferences extends PreferenceActivity {
 		sAddressIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
 		sNameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
 		sPortIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+		sMacIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_MAC);
+		sWifiOnlyIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_WIFIONLY);
 
 		// determine if we have locations saved
 		int count = cursor.getCount();
@@ -221,6 +225,8 @@ public class MythMotePreferences extends PreferenceActivity {
 			intent.putExtra(FrontendLocation.STR_NAME, location.Name);
 			intent.putExtra(FrontendLocation.STR_ADDRESS, location.Address);
 			intent.putExtra(FrontendLocation.STR_PORT, location.Port);
+			intent.putExtra(FrontendLocation.STR_MAC, location.MAC);
+			intent.putExtra(FrontendLocation.STR_WIFIONLY, location.WifiOnly);
 		}
 
 		// start activity
@@ -316,11 +322,16 @@ public class MythMotePreferences extends PreferenceActivity {
 					.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS);
 					sNameIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_NAME);
 					sPortIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_PORT);
+					sMacIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_MAC);
+					sWifiOnlyIndex = cursor.getColumnIndex(MythMoteDbHelper.KEY_WIFIONLY);
+					
 
 					//get data
 					location.Name = cursor.getString(sNameIndex);
 					location.Address = cursor.getString(sAddressIndex);
 					location.Port = cursor.getInt(sPortIndex);
+					location.MAC = cursor.getString(sMacIndex);
+					location.WifiOnly = cursor.getInt(sWifiOnlyIndex);
 
 					//show location editor
 					showLocationEditDialog(context, location);
@@ -392,8 +403,8 @@ public class MythMotePreferences extends PreferenceActivity {
 
 				// Displays the list of configured frontend locations.
 				// Fires the locationChanged event when the user selects a
-				// location
-				// even if the user selects the same location already selected.
+				// location even if the user selects the same location already 
+				// selected.
 				SelectLocation(context, new LocationChangedEventListener() {
 					public void LocationChanged() {
 						// reset preference list with updated selection
