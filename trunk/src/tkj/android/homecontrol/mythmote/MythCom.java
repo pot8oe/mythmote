@@ -132,9 +132,9 @@ public class MythCom {
 		disconnectSocket();
 	}
 
-	public void SendCommand(String jumpPoint) {
+	public void SendCommand(String cmd) {
 		// send command data
-		this.sendData(String.format("%s\n", jumpPoint));
+		this.sendData(String.format("%s\n", cmd));
 	}
 
 	public void SendJumpCommand(String jumpPoint) {

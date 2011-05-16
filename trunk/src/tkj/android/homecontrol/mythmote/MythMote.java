@@ -33,7 +33,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
@@ -80,6 +79,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
+	private static boolean sGesturesEnabled = true;
 
 	/**
 	 * Called when the activity is first created.
@@ -100,14 +100,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		// get gesture overlay view
 		sGestureOverlayView = (GestureOverlayView) this
-				.findViewById(R.id.gestureGestureOverlayView);
-		sGestureOverlayView.addOnGesturePerformedListener(this);
-
-		// get gesture library
-		sGestureLib = GestureLibraries.fromRawResource(this,
-				R.raw.tab_swipe_gestures);
-		sGestureLib.load();
-
+				.findViewById(R.id.mythMoteOverlayView);
+		
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
 
@@ -134,7 +128,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		
 		// Here we disconnect if connected because the selected location
 		// may have changed from the preference activity. setSelectedLocation()
 		// will also trigger
@@ -149,6 +143,19 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// set selected location and connect
 		if (this.setSelectedLocation())
 			sComm.Connect(sLocation);
+		
+		//remove gesture listener(s)
+		sGestureOverlayView.removeAllOnGesturePerformedListeners();
+		
+		//check if gestures are enabled
+		if(sGesturesEnabled){
+			// get gesture library
+			sGestureLib = GestureBuilderActivity.readLibrary(this);
+			sGestureLib.load();
+			
+			sGestureOverlayView.addOnGesturePerformedListener(this);
+		}
+		
 	}
 
 	/**
@@ -524,6 +531,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		SharedPreferences pref = this.getSharedPreferences(
 				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
 				MODE_PRIVATE);
+		
+		// get if gestures are enabled
+		sGesturesEnabled = pref.getBoolean(MythMotePreferences.PREF_GESTURES_ENABLED, true);
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
@@ -568,15 +578,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				// High score and has a name
 				if (p.score > 10.0 && p.name != null) {
 
-					// determine which action to take
-					if (p.name.equalsIgnoreCase("swipe_left")) {
-						sTabHost.setCurrentTab(sTabHost.getCurrentTab() + 1);
-						return;
-					} else if (p.name.equalsIgnoreCase("swipe_right")) {
-						sTabHost.setCurrentTab(sTabHost.getCurrentTab() - 1);
-						return;
-					}
-
+					//send command name it is the myth command
+					sComm.SendCommand(p.name);
+					return;
 				}
 			}
 		}
