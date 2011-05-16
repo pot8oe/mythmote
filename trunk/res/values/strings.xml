@@ -75,6 +75,30 @@
 <string name="send_wol_re_str">Send RE WakeOnLan</string>
 <string name="send_wol_pj_str">Send PJ WakeOnLan</string>
 <string name="wifi_only_str">WiFi Only</string>
+<string name="gesture_settings_str">Gesture Settings</string>
+<string name="gestures_enabled_str">Gestures Enabled</string>
+<string name="multistroke_gestures_str">Multi-stroke Gestures</string>
+<string name="multistroke_gestures_description_str">Enable gestures with multiple strokes. EX: cross pattern</string>
+<string name="gesture_list_str">Gesture List</string>
+<string name="gesture_list_description_str">Edit gestures and their actions</string>
+<string name="prompt_gesture_command_str">Mythfront Telnet Command</string>
+<string name="error_missing_name_str">You must enter a name</string>
+<string name="save_success_str">Gesture saved in %s</string>
+<string name="rename_action_str">OK</string>
+<string name="cancel_action_str">Cancel</string>
+<string name="gestures_loading_str">Loading gestures...</string>
+<string name="gestures_empty_str">No gestures</string>
+<string name="gestures_activity_str">Gestures</string>
+<string name="gestures_rename_str">Rename</string>
+<string name="gestures_delete_str">Delete</string>
+<string name="gestures_delete_success_str">Gesture deleted</string>
+<string name="gestures_rename_title_str">Rename gesture</string>
+<string name="gestures_rename_label_str">Gesture name</string>
+<string name="gestures_error_loading_str">Could not load %s. Make sure you have storage available.</string>
+<string name="button_add_str">Add</string>
+<string name="button_remove_str">Remove</string>
+<string name="gesture_default_command">key enter</string>
+
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
 <item>1sec</item>
