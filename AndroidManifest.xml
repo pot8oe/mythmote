@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 	<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
-	<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
+	<activity android:name=".LocationEditor" android:label="addresseditor"></activity>
+	<activity android:name=".GestureBuilderActivity" android:label="gesturebuilder"></activity>
+	<activity android:name=".CreateGestureActivity" android:label="creategesture"></activity>
 	</application>
 <uses-sdk android:minSdkVersion="3"></uses-sdk>
 </manifest> 
