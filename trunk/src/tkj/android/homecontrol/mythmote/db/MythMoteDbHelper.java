@@ -88,8 +88,8 @@ public class MythMoteDbHelper extends SQLiteOpenHelper {
 			db.setVersion(newVersion);
 		} else if ((oldVersion == 1 || oldVersion == 2) && newVersion == 3){ 
 			//Add mac and wifi only columns to frontend table
-			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + "ADD COLUMN " + KEY_MAC + " text;");
-			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + "ADD COLUMN " + KEY_WIFIONLY + " int;");
+			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + " ADD COLUMN " + KEY_MAC + " text;");
+			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + " ADD COLUMN " + KEY_WIFIONLY + " int;");
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS frontends");
 			db.execSQL("DROP TABLE IF EXISTS keybindings");
