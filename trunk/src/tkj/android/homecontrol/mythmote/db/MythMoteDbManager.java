@@ -78,7 +78,7 @@ public class MythMoteDbManager {
 		initialValues.put(KEY_NAME, location.Name);
 		initialValues.put(KEY_ADDRESS, location.Address);
 		initialValues.put(KEY_PORT, location.Port);
-		initialValues.put(KEY_MAC, location.Port);
+		initialValues.put(KEY_MAC, location.MAC);
 		initialValues.put(KEY_WIFIONLY, location.WifiOnly);
 
 		return db.insert(FRONTEND_TABLE, null, initialValues);
