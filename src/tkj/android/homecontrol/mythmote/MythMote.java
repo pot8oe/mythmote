@@ -250,9 +250,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				.setIcon(R.drawable.selected_location);
 		
 		//create wake on lan menu item
-		//menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
-		menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
-		menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
+		menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
+		//menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
+		//menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
 		
 		// create donate menu item
 		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
@@ -295,7 +295,13 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				break;
 
 			case SENDWOL_ID:
-				//Place holder for working WOL
+				//This sends the PJRS implementation of WOL
+				try {
+					//PJRS WOL
+					WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
+				} catch (IOException e) {
+					Log.d(LOG_TAG, e.getMessage());
+				}
 				break;
 			case SENDWOL_RE_ID:
 				try {
