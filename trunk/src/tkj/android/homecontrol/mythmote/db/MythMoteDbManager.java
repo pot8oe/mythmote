@@ -51,15 +51,21 @@ public class MythMoteDbManager {
 
 	public MythMoteDbManager(final Context ctx) {
 		this.context = ctx;
+		this.dbHelper = new MythMoteDbHelper(context);
 	}
 
 	public void open() {
-		this.dbHelper = new MythMoteDbHelper(context);
+		if(this.db != null)
+		{
+			close();
+		}
+		
 		this.db = this.dbHelper.getWritableDatabase();
 	}
 
 	public void close() {
 		dbHelper.close();
+		this.db = null;
 	}
 
 	/**
