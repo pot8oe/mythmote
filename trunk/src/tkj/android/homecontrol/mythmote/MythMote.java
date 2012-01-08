@@ -79,7 +79,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
-	private static boolean sGesturesEnabled = true;
+	private static boolean sGesturesEnabled = false;
 
 	/**
 	 * Called when the activity is first created.
@@ -319,6 +319,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 					Log.d(LOG_TAG, e.getMessage());
 				}
 				break;
+			case DONATE_ID:
+				//open browser at our paypal donation page.
+				
+				break;
+				
 			};
 		} catch (android.content.ActivityNotFoundException ex) {
 			// Show error when activity is not found
@@ -539,7 +544,8 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				MODE_PRIVATE);
 		
 		// get if gestures are enabled
-		sGesturesEnabled = pref.getBoolean(MythMotePreferences.PREF_GESTURES_ENABLED, true);
+		sGesturesEnabled = pref.getBoolean(MythMotePreferences.PREF_GESTURES_ENABLED, false);
+		if(sGestureOverlayView!= null) sGestureOverlayView.setGestureVisible(sGesturesEnabled);
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
