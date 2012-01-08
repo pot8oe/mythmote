@@ -45,6 +45,7 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String PREF_KEYBINDINGS_EDITABLE = "keybindings-editable";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_GESTURES_ENABLED = "gestures-enabled";
+	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 
 	private static int sIdIndex;
@@ -146,6 +147,12 @@ public class MythMotePreferences extends PreferenceActivity {
 				PREF_KEYBINDINGS_EDITABLE,
 				R.string.keybindings_editable_str,
 				R.string.keybindings_editable_descriptions_str, true));
+		
+		// create donate button visible checkbox
+		generalCat.addPreference(createCheckBox(context,
+				PREF_SHOW_DONATE_MENU_ITEM,
+				R.string.show_donate_menu_item_str,
+				R.string.show_donate_menu_item_str, true));
 		
 		//create gestures enabled
 		gestureCat.addPreference(createCheckBox(context,
