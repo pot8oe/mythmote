@@ -133,7 +133,7 @@ public class MythMotePreferences extends PreferenceActivity {
 				R.string.status_update_interval_str,
 				R.string.status_update_interval_description_str,
 				R.array.status_Update_Interval_strings,
-				R.array.status_Update_Interval_values, "5000"));
+				R.array.status_Update_Interval_values, "0"));
 
 		// create haptic feedback shared preference
 		generalCat.addPreference(createCheckBox(context,
@@ -151,7 +151,7 @@ public class MythMotePreferences extends PreferenceActivity {
 		gestureCat.addPreference(createCheckBox(context,
 				PREF_GESTURES_ENABLED,
 				R.string.gestures_enabled_str,
-				R.string.gestures_enabled_str, true));
+				R.string.gestures_enabled_str, false));
 		
 		//gesture list preference
 		Preference gestureList = createGestureListPreference(context);
