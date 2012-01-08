@@ -37,6 +37,7 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +81,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
 	private static boolean sGesturesEnabled = false;
+	private static boolean sShowDonateMenuItem = true;
 
 	/**
 	 * Called when the activity is first created.
@@ -254,11 +256,25 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		//menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
 		//menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
 		
-		// create donate menu item
-		menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
-
 		// return results
 		return result;
+	}
+	
+	/**
+	 * Called when the menu is opened.
+	 */
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		
+		menu.removeItem(DONATE_ID);
+		
+		//remove donate button if disabled
+		if(sShowDonateMenuItem){
+			// create donate menu item
+			menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
+		}
+		
+		return super.onMenuOpened(featureId, menu);
 	}
 
 	/**
@@ -321,7 +337,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				break;
 			case DONATE_ID:
 				//open browser at our paypal donation page.
-				
+				Uri uri = Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TX7RH2TX6NJ2N&lc=US&item_name=mythmote%2ddonation&item_number=mythmote%2dgooglecodepage&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"); 
+				Intent webIntent = new Intent(Intent.ACTION_VIEW, uri); 
+				startActivity(webIntent); 
 				break;
 				
 			};
@@ -549,6 +567,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
+		
+		// get if donate button should be visibl
+		sShowDonateMenuItem = pref.getBoolean(MythMotePreferences.PREF_SHOW_DONATE_MENU_ITEM, true);
 
 		// get keybindings editable preference
 		this.mKeyManager.setEditingEnabled(pref.getBoolean(
