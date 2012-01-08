@@ -98,6 +98,7 @@
 <string name="button_add_str">Add</string>
 <string name="button_remove_str">Remove</string>
 <string name="gesture_default_command">key enter</string>
+<string name="show_donate_menu_item_str">Show Donate Menu Item</string>
 
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
