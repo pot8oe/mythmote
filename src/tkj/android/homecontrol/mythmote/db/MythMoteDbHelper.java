@@ -90,6 +90,9 @@ public class MythMoteDbHelper extends SQLiteOpenHelper {
 			//Add mac and wifi only columns to frontend table
 			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + " ADD COLUMN " + KEY_MAC + " text;");
 			db.execSQL("ALTER TABLE " + FRONTEND_TABLE + " ADD COLUMN " + KEY_WIFIONLY + " int;");
+			
+			//default to wifi frontends
+			db.execSQL("UPDATE " + FRONTEND_TABLE + " SET " + KEY_WIFIONLY + "=1");
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS frontends");
 			db.execSQL("DROP TABLE IF EXISTS keybindings");
