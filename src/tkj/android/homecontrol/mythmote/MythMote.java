@@ -27,6 +27,7 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -70,6 +71,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	private static final String KEY_VOLUME_DOWN = "[";
 	private static final String KEY_VOLUME_UP = "]";
+	private static final String DONATE_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TX7RH2TX6NJ2N&lc=US&item_name=mythmote%2ddonation&item_number=mythmote%2dgooglecodepage&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted";
 
 	private KeyBindingManager mKeyManager;
 
@@ -336,10 +338,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				}
 				break;
 			case DONATE_ID:
-				//open browser at our paypal donation page.
-				Uri uri = Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TX7RH2TX6NJ2N&lc=US&item_name=mythmote%2ddonation&item_number=mythmote%2dgooglecodepage&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"); 
-				Intent webIntent = new Intent(Intent.ACTION_VIEW, uri); 
-				startActivity(webIntent); 
+				this.startDonateIntent();
 				break;
 				
 			};
@@ -581,6 +580,23 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		// done with pref ref
 		pref = null;
+	}
+	
+	private void startDonateIntent(){
+		AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
+		dBuilder.setMessage(R.string.donate_intent_alert_str);
+		dBuilder.setTitle("Donate Beer Money?");
+		dBuilder.setNegativeButton("Cancel", null);
+		dBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//open browser at our paypal donation page.
+				Uri uri = Uri.parse(DONATE_URL); 
+				Intent webIntent = new Intent(Intent.ACTION_VIEW, uri); 
+				startActivity(webIntent); 
+			}
+		});
+		dBuilder.show();
 	}
 
 	@Override
