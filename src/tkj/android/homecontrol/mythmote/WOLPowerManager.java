@@ -61,6 +61,10 @@ public class WOLPowerManager
 	 */
 	public static void sendWOL(final String IPAddress, final String MACAddress, int nos_to_send) throws IOException 
 	{
+		//check for errors
+		if(IPAddress == null || IPAddress.length() == 0) return;
+		if(MACAddress == null || MACAddress.length() == 0) return;
+		
 		String macStr = MACAddress;
 
 		//Modify the IP address for broadcast
