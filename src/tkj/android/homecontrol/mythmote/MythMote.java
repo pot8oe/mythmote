@@ -254,7 +254,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				.setIcon(R.drawable.selected_location);
 		
 		//create wake on lan menu item
-		menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
+		menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str).setIcon(R.drawable.ic_menu_sun);
 		//menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
 		//menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
 		
@@ -273,7 +273,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		//remove donate button if disabled
 		if(sShowDonateMenuItem){
 			// create donate menu item
-			menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str);// .setIcon();
+			menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str).setIcon(R.drawable.paypal);
 		}
 		
 		return super.onMenuOpened(featureId, menu);
