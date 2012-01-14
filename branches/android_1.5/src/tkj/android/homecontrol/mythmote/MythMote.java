@@ -33,11 +33,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.gesture.Gesture;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-import android.gesture.Prediction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -54,7 +49,7 @@ import android.view.View.OnClickListener;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		OnTabChangeListener, LocationChangedEventListener,
-		OnGesturePerformedListener, MythCom.StatusChangedEventListener,
+		MythCom.StatusChangedEventListener,
 		KeyMapBinder {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -77,12 +72,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	private static TabHost sTabHost;
 	private static MythCom sComm;
-	private static GestureOverlayView sGestureOverlayView;
-	private static GestureLibrary sGestureLib;
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
-	private static boolean sGesturesEnabled = false;
 	private static boolean sShowDonateMenuItem = true;
 
 	/**
@@ -101,10 +93,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			// create comm class
 			sComm = new MythCom(this);
 		}
-
-		// get gesture overlay view
-		sGestureOverlayView = (GestureOverlayView) this
-				.findViewById(R.id.mythMoteOverlayView);
 		
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
@@ -147,18 +135,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// set selected location and connect
 		if (this.setSelectedLocation())
 			sComm.Connect(sLocation);
-		
-		//remove gesture listener(s)
-		sGestureOverlayView.removeAllOnGesturePerformedListeners();
-		
-		//check if gestures are enabled
-		if(sGesturesEnabled){
-			// get gesture library
-			sGestureLib = GestureBuilderActivity.readLibrary(this);
-			sGestureLib.load();
-			
-			sGestureOverlayView.addOnGesturePerformedListener(this);
-		}
 		
 	}
 
@@ -559,10 +535,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		SharedPreferences pref = this.getSharedPreferences(
 				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
 				MODE_PRIVATE);
-		
-		// get if gestures are enabled
-		sGesturesEnabled = pref.getBoolean(MythMotePreferences.PREF_GESTURES_ENABLED, false);
-		if(sGestureOverlayView!= null) sGestureOverlayView.setGestureVisible(sGesturesEnabled);
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
@@ -597,43 +569,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			}
 		});
 		dBuilder.show();
-	}
-
-	@Override
-	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-
-		// Leave if gesture lib has not been initialized
-		if (sGestureLib == null)
-			return;
-
-		// attempt to recognize the gesture
-		ArrayList<Prediction> predictions = sGestureLib.recognize(gesture);
-
-		// get prediction size
-		final int pCount = predictions.size();
-
-		// at least 1 prediction
-		if (pCount > 0) {
-
-			// prediction reference
-			Prediction p;
-
-			// for each prediction
-			for (int i = 0; i < pCount; i++) {
-
-				// get prediction
-				p = predictions.get(i);
-
-				// High score and has a name
-				if (p.score > 10.0 && p.name != null) {
-
-					//send command name it is the myth command
-					sComm.SendCommand(p.name);
-					return;
-				}
-			}
-		}
-
 	}
 
 }
