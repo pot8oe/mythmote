@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="tkj.android.homecontrol.mythmote"
-      android:versionCode="1303" android:versionName="1.6.2">
+      android:versionCode="1403" android:versionName="1.6.3">
+      
+    <uses-sdk android:minSdkVersion="3"></uses-sdk>
 
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />    
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,5 +22,4 @@
 	<activity android:name=".GestureBuilderActivity" android:label="gesturebuilder"></activity>
 	<activity android:name=".CreateGestureActivity" android:label="creategesture"></activity>
 	</application>
-<uses-sdk android:minSdkVersion="3"></uses-sdk>
 </manifest> 
