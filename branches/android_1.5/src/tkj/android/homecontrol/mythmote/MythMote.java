@@ -292,7 +292,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 				//This sends the PJRS implementation of WOL
 				try {
 					//PJRS WOL
-					WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
+					WOLPowerManager.sendWOL(this, sLocation.MAC, 2);
 				} catch (IOException e) {
 					Log.d(LOG_TAG, e.getMessage());
 				}
@@ -308,7 +308,7 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 			case SENDWOL_PJ_ID:
 				try {
 					//PJRS WOL
-					WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
+					WOLPowerManager.sendWOL(this, sLocation.MAC, 2);
 				} catch (IOException e) {
 					Log.d(LOG_TAG, e.getMessage());
 				}

@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -59,22 +60,13 @@ public class WOLPowerManager
 	 * PJRS Wake On Lan based on code at www.jibble.org which is
 	 * 	 * similar to that by rob elsner; the original sendWOL doesn't work
 	 */
-	public static void sendWOL(final String IPAddress, final String MACAddress, int nos_to_send) throws IOException 
+	public static void sendWOL(final Context context, final String MACAddress, int nos_to_send) throws IOException 
 	{
 		//check for errors
-		if(IPAddress == null || IPAddress.length() == 0) return;
 		if(MACAddress == null || MACAddress.length() == 0) return;
-		
-		String macStr = MACAddress;
-
-		//Modify the IP address for broadcast
-		//Set rightmost octet to be 255 for broadcast then reassemble it back into a string
-		String[] octets = IPAddress.split("\\.");
-		octets[3] = "255";
-		String newIPAddr = octets[0] + "." + octets[1] + "." + octets[2] + "." + octets[3];
 
 		try {
-			byte[] macBytes = getMacBytes(macStr);
+			byte[] macBytes = getMacBytes(MACAddress);
 			byte[] bytes = new byte[6 + 16 * macBytes.length];
 			for (int i = 0; i < 6; i++) {
 				bytes[i] = (byte) 0xff;
@@ -83,7 +75,7 @@ public class WOLPowerManager
 				System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
 			}
 
-			InetAddress address = InetAddress.getByName(newIPAddr);
+			InetAddress address = getBroadcastAddress(context);
 			DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, MACPORT);
 			DatagramSocket socket = new DatagramSocket(MACPORT);
 			for (int i = 0; i < nos_to_send; i++)
