@@ -44,7 +44,6 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
 	public static final String PREF_KEYBINDINGS_EDITABLE = "keybindings-editable";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
-	public static final String PREF_GESTURES_ENABLED = "gestures-enabled";
 	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 
@@ -109,15 +108,11 @@ public class MythMotePreferences extends PreferenceActivity {
 		//general category
 		PreferenceCategory generalCat = new PreferenceCategory(context);
 		generalCat.setTitle(R.string.general_preferences_str);
-		//gesture category
-		PreferenceCategory gestureCat = new PreferenceCategory(context);
-		gestureCat.setTitle(R.string.gesture_settings_str);
 		
 
 		// add categories to preference screen
 		prefScreen.addPreference(selectedCat);
 		prefScreen.addPreference(locationListCat);
-		prefScreen.addPreference(gestureCat);
 		prefScreen.addPreference(generalCat);
 
 		// Create add and delete location preferences and add to location list
@@ -153,16 +148,6 @@ public class MythMotePreferences extends PreferenceActivity {
 				PREF_SHOW_DONATE_MENU_ITEM,
 				R.string.show_donate_menu_item_str,
 				R.string.show_donate_menu_item_str, true));
-		
-		//create gestures enabled
-		gestureCat.addPreference(createCheckBox(context,
-				PREF_GESTURES_ENABLED,
-				R.string.gestures_enabled_str,
-				R.string.gestures_enabled_str, false));
-		
-		//gesture list preference
-		Preference gestureList = createGestureListPreference(context);
-		gestureCat.addPreference(gestureList);
 
 		// open DB
 		MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
@@ -238,9 +223,7 @@ public class MythMotePreferences extends PreferenceActivity {
 
 		// set preference screen
 		context.setPreferenceScreen(prefScreen);
-		
-		//Assign dependences
-		gestureList.setDependency(PREF_GESTURES_ENABLED);
+
 	}
 
 	private static void showLocationEditDialog(Context context,
@@ -441,25 +424,6 @@ public class MythMotePreferences extends PreferenceActivity {
 					}
 
 				});
-				return true;
-			}
-		});
-		return pref;
-	}
-	
-	private static Preference createGestureListPreference(final PreferenceActivity context) {
-		Preference pref = new Preference(context);
-		String name = context.getString(R.string.gesture_list_str);
-		pref.setKey(name);
-		pref.setTitle(name);
-		pref.setDefaultValue(context.getString(R.string.gesture_list_description_str));
-		pref.setEnabled(true);
-		pref.setSummary(context.getString(R.string.gesture_list_description_str));
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			public boolean onPreferenceClick(Preference preference) {
-				Intent intent = new Intent(context, tkj.android.homecontrol.mythmote.GestureBuilderActivity.class);
-				context.startActivity(intent);
 				return true;
 			}
 		});
