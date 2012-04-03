@@ -268,14 +268,15 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		
-		menu.removeItem(DONATE_ID);
-		
-		//remove donate button if disabled
-		if(sShowDonateMenuItem){
-			// create donate menu item
-			menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str).setIcon(R.drawable.paypal);
+		if(menu != null){
+			if(menu.findItem(DONATE_ID) != null)menu.removeItem(DONATE_ID);
+			
+			//remove donate button if disabled
+			if(sShowDonateMenuItem){
+				// create donate menu item
+				menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str).setIcon(R.drawable.paypal);
+			}
 		}
-		
 		return super.onMenuOpened(featureId, menu);
 	}
 
