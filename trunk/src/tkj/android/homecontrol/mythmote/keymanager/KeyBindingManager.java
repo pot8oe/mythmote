@@ -81,7 +81,9 @@ import android.widget.EditText;
 
 public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		OnLongClickListener {
-
+	
+	AlertDialog alertDialog;
+	
 	/**
 	 * Add a value here which is the button name (preferably similar to the
 	 * layout id) and the default action
@@ -312,10 +314,21 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	public boolean onLongClick(final View v) {
 		
 		//do not consume the onLongClick event if editing is disabled
-		if(!mEditingEnabled)return false;
-		
+		if(!mEditingEnabled) {
+			onClick(v);
+			return true;
+		}
+
+		// prevent a repeated onLongClick from opening multiple alert dialogs
+		if ( alertDialog != null && alertDialog.isShowing())
+		{
+			return true;
+		} else {
+			alertDialog = null;
+		}
+			
 		//create alert dialog 
-		AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+		AlertDialog.Builder alert= new AlertDialog.Builder(v.getContext());
 
 		//set alert title and message
 		alert.setTitle(R.string.command_edit_title_str);
@@ -355,7 +368,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 				});
 
 		//present alert dialog to user
-		alert.show();
+		alertDialog = alert.show();
 		
 		//return true, we consumed the long-press
 		return true;
