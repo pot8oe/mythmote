@@ -51,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 
 public class MythMote extends TabActivity implements TabHost.TabContentFactory,
@@ -552,8 +553,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		// resize tabs to remove useless space
 		final int count = sTabHost.getTabWidget().getChildCount();
-		for (int i = 0; i < count; i++)
-			sTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 50;
+		LayoutParams params;
+		for (int i = 0; i < count; i++){
+			params = sTabHost.getTabWidget().getChildAt(i).getLayoutParams();
+			params.height = params.height > 50 ? params.height/2 : 50;
+		}
 	}
 
 	/**
