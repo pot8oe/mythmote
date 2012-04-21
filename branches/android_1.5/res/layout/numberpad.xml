@@ -1,39 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 
-<TableLayout android:id="@+id/TableLayout01" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content" android:layout_width="wrap_content" android:stretchColumns="0,1,2" android:isScrollContainer="true"><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1" android:id="@+id/Button1"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:id="@+id/Button2"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:id="@+id/Button3"></Button>
-</TableRow><TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow02"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:id="@+id/Button4"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5" android:id="@+id/Button5"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:id="@+id/Button6"></Button>
-</TableRow><TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow03"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7" android:id="@+id/Button7"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8" android:id="@+id/Button8"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="9" android:id="@+id/Button9"></Button>
-</TableRow>
-<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/Button0"></Button>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<TableLayout android:id="@+id/TableLayout01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:stretchColumns="0,1,2" android:isScrollContainer="true">
+
+	<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1" android:id="@+id/Button1"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:id="@+id/Button2"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:id="@+id/Button3"/>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow02">
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:id="@+id/Button4"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5" android:id="@+id/Button5"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:id="@+id/Button6"/>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow03">
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7" android:id="@+id/Button7"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8" android:id="@+id/Button8"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="9" android:id="@+id/Button9"/>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+		<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/Button0"/>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<LinearLayout android:id="@+id/LinearLayout01" android:layout_span="3"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1">
+			<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight=".45" android:id="@+id/ButtonBackspace" android:text="@string/backspace_str"/>
+			<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight=".55" android:id="@+id/ButtonEnter" android:text="@string/enter_str"/>
+		</LinearLayout>
+	</TableRow>
 
 
-
-</TableRow><TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<LinearLayout android:id="@+id/LinearLayout01" android:layout_span="3"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1"><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight=".45" android:id="@+id/ButtonBackspace" android:text="@string/backspace_str"></Button><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight=".55" android:id="@+id/ButtonEnter" android:text="@string/enter_str"></Button></LinearLayout>
-</TableRow>
 <TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content">
-
-
-
-<TableLayout android:id="@+id/TableLayout02" android:layout_span="3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:stretchColumns="0"><TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-
-</TableRow><TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_span="2" android:text="@string/send_keyboard_input_str"></TextView>
-</TableRow><TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content"><EditText android:singleLine="true" android:typeface="normal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextKeyboardInput"></EditText><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ButtonSend" android:text="@string/send_str"></Button></TableRow>
-
-</TableLayout>
+	<TableLayout android:id="@+id/TableLayout02" android:layout_span="3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:stretchColumns="0">
+		<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+		</TableRow>
+		
+		<TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_span="2" android:text="@string/send_keyboard_input_str"/>
+		</TableRow>
+		
+		<TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		    <EditText android:singleLine="true" android:typeface="normal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextKeyboardInput"/>
+		    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ButtonSend" android:text="@string/send_str"/>
+		</TableRow>
+	</TableLayout>
 </TableRow>
 
 </TableLayout>
 </ScrollView>
-</LinearLayout>

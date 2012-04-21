@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -42,7 +43,7 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
-	public static final String PREF_KEYBINDINGS_EDITABLE = "keybindings-editable";
+	public static final String PREF_LONGPRESS_ACTION = "longpress-action";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
@@ -137,11 +138,13 @@ public class MythMotePreferences extends PreferenceActivity {
 				R.string.haptic_feedback_enabled_str,
 				R.string.haptic_feedback_enabled_description_str, false));
 		
-		// createkaybinding editing enabled
-		generalCat.addPreference(createCheckBox(context,
-				PREF_KEYBINDINGS_EDITABLE,
-				R.string.keybindings_editable_str,
-				R.string.keybindings_editable_descriptions_str, true));
+		// create mythfrontend update status interval preference
+		generalCat.addPreference(createIntListPreference(context,
+				PREF_LONGPRESS_ACTION,
+				R.string.longpress_action_str,
+				R.string.longpress_action_description_str,
+				R.array.longpress_action_strings,
+				R.array.longpress_action_values, "0"));
 		
 		// create donate button visible checkbox
 		generalCat.addPreference(createCheckBox(context,

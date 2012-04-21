@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:tkj="http://schemas.anroid.com/apk/res/tkj.android.homecontrol.mythmote.ui" 
+    android:id="@+id/ScrollView01" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
 
 <TableLayout android:id="@+id/TableLayout01" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:isScrollContainer="true" android:stretchColumns="0,1,2,3,4,5">
 
 <TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:autoText="false" android:id="@+id/ButtonRecord" android:drawableTop="@drawable/rec" android:text="@string/rec_str"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:id="@+id/ButtonStop" android:drawableTop="@drawable/stop" android:text="@string/stop_str"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:drawableTop="@drawable/pause" android:id="@+id/ButtonPause"  android:text="@string/pause_str"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:id="@+id/ButtonPlay" android:drawableTop="@drawable/play" android:text="@string/play_str"></Button>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:autoText="false" android:id="@+id/ButtonRecord" android:drawableTop="@drawable/rec" android:text="@string/rec_str"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:id="@+id/ButtonStop" android:drawableTop="@drawable/stop" android:text="@string/stop_str"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:drawableTop="@drawable/pause" android:id="@+id/ButtonPause"  android:text="@string/pause_str"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.25" android:id="@+id/ButtonPlay" android:drawableTop="@drawable/play" android:text="@string/play_str"/>
 </TableRow>
 
 <TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="1">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/previous_str" android:layout_weight="0.25" android:drawableTop="@drawable/skipbk" android:id="@+id/ButtonSkipBack"/>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/rw" android:text="@string/rw_str" android:id="@+id/ButtonRew" android:layout_weight="0.25"/>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/ff" android:text="@string/ff_str" android:id="@+id/ButtonFF" android:layout_weight="0.25"/>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/next_str" android:layout_weight="0.25" android:drawableTop="@drawable/skipfw" android:id="@+id/ButtonSkipForward"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/previous_str" android:layout_weight="0.25" android:drawableTop="@drawable/skipbk" android:id="@+id/ButtonSkipBack"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/rw" android:text="@string/rw_str" android:id="@+id/ButtonRew" android:layout_weight="0.25"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableTop="@drawable/ff" android:text="@string/ff_str" android:id="@+id/ButtonFF" android:layout_weight="0.25"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/next_str" android:layout_weight="0.25" android:drawableTop="@drawable/skipfw" android:id="@+id/ButtonSkipForward"/>
 </TableRow>
 
 <TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="100">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/vol_up_str" android:id="@+id/ButtonVolUp" android:layout_weight="50" android:drawableTop="@drawable/speaker_plus"/>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ch_up_str" android:id="@+id/ButtonChUp" android:layout_weight="50" android:drawableTop="@drawable/tv_plus"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/vol_up_str" android:id="@+id/ButtonVolUp" android:layout_weight="50" android:drawableTop="@drawable/speaker_plus"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ch_up_str" android:id="@+id/ButtonChUp" android:layout_weight="50" android:drawableTop="@drawable/tv_plus"/>
 </TableRow>
 
 <TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="100">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonMute" android:text="@string/mute_str" android:layout_weight="50" android:drawableTop="@drawable/speaker_off"/>
-<Button android:drawableTop="@drawable/tv_back" android:layout_width="wrap_content" android:layout_weight="50" android:text="@string/ch_return_str" android:layout_height="wrap_content" android:id="@+id/ButtonChReturn"></Button>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonMute" android:text="@string/mute_str" android:layout_weight="50" android:drawableTop="@drawable/speaker_off"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:drawableTop="@drawable/tv_back" android:layout_width="wrap_content" android:layout_weight="50" android:text="@string/ch_return_str" android:layout_height="wrap_content" android:id="@+id/ButtonChReturn"/>
 
 </TableRow>
 
 <TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:weightSum="100">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonVolDown" android:text="@string/vol_down_str" android:layout_weight="50" android:drawableTop="@drawable/speaker_minus"/>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonChDown" android:text="@string/ch_down_str" android:layout_weight="50" android:drawableTop="@drawable/tv_minus"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonVolDown" android:text="@string/vol_down_str" android:layout_weight="50" android:drawableTop="@drawable/speaker_minus"/>
+<tkj.android.homecontrol.mythmote.ui.AutoRepeatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ButtonChDown" android:text="@string/ch_down_str" android:layout_weight="50" android:drawableTop="@drawable/tv_minus"/>
 </TableRow>
 
 </TableLayout>
 </ScrollView>
-</LinearLayout>
 
