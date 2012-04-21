@@ -1,5 +1,6 @@
 --1.7.0
-* Added key repeating.
+* Added key repeating
+* Fixed tab height on GalaxyNexus
 
 --1.6.3
 * Fixed WOL crashes.
