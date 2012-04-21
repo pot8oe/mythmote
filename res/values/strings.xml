@@ -65,8 +65,6 @@
 <string name="send_keyboard_input_str">Send keyboard input</string>
 <string name="backspace_str">Backspace</string>
 <string name="enter_str">Enter</string>
-<string name="keybindings_editable_str">Key-bindings Editable</string>
-<string name="keybindings_editable_descriptions_str">Enabled/Disables editing of mythfrontend commands when long-pressing buttons</string>
 <string name="command_edit_title_str">Command</string>
 <string name="command_edit_msg_str">Type the command to send to MythTV</string>
 <string name="donate_menu_item_str">Donate</string>
@@ -100,6 +98,15 @@
 <string name="gesture_default_command">key enter</string>
 <string name="show_donate_menu_item_str">Show Donate Menu Item</string>
 <string name="donate_intent_alert_str">Pressing OK will open the mythmote paypal donation web page.</string>
+<string name="guide_str">Guide</string>
+<string name="home_str">Home</string>
+<string name="live_tv_str">Live TV</string>
+<string name="rec_tv_str">Rec TV</string>
+<string name="music_str">Music</string>
+<string name="videos_str">Video</string>
+<string name="status_str">Status</string>
+<string name="longpress_action_str">Button Long-Press action</string>
+<string name="longpress_action_description_str">Action taken when a button is held down.</string>
 
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
@@ -126,5 +133,14 @@
 <item>8000</item>
 <item>9000</item>
 <item>10000</item>
+</string-array>
+
+<string-array name="longpress_action_strings">
+<item>Auto Repeat</item>
+<item>Edit Key-binding</item>
+</string-array>
+<string-array name="longpress_action_values">
+<item>0</item>
+<item>1</item>
 </string-array>
 </resources>
