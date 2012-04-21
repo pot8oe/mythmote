@@ -34,6 +34,7 @@ public class AutoRepeatButton extends Button {
 
 	private static final int DEFAULT_INITIAL_DELAY = 500;
 	private static final int DEFAULT_REPEAT_INTERVAL = 100;
+	private static boolean sAutoRepeatEnabled = true;
 	private long initialRepeatDelay = 500;
 	private long repeatIntervalInMilliseconds = 100;
 	private boolean wasLongClick = false;
@@ -48,8 +49,9 @@ public class AutoRepeatButton extends Button {
 			// Schedule the next repetitions of the click action, using a faster
 			// repeat
 			// interval than the initial repeat delay interval.
-			postDelayed(repeatClickWhileButtonHeldRunnable,
-					repeatIntervalInMilliseconds);
+			if(sAutoRepeatEnabled) {
+				postDelayed(repeatClickWhileButtonHeldRunnable, repeatIntervalInMilliseconds);
+			}
 		}
 	};
 
@@ -66,8 +68,7 @@ public class AutoRepeatButton extends Button {
 
 					// Schedule the start of repetitions after a one half second
 					// delay.
-					postDelayed(repeatClickWhileButtonHeldRunnable,
-							initialRepeatDelay);
+					postDelayed(repeatClickWhileButtonHeldRunnable, initialRepeatDelay);
 				} else if (action == MotionEvent.ACTION_UP ||
 						action == MotionEvent.ACTION_CANCEL) {
 					if ( !wasLongClick) 
@@ -115,5 +116,13 @@ public class AutoRepeatButton extends Button {
 			}
 		}
 		init();
+	}
+	
+	public static void SetAutoRepeatEnalbed(boolean enabled){
+		sAutoRepeatEnabled = enabled;
+	}
+	
+	public static boolean GetAutoRepeatEnalbed(){
+		return sAutoRepeatEnabled;
 	}
 }

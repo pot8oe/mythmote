@@ -25,6 +25,7 @@ import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
+import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -579,9 +580,24 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// get if donate button should be visibl
 		sShowDonateMenuItem = pref.getBoolean(MythMotePreferences.PREF_SHOW_DONATE_MENU_ITEM, true);
 
-		// get keybindings editable preference
-		this.mKeyManager.setEditingEnabled(pref.getBoolean(
-				MythMotePreferences.PREF_KEYBINDINGS_EDITABLE, true));
+		//read long press action
+		if(pref.getInt(MythMotePreferences.PREF_LONGPRESS_ACTION, 0) == 0){
+			//auto repeat action
+			
+			//enable auto repeat
+			AutoRepeatButton.SetAutoRepeatEnalbed(true);
+			
+			//disable editable
+			this.mKeyManager.setEditingEnabled(false);
+		}else{
+			//edit key-bindings action
+			
+			//disable auto repeat
+			AutoRepeatButton.SetAutoRepeatEnalbed(false);
+			
+			//set editable
+			this.mKeyManager.setEditingEnabled(true);
+		}
 
 		// set the hapticfeedback setting in keymanager
 		this.mKeyManager.setHapticFeedbackEnabled(pref.getBoolean(
