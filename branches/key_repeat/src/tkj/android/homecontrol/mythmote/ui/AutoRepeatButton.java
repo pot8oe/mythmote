@@ -54,6 +54,7 @@ public class AutoRepeatButton extends Button {
 	};
 
 	private void init() {
+		
 		this.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -67,12 +68,14 @@ public class AutoRepeatButton extends Button {
 					// delay.
 					postDelayed(repeatClickWhileButtonHeldRunnable,
 							initialRepeatDelay);
-				} else if (action == MotionEvent.ACTION_UP) {
+				} else if (action == MotionEvent.ACTION_UP ||
+						action == MotionEvent.ACTION_CANCEL) {
 					if ( !wasLongClick) 
 						performClick();
 					// Cancel any repetition in progress.
 					removeCallbacks(repeatClickWhileButtonHeldRunnable);
 				}
+				
 				wasLongClick = false;
 				// Returning true here prevents performClick() from getting
 				// called in the usual manner, which would be redundant, given
