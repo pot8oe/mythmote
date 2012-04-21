@@ -43,7 +43,6 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
-	public static final String PREF_KEYBINDINGS_EDITABLE = "keybindings-editable";
 	public static final String PREF_LONGPRESS_ACTION = "longpress-action";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_GESTURES_ENABLED = "gestures-enabled";
