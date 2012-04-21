@@ -4,10 +4,6 @@
     android:id="@android:id/tabhost"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <android.gesture.GestureOverlayView 
-    	android:id="@+id/mythMoteOverlayView" 
-    	android:layout_width="wrap_content" 
-    	android:layout_height="wrap_content">
 	    <LinearLayout
 	        android:orientation="vertical"
 	        android:layout_width="fill_parent"
@@ -23,7 +19,6 @@
 	            android:layout_height="fill_parent"
 	            android:padding="5dp" />
 	    </LinearLayout>
-    </android.gesture.GestureOverlayView>
 </TabHost>
 
 
