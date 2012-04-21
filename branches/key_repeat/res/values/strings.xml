@@ -100,6 +100,13 @@
 <string name="gesture_default_command">key enter</string>
 <string name="show_donate_menu_item_str">Show Donate Menu Item</string>
 <string name="donate_intent_alert_str">Pressing OK will open the mythmote paypal donation web page.</string>
+<string name="guide_str">Guide</string>
+<string name="home_str">Home</string>
+<string name="live_tv_str">Live TV</string>
+<string name="rec_tv_str">Rec TV</string>
+<string name="music_str">Music</string>
+<string name="videos_str">Video</string>
+<string name="status_str">Status</string>
 
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
