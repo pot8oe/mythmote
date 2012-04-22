@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="next_str">次へ</string>
+<string name="previous_str">前へ</string>
+<string name="port_example_string">デフォルト: 6546</string>
+<string name="ip_Address_str">IP アドレス</string>
+<string name="location_name_str">ロケーション名</string>
+<string name="cancel_str">キャンセル</string>
+<string name="save_str">保存</string>
+<string name="port_str">ポート</string>
+<string name="address_str">アドレス</string>
+<string name="name_str">名前</string>
+<string name="app_name">mythmote</string>
+<string name="settings_menu_str">設定</string>
+<string name="rec_str">録画</string>
+<string name="play_str">再生</string>
+<string name="stop_str">停止</string>
+<string name="rw_str">巻き戻し</string>
+<string name="ff_str">早送り</string>
+<string name="up_str">上へ</string>
+<string name="down_str">下へ</string>
+<string name="left_str">左へ</string>
+<string name="right_str">右へ</string>
+<string name="select_str">選択</string>
+<string name="add_location_str">新ロケーション</string>
+<string name="add_location_description_str">新しいフロントエンドロケーション・プロフィールを作成</string>
+<string name="navigation_str">ナビゲーション</string>
+<string name="media_str">メディア</string>
+<string name="numpad_str">数字</string>
+<string name="enable_wifi_question_str">WiFiが有効になっていません。適切なアプリケーションの操作が必要です。今すぐWiFiを接続しますか。</string>
+<string name="enable_wifi_str">WiFi接続</string>
+<string name="exit_app_str">mythmoteの終了</string>
+<string name="enabling_wifi_str">WiFi接続中…</string>
+<string name="ok_str">OK</string>
+<string name="no_route_to_host_str">ホストへの経路がありません</string>
+<string name="connected_str">接続済み</string>
+<string name="reconnect_str">再度接続</string>
+<string name="attempting_to_connect_str">ホストに接続しています</string>
+<string name="selected_location_str">選択したロケーション</string>
+<string name="select_location_str">ロケーションを選択</string>
+<string name="location_list_str">ロケーションリスト</string>
+<string name="error_input_str">入力エラー</string>
+<string name="error_invalid_name_str">名前が無効</string>
+<string name="error_invalid_address_str">アドレスが無効</string>
+<string name="error_invalid_port_str">無効なポートInvalid Port</string>
+<string name="delete_location_str">ロケーションの削除</string>
+<string name="delete_location_description_str">既存のフロントエンドロケーション・プロフィールの削除</string>
+<string name="mute_str">ミュート</string>
+<string name="vol_up_str">音量+</string>
+<string name="vol_down_str">音量-</string>
+<string name="ch_up_str">チャンネル+</string>
+<string name="ch_down_str">チャンネル-</string>
+<string name="ch_return_str">ラスト</string>
+<string name="pause_str">一時停止</string>
+<string name="menu_str">メニュー</string>
+<string name="info_str">情報</string>
+<string name="no_frontend_locations_defined_str">フロントエンドロケーションが見つかりません</string>
+<string name="general_preferences_str">一般設定</string>
+<string name="haptic_feedback_enabled_str">ハプティックフィードバックが有効</string>
+<string name="haptic_feedback_enabled_description_str">ボタンを押して、ハプティックフィードバックを行います</string>
+<string name="status_update_interval_str">ステータス更新間隔</string>
+<string name="status_update_interval_description_str">頻繁にｍｙｔｈフロントエンドステータスは秒単位でチェックされます。</string>
+<string-array name="status_Update_Interval_strings">
+<item>0 (Off)</item>
+<item>1秒</item>
+<item>2秒</item>
+<item>3秒</item>
+<item>4秒</item>
+<item>5秒 (推薦値)</item>
+<item>6秒</item>
+<item>7秒</item>
+<item>8秒</item>
+<item>9秒</item>
+<item>10秒</item>
+</string-array>
+<string-array name="status_Update_Interval_values">
+<item>0</item>
+<item>1000</item>
+<item>2000</item>
+<item>3000</item>
+<item>4000</item>
+<item>5000</item>
+<item>6000</item>
+<item>7000</item>
+<item>8000</item>
+<item>9000</item>
+<item>10000</item>
+</string-array>
+</resources>
