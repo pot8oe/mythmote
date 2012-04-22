@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,29 +15,29 @@
      limitations under the License.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    
-     <LinearLayout
+    android:orientation="vertical" >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical" >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/prompt_gesture_command_str"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-        <EditText 
-        	android:layout_height="wrap_content"
-        	android:layout_width="match_parent" 
-        	android:text="@string/gesture_default_command" 
-        	android:id="@+id/gesture_command" />
-      </LinearLayout>
 
-    
+        <EditText
+            android:id="@+id/gesture_command"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gesture_default_command" />
+    </LinearLayout>
+
     <android.gesture.GestureOverlayView
         android:id="@+id/gestures_overlay"
         android:layout_width="match_parent"
@@ -47,32 +48,25 @@
 
     <LinearLayout
         style="@android:style/ButtonBar"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/done"
-                
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
             android:enabled="false"
-
             android:onClick="addGesture"
             android:text="@string/save_str" />
-    
+
         <Button
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            
             android:onClick="cancelGesture"
             android:text="@string/cancel_str" />
-    
     </LinearLayout>
-    
+
 </LinearLayout>

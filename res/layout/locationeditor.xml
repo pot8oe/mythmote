@@ -1,30 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
-<TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/TableLayoutLocationEditor" android:stretchColumns="0,1">
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/TableLayoutLocationEditor"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0,1" >
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextViewName" android:text="@string/name_str"></TextView>
-<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="@string/location_name_str" android:id="@+id/EditTextLocationName"></EditText>
+            <TextView
+                android:id="@+id/TextViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name_str" >
+            </TextView>
 
+            <EditText
+                android:id="@+id/EditTextLocationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/location_name_str" >
+            </EditText>
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextViewAddress" android:text="@string/address_str"></TextView>
-<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextAddress" android:hint="@string/ip_Address_str"></EditText>
+            <TextView
+                android:id="@+id/TextViewAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address_str" >
+            </TextView>
 
-<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/port_str"></TextView>
-<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextPort" android:hint="@string/port_example_string" android:inputType="number" android:maxLength="6"></EditText>
+            <EditText
+                android:id="@+id/EditTextAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/ip_Address_str" >
+            </EditText>
 
-<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/MAC_str"></TextView>
-<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/EditTextMAC" android:hint="@string/MAC_example_string"></EditText>
-<CheckBox android:layout_height="wrap_content" android:text="@string/wifi_only_str" android:layout_width="wrap_content" android:id="@+id/checkBoxWifiOnly"></CheckBox>
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/port_str" >
+            </TextView>
 
-<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/save_str" android:id="@+id/ButtonLocationSave" android:layout_weight="50"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cancel_str" android:id="@+id/ButtonLocationCancel" android:layout_weight="50"></Button>
-</TableRow>
-</TableLayout>
-</ScrollView>
+            <EditText
+                android:id="@+id/EditTextPort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/port_example_string"
+                android:inputType="number"
+                android:maxLength="6" >
+            </EditText>
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/MAC_str" >
+            </TextView>
+
+            <EditText
+                android:id="@+id/EditTextMAC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/MAC_example_string" >
+            </EditText>
+
+            <CheckBox
+                android:id="@+id/checkBoxWifiOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wifi_only_str" >
+            </CheckBox>
+
+            <TableRow
+                android:id="@+id/TableRow01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/ButtonLocationSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:text="@string/save_str" >
+                </Button>
+
+                <Button
+                    android:id="@+id/ButtonLocationCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:text="@string/cancel_str" >
+                </Button>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
 </LinearLayout>
