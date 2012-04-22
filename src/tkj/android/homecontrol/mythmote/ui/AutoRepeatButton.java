@@ -32,9 +32,10 @@ import android.widget.Button;
  */
 public class AutoRepeatButton extends Button {
 
-	private static final int DEFAULT_INITIAL_DELAY = 500;
-	private static final int DEFAULT_REPEAT_INTERVAL = 100;
+	public static final int DEFAULT_INITIAL_DELAY = 500;
+	public static final int DEFAULT_REPEAT_INTERVAL = 100;
 	private static boolean sAutoRepeatEnabled = true;
+	private static int sRepeatInterval = DEFAULT_REPEAT_INTERVAL;
 	private long initialRepeatDelay = 500;
 	private long repeatIntervalInMilliseconds = 100;
 	private boolean wasLongClick = false;
@@ -50,7 +51,7 @@ public class AutoRepeatButton extends Button {
 			// repeat
 			// interval than the initial repeat delay interval.
 			if(sAutoRepeatEnabled) {
-				postDelayed(repeatClickWhileButtonHeldRunnable, repeatIntervalInMilliseconds);
+				postDelayed(repeatClickWhileButtonHeldRunnable, getActiveDelay());
 			}
 		}
 	};
@@ -124,5 +125,24 @@ public class AutoRepeatButton extends Button {
 	
 	public static boolean GetAutoRepeatEnalbed(){
 		return sAutoRepeatEnabled;
+	}
+	
+	public static void SetRepeatInterval(int interval){
+		sRepeatInterval = interval;
+	}
+	
+	public static int GetRepeatInterval(){
+		return sRepeatInterval;
+	}
+	
+	
+	private long getActiveDelay(){
+		//if we have read in a non-default delay attribute use it
+		if(this.repeatIntervalInMilliseconds != DEFAULT_REPEAT_INTERVAL) {
+			return this.repeatIntervalInMilliseconds;
+		}
+		
+		//use system wide set delay
+		return sRepeatInterval;
 	}
 }
