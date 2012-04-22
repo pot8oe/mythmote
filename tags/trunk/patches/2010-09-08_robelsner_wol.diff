@@ -1,0 +1,250 @@
+Index: AndroidManifest.xml
+===================================================================
+--- AndroidManifest.xml	(revision 142)
++++ AndroidManifest.xml	(working copy)
+@@ -1,21 +1,27 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-      package="tkj.android.homecontrol.mythmote"
+-      android:versionName="1.4.0" android:versionCode="8">
+-      
+-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+-    <uses-permission android:name="android.permission.INTERNET" />
+-    
+-    <application android:icon="@drawable/mythmote" android:label="@string/app_name">  <!-- android:debuggable="true" -->
+-        <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation">
+-            <intent-filter>
+-                <action android:name="android.intent.action.MAIN" />
+-                <category android:name="android.intent.category.LAUNCHER" />
+-            </intent-filter>
+-        </activity>
+-    <activity android:name=".MythMotePreferences" android:label="preferences"></activity>
+-<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
+-</application>
+-<uses-sdk android:minSdkVersion="3"></uses-sdk>
++	package="tkj.android.homecontrol.mythmote" android:versionName="1.4.0"
++	android:versionCode="8">
++
++	<application android:icon="@drawable/mythmote"
++		android:label="@string/app_name">  <!-- android:debuggable="true" -->
++		<activity android:label="@string/app_name" android:name=".MythMote"
++			android:configChanges="keyboard|keyboardHidden|orientation">
++			<intent-filter>
++				<action android:name="android.intent.action.MAIN" />
++				<category android:name="android.intent.category.LAUNCHER" />
++			</intent-filter>
++		</activity>
++		<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
++		<activity android:label="addresseditor" android:name=".LocationEditor"></activity>
++	</application>
++	<uses-sdk android:minSdkVersion="3"></uses-sdk>
++	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
++	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
++	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
++	<uses-permission android:name="android.permission.INTERNET" />
++
++
++<uses-permission android:name="android.permission.BROADCAST_WAP_PUSH"></uses-permission>
++
+ </manifest> 
+\ No newline at end of file
+Index: src/tkj/android/homecontrol/mythmote/MythMote.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythMote.java	(revision 142)
++++ src/tkj/android/homecontrol/mythmote/MythMote.java	(working copy)
+@@ -34,6 +34,7 @@
+ 	public static final int SETTINGS_ID = Menu.FIRST;
+ 	public static final int RECONNECT_ID = Menu.FIRST + 1;
+ 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
++	public static final int SENDWOL_ID = SELECTLOCATION_ID + 1;
+ 	public static final String NAME_NAV_TAB = "TabNavigation";
+ 	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
+ 	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
+@@ -163,6 +164,8 @@
+         //create select location menu item
+         menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str).setIcon(R.drawable.home);
+         
++        menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str);
++        
+         //return results
+         return result;
+     }
+@@ -195,6 +198,10 @@
+ 					//even if the user selects the same location already selected.
+ 					MythMotePreferences.SelectLocation(this, this);
+ 		   			break;
++		   		case SENDWOL_ID:
++		   			WOLPowerManager pm = new WOLPowerManager();
++		   			pm.sendWOL(this);
++		   			break;
+ 		   };
+ 	   }
+ 	   catch(android.content.ActivityNotFoundException ex)
+Index: src/tkj/android/homecontrol/mythmote/WOLPowerManager.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/WOLPowerManager.java	(revision 0)
++++ src/tkj/android/homecontrol/mythmote/WOLPowerManager.java	(revision 0)
+@@ -0,0 +1,150 @@
++package tkj.android.homecontrol.mythmote;
++
++import java.io.IOException;
++import java.net.DatagramPacket;
++import java.net.DatagramSocket;
++import java.net.InetAddress;
++
++import android.app.Activity;
++import android.app.AlertDialog;
++import android.content.Context;
++import android.content.DialogInterface;
++import android.net.DhcpInfo;
++import android.net.wifi.WifiManager;
++import android.util.Log;
++import android.widget.EditText;
++import android.widget.Toast;
++
++/**
++ * 
++ * Send a Wake-On-Lan packet to the given host
++ * 
++ * @author rob elsner
++ * 
++ */
++public class WOLPowerManager
++{
++	/**
++	 * Remove this function once the MAC has been stored
++	 */
++	public void sendWOL(final Context ctx)
++	{
++		AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
++
++		alert.setTitle("MAC");
++		alert.setMessage("Enter MAC in the form ##:##:##:##:##:##");
++
++		// Set an EditText view to get user input
++		final EditText input = new EditText(ctx);
++		alert.setView(input);
++
++		alert.setPositiveButton(android.R.string.ok,
++				new DialogInterface.OnClickListener()
++				{
++					public void onClick(DialogInterface dialog, int whichButton)
++					{
++						String value = input.getText().toString();
++						if (!value.matches("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$"))
++						{
++							Toast toast = Toast.makeText(ctx, "MAC of form ##:##:##:##:##:## only.", Toast.LENGTH_LONG);
++							toast.show();
++						}
++						try
++						{
++							sendWOL(value, ctx);
++						} catch (IOException e)
++						{
++							Toast toast = Toast.makeText(ctx, "error " + e.getLocalizedMessage(),Toast.LENGTH_LONG);
++							toast.show();
++						}
++					}
++				});
++
++		alert.setNegativeButton(android.R.string.cancel,
++				new DialogInterface.OnClickListener()
++				{
++					public void onClick(DialogInterface dialog, int whichButton)
++					{
++						// Canceled.
++					}
++				});
++
++		alert.create().show();
++	}
++
++	/**
++	 * Send a WOL broadcast packet to the specified MAC
++	 * 
++	 * @param macAddress
++	 *            00:00:00:00:00 format
++	 * @return true on success
++	 * @throws IOException
++	 */
++	public boolean sendWOL(final String macAddress, final Context mContext)
++			throws IOException
++	{
++		try
++		{
++			byte[] wolPacket = buildWolPacket(macAddress);
++			InetAddress broadcast = getBroadcastAddress(mContext);
++			DatagramSocket socket = new DatagramSocket(7000);
++			socket.setBroadcast(true);
++			DatagramPacket packet = new DatagramPacket(wolPacket,
++					wolPacket.length, broadcast, 7000);
++			socket.send(packet);
++			socket.close();
++			return true;
++		} catch (Exception e)
++		{
++			Log.e("wol", "failure", e);
++			Toast t = Toast.makeText(mContext, e.getLocalizedMessage(), Toast.LENGTH_LONG);
++			t.show();
++			return false;
++		}
++
++	}
++
++	InetAddress getBroadcastAddress(final Context mContext) throws IOException
++	{
++		WifiManager wifi = (WifiManager) mContext
++				.getSystemService(Context.WIFI_SERVICE);
++		DhcpInfo dhcp = wifi.getDhcpInfo();
++		// handle null somehow
++
++		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
++		byte[] quads = new byte[4];
++		for (int k = 0; k < 4; k++)
++			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
++		return InetAddress.getByAddress(quads);
++	}
++
++	/**
++	 * 
++	 * @param macAddress
++	 *            should be formatted as 00:00:00:00:00:00 in a string
++	 * @return the raw packet bytes to send along
++	 */
++	private byte[] buildWolPacket(final String macAddress)
++	{
++		final byte[] preamble =
++		{ (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
++				(byte) 0xFF };
++		byte[] macBytes = new byte[6];
++		String[] octets = macAddress.split(":");
++		for (int i = 0; i < 6; i++)
++		{
++			
++			macBytes[i] = (byte)(Integer.parseInt(octets[i], 16) & 0xFF);
++		}
++		final byte[] body = new byte[36]; // 6 bytes for mac, repeated 6 times
++		for (int destPos = 0; destPos < 36; destPos += 6)
++		{
++			System.arraycopy(macBytes, 0, body, destPos, 6);
++		}
++		final byte[] packetBody = new byte[42];
++		System.arraycopy(preamble, 0, packetBody, 0, 6);
++		System.arraycopy(body, 0, packetBody, 6, 36);
++		return packetBody;
++	}
++
++}
+Index: res/values/strings.xml
+===================================================================
+--- res/values/strings.xml	(revision 142)
++++ res/values/strings.xml	(working copy)
+@@ -35,6 +35,7 @@
+ <string name="no_route_to_host_str">No route to host</string>
+ <string name="connected_str">Connected</string>
+ <string name="reconnect_str">Reconnect</string>
++<string name="send_wol_str">Send WakeOnLan</string>
+ <string name="attempting_to_connect_str">Attempting to connect to host</string>
+ <string name="selected_location_str">Selected Location</string>
+ <string name="select_location_str">Select Location</string>
