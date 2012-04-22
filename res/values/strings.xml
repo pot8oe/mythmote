@@ -108,7 +108,7 @@
 <string name="longpress_action_str">Button Long-Press action</string>
 <string name="longpress_action_description_str">Action taken when a button is held down.</string>
 <string name="key_repeat_interval_str">Key Repeat Interval</string>
-<string name="key_repeat_interval_description_str">Speed at which key presses repeat during long press</string>
+<string name="key_repeat_interval_description_str">Speed of key presses during Long-Press action "Auto Repeat"</string>
 
 
 <string-array name="status_Update_Interval_strings">
