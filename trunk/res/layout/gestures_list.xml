@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,17 +14,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <ListView
         android:id="@android:id/list"
-
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1.0" />
@@ -33,40 +30,33 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1.0"
-
         android:gravity="center"
-
-        android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/gestures_loading_str"/>
+        android:text="@string/gestures_loading_str"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         style="@android:style/ButtonBar"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/addButton"
-            android:onClick="addGesture"
-
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:enabled="false" android:text="@string/button_add_str"/>
+            android:enabled="false"
+            android:onClick="addGesture"
+            android:text="@string/button_add_str" />
 
         <Button
             android:id="@+id/reloadButton"
-            android:onClick="reloadGestures"
-
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:enabled="false" android:text="@string/button_remove_str"/>
-
+            android:enabled="false"
+            android:onClick="reloadGestures"
+            android:text="@string/button_remove_str" />
     </LinearLayout>
 
 </LinearLayout>
-
