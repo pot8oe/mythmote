@@ -44,6 +44,7 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
 	public static final String PREF_LONGPRESS_ACTION = "longpress-action";
+	public static final String PREF_KEY_REPEAT_INTERVAL = "key-repeat-interval";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
@@ -138,13 +139,21 @@ public class MythMotePreferences extends PreferenceActivity {
 				R.string.haptic_feedback_enabled_str,
 				R.string.haptic_feedback_enabled_description_str, false));
 		
-		// create mythfrontend update status interval preference
+		// create longpress action preference
 		generalCat.addPreference(createIntListPreference(context,
 				PREF_LONGPRESS_ACTION,
 				R.string.longpress_action_str,
 				R.string.longpress_action_description_str,
 				R.array.longpress_action_strings,
 				R.array.longpress_action_values, "0"));
+		
+		// create key repeat interval preference
+		generalCat.addPreference(createIntListPreference(context,
+				PREF_KEY_REPEAT_INTERVAL,
+				R.string.key_repeat_interval_str,
+				R.string.key_repeat_interval_description_str,
+				R.array.key_repeat_interval_strings,
+				R.array.key_repeat_interval_values, "100"));
 		
 		// create donate button visible checkbox
 		generalCat.addPreference(createCheckBox(context,

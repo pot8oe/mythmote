@@ -1,59 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TableLayout01"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:stretchColumns="0,1,2,3,4,5" >
 
-<TableLayout android:id="@+id/TableLayout01"
-	android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android"
-	android:stretchColumns="0,1,2,3,4,5" android:layout_height="wrap_content">
-		<TableRow android:paddingTop="2dip"  android:layout_weight=".25">
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:text="Music" android:id="@+id/ButtonJump4"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:text="Videos" android:id="@+id/ButtonJump5"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:text="Live TV"
-			android:id="@+id/ButtonJump2"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:text="Rec TV" android:id="@+id/ButtonJump3"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:clickable="true"
-			android:id="@+id/ButtonJump6" android:text="Status"/>
-	</TableRow>
-	<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content"
-		android:layout_height="fill_parent" android:layout_gravity="clip_vertical" android:layout_weight=".25">
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/square"
-			android:text="@string/select_str" android:id="@+id/ButtonSelect"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:id="@+id/ButtonInfo"
-			android:text="@string/info_str" android:drawableTop="@drawable/info"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:bufferType="normal"
-			android:autoText="false" android:drawableTop="@drawable/up"
-			android:text="@string/up_str" android:id="@+id/ButtonUp"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/guide"
-			android:id="@+id/ButtonGuide" android:text="Guide"/>
-		<Button android:layout_width="fill_parent" android:drawableTop="@drawable/home"
-			android:layout_height="fill_parent" android:text="Home" android:id="@+id/ButtonJump1"/>
-	</TableRow>
-	<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content"
-		android:layout_height="fill_parent"  android:layout_weight=".25">
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:cursorVisible="true"
-			android:id="@+id/ButtonEsc" android:text="@string/cancel_str"
-			android:drawableTop="@drawable/cancel"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/left"
-			android:text="@string/left_str" android:id="@+id/ButtonLeft"/>
-		<Button android:layout_width="wrap_content"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/down"
-			android:text="@string/down_str" android:id="@+id/ButtonDown"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:drawableTop="@drawable/right"
-			android:text="@string/right_str" android:id="@+id/ButtonRight"/>
-		<Button android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:id="@+id/ButtonMenu"
-			android:text="@string/menu_str" android:drawableTop="@drawable/menu"/>
-	</TableRow>
+    <TableRow
+        android:layout_weight=".25"
+        android:paddingTop="2dip" >
 
-	<TableRow  android:layout_weight="0.25"></TableRow>
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Music" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Videos" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Live TV" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Rec TV" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump6"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:text="Status" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/TableRow01"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="clip_vertical"
+        android:layout_weight=".25" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonSelect"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/square"
+            android:text="@string/select_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/info"
+            android:text="@string/info_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonUp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:autoText="false"
+            android:bufferType="normal"
+            android:drawableTop="@drawable/up"
+            android:text="@string/up_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonGuide"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/guide"
+            android:text="Guide" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonJump1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/home"
+            android:text="Home" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/TableRow02"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight=".25" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonEsc"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cursorVisible="true"
+            android:drawableTop="@drawable/cancel"
+            android:text="@string/cancel_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonLeft"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/left"
+            android:text="@string/left_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonDown"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/down"
+            android:text="@string/down_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonRight"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/right"
+            android:text="@string/right_str" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonMenu"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableTop="@drawable/menu"
+            android:text="@string/menu_str" />
+    </TableRow>
+
+    <TableRow android:layout_weight="0.25" >
+    </TableRow>
+
 </TableLayout>

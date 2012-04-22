@@ -569,6 +569,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// set the hapticfeedback setting in keymanager
 		this.mKeyManager.setHapticFeedbackEnabled(pref.getBoolean(
 				MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false));
+		
+		//set autorepeat interval
+		AutoRepeatButton.SetRepeatInterval(pref.getInt(
+				MythMotePreferences.PREF_KEY_REPEAT_INTERVAL, 
+				AutoRepeatButton.DEFAULT_REPEAT_INTERVAL));
 
 		// done with pref ref
 		pref = null;
