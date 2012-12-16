@@ -18,6 +18,7 @@ package tkj.android.homecontrol.mythmote;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
@@ -27,24 +28,22 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 import android.app.AlertDialog;
-import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.gesture.Gesture;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-import android.gesture.Prediction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,12 +51,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 
-public class MythMote extends TabActivity implements TabHost.TabContentFactory,
-		OnTabChangeListener, LocationChangedEventListener,
-		OnGesturePerformedListener, MythCom.StatusChangedEventListener,
+public class MythMote extends FragmentActivity implements OnTabChangeListener,
+		LocationChangedEventListener,
+		MythCom.StatusChangedEventListener,
 		KeyMapBinder {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -78,15 +76,15 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 	private KeyBindingManager mKeyManager;
 
-	private static TabHost sTabHost;
 	private static MythCom sComm;
-	private static GestureOverlayView sGestureOverlayView;
-	private static GestureLibrary sGestureLib;
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
-	private static boolean sGesturesEnabled = false;
 	private static boolean sShowDonateMenuItem = true;
+//	private static PowerManager powerManager;
+//	private static PowerManager.WakeLock wakeLock;
+	private static List<Fragment> sFragmentArrayList;
+	private static List<String> sHeaderArrayList;
 
 	/**
 	 * Called when the activity is first created.
@@ -94,7 +92,11 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//allow mythmote to be shown ontop of lock screen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		
+		//load main layout
 		this.setContentView(R.layout.main);
 
 		// determine if large screen layouts are being used
@@ -103,27 +105,14 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 
 		if (sComm == null) {
 			// create comm class
-			sComm = new MythCom(this);
+			sComm = MythCom.GetMythCom(this);
 		}
-
-		// get gesture overlay view
-		sGestureOverlayView = (GestureOverlayView) this
-				.findViewById(R.id.mythMoteOverlayView);
 		
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
 
-		// create tab UI
-		sTabHost = getTabHost();
-
-		// create tabs
-		this.createTabs();
-
-		// setup on tab change event
-		sTabHost.setOnTabChangedListener(this);
-
-		// set navigation tab and setup events
-		sTabHost.setCurrentTab(0);
+		// setup view pager
+		this.setupViewPager();
 
 		// create key manager and load keys from DB
 		mKeyManager = new KeyBindingManager(this, this, sComm);
@@ -151,19 +140,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		// set selected location and connect
 		if (this.setSelectedLocation())
 			sComm.Connect(sLocation);
-		
-		//remove gesture listener(s)
-		sGestureOverlayView.removeAllOnGesturePerformedListeners();
-		
-		//check if gestures are enabled
-		if(sGesturesEnabled){
-			// get gesture library
-			sGestureLib = GestureBuilderActivity.readLibrary(this);
-			sGestureLib.load();
-			
-			sGestureOverlayView.addOnGesturePerformedListener(this);
-		}
-		
 	}
 
 	/**
@@ -183,10 +159,9 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onDestroy() {
 		super.onDestroy();
 
-		if (sComm != null && sComm.IsConnected())
-			sComm.Disconnect();
-		
-		sTabHost = null;
+		if (sComm != null){
+			sComm.ActivityOnDestroy();
+		}
 
 	}
 
@@ -198,24 +173,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onConfigurationChanged(Configuration config) {
 		super.onConfigurationChanged(config);
 
-		// make sure tabhost has been set
-		if (sTabHost == null)
-			sTabHost = this.getTabHost();
-
-		// get current tab index
-		int cTab = sTabHost.getCurrentTab();
-
-		// set current tab to 0. Clear seems to fail when set to anything else
-		sTabHost.setCurrentTab(0);
-
-		// clear all tabs
-		sTabHost.clearAllTabs();
-
-		// create tabs
-		this.createTabs();
-
-		// set current tab back
-		sTabHost.setCurrentTab(cTab);
 	}
 
 	/**
@@ -366,36 +323,46 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	public void onTabChanged(String arg0) {
 		// load keybindings
 		mKeyManager.loadKeys();
-
-		// setup the media tab's send keyboard input button
-		if (sTabHost.getCurrentTabTag().equals(NAME_NUMPAD_TAB)) {
-			setupSendKeyboardInputButton();
-		}
 	}
 
 	/**
-	 * Called when a tab is selected. Returns the layout for the selected tab.
-	 * Default is navigation tab
+	 * Setups up the viewpager and MythmotePagerAdapter if
+	 * the current layout contains the mythmote_pager view pager.
 	 */
-	public View createTabContent(String tag) {
+	private void setupViewPager() {
 
-		// check which tab content to return
-		if (tag == NAME_NAV_TAB) {
-			// get navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation,
-					this.getTabHost().getTabContentView(), false);
-		} else if (tag == NAME_MEDIA_TAB) {
-			// return media tab view
-			return this.getLayoutInflater().inflate(R.layout.mediacontrol,
-					this.getTabHost().getTabContentView(), false);
-		} else if (tag == NAME_NUMPAD_TAB) {
-			// return number pad view
-			return this.getLayoutInflater().inflate(R.layout.numberpad,
-					this.getTabHost().getTabContentView(), false);
-		} else {
-			// default to navigation tab view
-			return this.getLayoutInflater().inflate(R.layout.navigation,
-					this.getTabHost().getTabContentView(), false);
+		// get viewpager from layout
+		ViewPager pager = (ViewPager) findViewById(R.id.mythmote_pager);
+
+		// if there is a viewpager set it up
+		if (null != pager) {
+			
+			//get fragment manager
+			FragmentManager fm = this.getSupportFragmentManager();
+			
+			//create fragment and header arrays
+			sFragmentArrayList = new ArrayList<Fragment>();
+			sHeaderArrayList = new ArrayList<String>();
+			
+			//mythmote navigation page fragment
+			Fragment nav = Fragment.instantiate(this, MythmoteNavigationFragment.class.getName());
+			sFragmentArrayList.add(nav);
+			sHeaderArrayList.add(this.getString(R.string.navigation_str));
+
+			//mythmote numbers page fragment
+			Fragment num = Fragment.instantiate(this, MythmoteNumberPadFragment.class.getName());
+			sFragmentArrayList.add(num);
+			sHeaderArrayList.add(this.getString(R.string.numpad_str));
+			
+//			//mythmote action list fragment
+//			Fragment actions = Fragment.instantiate(this, MythmoteActionListFragment.class.getName());
+//			sFragmentArrayList.add(actions);
+//			sHeaderArrayList.add(this.getString(R.string.mythmote_page_actionlist));
+			
+			//set pager adapter and initial item
+			pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
+			pager.setCurrentItem(0);
+
 		}
 	}
 
@@ -537,31 +504,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 	}
 
 	/**
-	 * Called to create and add tabs to the tabhost
-	 */
-	private void createTabs() {
-		// create tabs. Media tab is only used when large layouts are inactive
-		sTabHost.addTab(sTabHost.newTabSpec(NAME_NAV_TAB)
-				.setIndicator(this.getString(R.string.navigation_str))
-				.setContent(this));
-		if (!sIsScreenLarge)
-			sTabHost.addTab(sTabHost.newTabSpec(NAME_MEDIA_TAB)
-					.setIndicator(this.getString(R.string.media_str))
-					.setContent(this));
-		sTabHost.addTab(sTabHost.newTabSpec(NAME_NUMPAD_TAB)
-				.setIndicator(this.getString(R.string.numpad_str))
-				.setContent(this));
-
-		// resize tabs to remove useless space
-		final int count = sTabHost.getTabWidget().getChildCount();
-		LayoutParams params;
-		for (int i = 0; i < count; i++){
-			params = sTabHost.getTabWidget().getChildAt(i).getLayoutParams();
-			params.height = params.height > 50 ? params.height/2 : 50;
-		}
-	}
-
-	/**
 	 * Reads the mythmote shared preferences and sets local members accordingly.
 	 */
 	private void loadSharedPreferences() {
@@ -569,10 +511,6 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		SharedPreferences pref = this.getSharedPreferences(
 				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
 				MODE_PRIVATE);
-		
-		// get if gestures are enabled
-		sGesturesEnabled = pref.getBoolean(MythMotePreferences.PREF_GESTURES_ENABLED, false);
-		if(sGestureOverlayView!= null) sGestureOverlayView.setGestureVisible(sGesturesEnabled);
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
@@ -629,41 +567,31 @@ public class MythMote extends TabActivity implements TabHost.TabContentFactory,
 		dBuilder.show();
 	}
 
-	@Override
-	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+	
+	
+	
+	class MythmotePagerAdapter extends FragmentStatePagerAdapter {
+		
+        public MythmotePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-		// Leave if gesture lib has not been initialized
-		if (sGestureLib == null)
-			return;
+        @Override
+        public int getCount() {
+            return sFragmentArrayList.size();
+        }
 
-		// attempt to recognize the gesture
-		ArrayList<Prediction> predictions = sGestureLib.recognize(gesture);
-
-		// get prediction size
-		final int pCount = predictions.size();
-
-		// at least 1 prediction
-		if (pCount > 0) {
-
-			// prediction reference
-			Prediction p;
-
-			// for each prediction
-			for (int i = 0; i < pCount; i++) {
-
-				// get prediction
-				p = predictions.get(i);
-
-				// High score and has a name
-				if (p.score > 10.0 && p.name != null) {
-
-					//send command name it is the myth command
-					sComm.SendCommand(p.name);
-					return;
-				}
-			}
+        @Override
+        public Fragment getItem(int position) {
+            return sFragmentArrayList.get(position);
+        }
+        
+        @Override
+		public CharSequence getPageTitle(int position) {
+			return sHeaderArrayList.get(position);
 		}
 
-	}
+    }
+
 
 }

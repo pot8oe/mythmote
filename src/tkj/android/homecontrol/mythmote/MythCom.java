@@ -53,6 +53,7 @@ public class MythCom {
 	public static final int STATUS_CONNECTING = 3;
 	public static final int STATUS_ERROR = 99;
 
+	private static MythCom sMythComSingleton;
 	private static Timer sTimer;
 	private static Toast sToast;
 	private static Socket sSocket;
@@ -80,9 +81,28 @@ public class MythCom {
 	private static TimerTask timerTaskCheckStatus;
 
 	/** Parent activity is used to get context */
-	public MythCom(Activity parentActivity) {
+	private MythCom(Activity parentActivity) {
 		sParent = parentActivity;
 		sStatusCode = STATUS_DISCONNECTED;
+	}
+	
+	/**
+	 * Gets the one and only mythcom object. This will create the object if 
+	 * it does not already exist.
+	 * @param parentActivity
+	 * @return
+	 */
+	public static MythCom GetMythCom(Activity parentActivity){
+		if(sMythComSingleton==null)sMythComSingleton=new MythCom(parentActivity);
+		return sMythComSingleton;
+	}
+	
+	/**
+	 * Returns the one and only MythCom object. Null if it has not been created.
+	 * @return
+	 */
+	public static MythCom GetMythCom(){
+		return sMythComSingleton;
 	}
 
 	/**
@@ -130,6 +150,14 @@ public class MythCom {
 			this.sendData("exit\n");
 
 		disconnectSocket();
+	}
+	
+	/**
+	 * Call this from the given parent activity's OnDestroy()
+	 */
+	public void ActivityOnDestroy(){
+		this.Disconnect();
+		sParent = null;
 	}
 
 	public void SendCommand(String cmd) {
