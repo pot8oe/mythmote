@@ -19,7 +19,7 @@
     <application
         android:icon="@drawable/mythmote"
         android:label="@string/app_name"
-        android:allowBackup="false">  <!-- android:debuggable="true" -->
+        android:allowBackup="false"> 
         
 	    <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation">
 	        <intent-filter>
@@ -30,8 +30,8 @@
 	        
 		<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
 		<activity android:name=".LocationEditor" android:label="addresseditor"></activity>
-		<activity android:name=".GestureBuilderActivity" android:label="gesturebuilder"></activity>
-		<activity android:name=".CreateGestureActivity" android:label="creategesture"></activity>
+<!-- 		<activity android:name=".GestureBuilderActivity" android:label="gesturebuilder"></activity> -->
+<!-- 		<activity android:name=".CreateGestureActivity" android:label="creategesture"></activity> -->
 	
 	</application>
 
