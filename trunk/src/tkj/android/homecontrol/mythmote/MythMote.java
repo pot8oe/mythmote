@@ -156,11 +156,13 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 	/**
 	 * Called when the activity is being destroyed
 	 */
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 
 		if (sComm != null){
 			sComm.ActivityOnDestroy();
+			sComm = null;
 		}
 
 	}
@@ -173,6 +175,11 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 	public void onConfigurationChanged(Configuration config) {
 		super.onConfigurationChanged(config);
 
+		// setup view pager
+		this.setupViewPager();
+
+		// re-load keys from DB
+		mKeyManager.loadKeys();
 	}
 
 	/**
@@ -337,6 +344,9 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 		// if there is a viewpager set it up
 		if (null != pager) {
 			
+			int cItem = pager.getCurrentItem();
+			cItem = cItem >= 0 ? cItem : 0;
+			
 			//get fragment manager
 			FragmentManager fm = this.getSupportFragmentManager();
 			
@@ -361,7 +371,7 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 			
 			//set pager adapter and initial item
 			pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
-			pager.setCurrentItem(0);
+			pager.setCurrentItem(cItem);
 
 		}
 	}

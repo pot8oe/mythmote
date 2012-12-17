@@ -158,6 +158,7 @@ public class MythCom {
 	public void ActivityOnDestroy(){
 		this.Disconnect();
 		sParent = null;
+		sMythComSingleton = null;
 	}
 
 	public void SendCommand(String cmd) {
