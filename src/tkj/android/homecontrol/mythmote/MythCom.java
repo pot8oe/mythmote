@@ -45,7 +45,7 @@ public class MythCom {
 	}
 
 	public static final int DEFAULT_MYTH_PORT = 6546;
-	public static final int SOCKET_TIMEOUT = 2000;
+	public static final int DEFAULT_SOCKET_TIMEOUT = 2000;
 	public static final int ENABLE_WIFI = 0;
 	public static final int CANCEL = 1;
 	public static final int STATUS_DISCONNECTED = 0;
@@ -94,14 +94,6 @@ public class MythCom {
 	 */
 	public static MythCom GetMythCom(Activity parentActivity){
 		if(sMythComSingleton==null)sMythComSingleton=new MythCom(parentActivity);
-		return sMythComSingleton;
-	}
-	
-	/**
-	 * Returns the one and only MythCom object. Null if it has not been created.
-	 * @return
-	 */
-	public static MythCom GetMythCom(){
 		return sMythComSingleton;
 	}
 
@@ -240,7 +232,7 @@ public class MythCom {
 						// connect
 						sSocket.connect(new InetSocketAddress(
 								sFrontend.Address, sFrontend.Port),
-								SOCKET_TIMEOUT);
+								DEFAULT_SOCKET_TIMEOUT);
 
 						// check if connected
 						if (sSocket.isConnected()) {
