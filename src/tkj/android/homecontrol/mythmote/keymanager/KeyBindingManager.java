@@ -231,6 +231,10 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 			return entries;
 		}
 	}
+	
+	public static boolean HapticFeedbackEnabled = false;
+	
+	public static boolean EditingEnabled = true;
 
 	private KeyMapBinder binder = null;
 
@@ -240,9 +244,6 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 
 	private MythMoteDbManager databaseAdapter;
 	
-	private boolean mHapticFeedbackEnabled = false;
-	
-	private boolean mEditingEnabled = true;
 
 	public KeyBindingManager(final Context ctx, final KeyMapBinder binder,
 			final MythCom communicator) {
@@ -273,22 +274,6 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	public KeyBindingEntry getCommand(final View initiatingView) {
 		return viewToEntryMap.get(initiatingView);
 	}
-	
-	public boolean getHapticFeedbackEnabled(){
-		return mHapticFeedbackEnabled;
-	}
-	
-	public void setHapticFeedbackEnabled(boolean enabled){
-		mHapticFeedbackEnabled = enabled;
-	}
-	
-	public boolean getEditingEnabled(){
-		return mEditingEnabled;
-	}
-	
-	public void setEditingEnabled(boolean enabled){
-		mEditingEnabled = enabled;
-	}
 
 	public void onClick(View v) {
 
@@ -302,7 +287,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 			communicator.SendCommand(entry.getCommand());
 			
 			//perform haptic feedback if enabled
-			if(mHapticFeedbackEnabled){
+			if(HapticFeedbackEnabled){
 			v.performHapticFeedback(
 					HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING,
 					HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
@@ -314,7 +299,7 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	public boolean onLongClick(final View v) {
 		
 		//do not consume the onLongClick event if editing is disabled
-		if(!mEditingEnabled) {
+		if(!EditingEnabled) {
 			onClick(v);
 			return true;
 		}

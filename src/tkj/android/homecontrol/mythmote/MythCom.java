@@ -398,16 +398,9 @@ public class MythCom {
 
 	/** Sets _status and fires the StatusChanged event **/
 	private void setStatus(final String StatusMsg, final int code) {
-		sParent.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				sStatus = StatusMsg;
-				if (sStatusListener != null)
-					sStatusListener.StatusChanged(StatusMsg, code);
-			}
-
-		});
+		sStatus = StatusMsg;
+		if (sStatusListener != null)
+			sStatusListener.StatusChanged(StatusMsg, code);
 	}
 
 	/**
