@@ -53,10 +53,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 
-public class MythMote extends FragmentActivity implements OnTabChangeListener,
-		LocationChangedEventListener,
-		MythCom.StatusChangedEventListener,
-		KeyMapBinder {
+public class MythMote extends FragmentActivity implements
+		LocationChangedEventListener, MythCom.StatusChangedEventListener {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
@@ -73,8 +71,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 	private static final String KEY_VOLUME_DOWN = "[";
 	private static final String KEY_VOLUME_UP = "]";
 	private static final String DONATE_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TX7RH2TX6NJ2N&lc=US&item_name=mythmote%2ddonation&item_number=mythmote%2dgooglecodepage&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted";
-
-	private KeyBindingManager mKeyManager;
 
 	private static MythCom sComm;
 	private static FrontendLocation sLocation = new FrontendLocation();
@@ -113,10 +109,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 
 		// setup view pager
 		this.setupViewPager();
-
-		// create key manager and load keys from DB
-		mKeyManager = new KeyBindingManager(this, this, sComm);
-		mKeyManager.loadKeys();
 	}
 
 	/**
@@ -177,9 +169,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 
 		// setup view pager
 		this.setupViewPager();
-
-		// re-load keys from DB
-		mKeyManager.loadKeys();
 	}
 
 	/**
@@ -199,7 +188,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 			return super.onKeyDown(keyCode, event);
 
 		}
-
 	}
 
 	/**
@@ -325,14 +313,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 	}
 
 	/**
-	 * Called when the selected tab page is changed
-	 */
-	public void onTabChanged(String arg0) {
-		// load keybindings
-		mKeyManager.loadKeys();
-	}
-
-	/**
 	 * Setups up the viewpager and MythmotePagerAdapter if
 	 * the current layout contains the mythmote_pager view pager.
 	 */
@@ -364,11 +344,6 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 			sFragmentArrayList.add(num);
 			sHeaderArrayList.add(this.getString(R.string.numpad_str));
 			
-//			//mythmote action list fragment
-//			Fragment actions = Fragment.instantiate(this, MythmoteActionListFragment.class.getName());
-//			sFragmentArrayList.add(actions);
-//			sHeaderArrayList.add(this.getString(R.string.mythmote_page_actionlist));
-			
 			//set pager adapter and initial item
 			pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
 			pager.setCurrentItem(cItem);
@@ -392,34 +367,30 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 	 * Called when MythCom status changes
 	 */
 	public void StatusChanged(String StatusMsg, int statusCode) {
-		// set titleJUMPPOINT_guidegrid
-		setTitle(StatusMsg);
+		
+		final String msg = StatusMsg;
+		final int code = statusCode;
+		
+		this.runOnUiThread(new Runnable() {
 
-		// change color based on status code
-		if (statusCode == MythCom.STATUS_ERROR) {
-			setTitleColor(Color.RED);
-		} else if (statusCode == MythCom.STATUS_DISCONNECTED) {
-			setTitleColor(Color.RED);
-		} else if (statusCode == MythCom.STATUS_CONNECTED) {
-			setTitleColor(Color.GREEN);
-		} else if (statusCode == MythCom.STATUS_CONNECTING) {
-			setTitleColor(Color.YELLOW);
-		}
-	}
+			@Override
+			public void run() {
+				// set titleJUMPPOINT_guidegrid
+				setTitle(msg);
 
-	/**
-	 * Enable the long click and normal click actions where a long click will
-	 * configure the button, and a normal tap will perform the command
-	 * 
-	 * This is the callback from the {@link KeyBindingManager}
-	 */
-	public View bind(KeyBindingEntry entry) {
-		View v = this.findViewById(entry.getMythKey().getButtonId());
-		if (null == v)
-			return null;
-		v.setOnLongClickListener(mKeyManager);
-		v.setOnClickListener(mKeyManager);
-		return v;
+				// change color based on status code
+				if (code == MythCom.STATUS_ERROR) {
+					setTitleColor(Color.RED);
+				} else if (code == MythCom.STATUS_DISCONNECTED) {
+					setTitleColor(Color.RED);
+				} else if (code == MythCom.STATUS_CONNECTED) {
+					setTitleColor(Color.GREEN);
+				} else if (code == MythCom.STATUS_CONNECTING) {
+					setTitleColor(Color.YELLOW);
+				}
+			}
+
+		});
 	}
 
 	/**
@@ -536,7 +507,7 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 			AutoRepeatButton.SetAutoRepeatEnalbed(true);
 			
 			//disable editable
-			this.mKeyManager.setEditingEnabled(false);
+			KeyBindingManager.EditingEnabled = false;
 		}else{
 			//edit key-bindings action
 			
@@ -544,12 +515,12 @@ public class MythMote extends FragmentActivity implements OnTabChangeListener,
 			AutoRepeatButton.SetAutoRepeatEnalbed(false);
 			
 			//set editable
-			this.mKeyManager.setEditingEnabled(true);
+			KeyBindingManager.EditingEnabled = true;
 		}
 
 		// set the hapticfeedback setting in keymanager
-		this.mKeyManager.setHapticFeedbackEnabled(pref.getBoolean(
-				MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false));
+		KeyBindingManager.HapticFeedbackEnabled = pref.getBoolean(
+				MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
 		
 		//set autorepeat interval
 		AutoRepeatButton.SetRepeatInterval(pref.getInt(
