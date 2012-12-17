@@ -11,7 +11,9 @@ public class MythmoteNumberPadFragment extends AbstractMythmoteFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View view = inflater.inflate(R.layout.fragment_mythmote_numbers, container, false);
+		
+		return view;
 	}
 	
 }

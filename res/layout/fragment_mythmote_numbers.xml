@@ -24,14 +24,14 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:stretchColumns="0,1,2"
-    android:weightSum="100" >
+    android:weightSum="100" xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote">
 
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_weight="25" >
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -40,9 +40,10 @@
             android:layout_marginRight="1dp"
             android:layout_marginTop="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -50,9 +51,10 @@
             android:layout_marginRight="1dp"
             android:layout_marginTop="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="2" />
+            android:text="2"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -60,7 +62,8 @@
             android:layout_marginRight="1dp"
             android:layout_marginTop="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="3" />
+            android:text="3"
+            android:textColor="@color/button_text_color" />
 
     </TableRow>
 
@@ -69,7 +72,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="25" >
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -77,25 +80,28 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="4" />
+            android:text="4"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button5"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="5" />
+            android:text="5"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button6"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="6" />
+            android:text="6"
+            android:textColor="@color/button_text_color" />
 
     </TableRow>
 
@@ -104,7 +110,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="25" >
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button7"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -112,25 +118,28 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="7" />
+            android:text="7"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button8"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="8" />
+            android:text="8"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button9"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="9" />
+            android:text="9"
+            android:textColor="@color/button_text_color" />
 
     </TableRow>
 
@@ -139,7 +148,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="25" >
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button_backspace"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -147,25 +156,28 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="Delete" />
+            android:text="Delete"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button0"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="0" />
+            android:text="0"
+            android:textColor="@color/button_text_color" />
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/numbers_button_enter"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/mythmote_button"
-            android:text="Enter" />
+            android:text="Enter"
+            android:textColor="@color/button_text_color" />
 
     </TableRow>
     
