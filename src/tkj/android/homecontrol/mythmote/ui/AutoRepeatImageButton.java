@@ -59,11 +59,17 @@ public class AutoRepeatImageButton extends ImageButton {
 					// Schedule the start of repetitions after a one half second
 					// delay.
 					postDelayed(repeatClickWhileButtonHeldRunnable, initialRepeatDelay);
-				} else if (action == MotionEvent.ACTION_UP ||
-						action == MotionEvent.ACTION_CANCEL) {
+				} else if (action == MotionEvent.ACTION_UP){
+					//perform click if its was not a long press
 					if ( !wasLongClick) 
 						performClick();
 					
+					//return button to non pressed state
+					v.setPressed(false);
+					
+					// Cancel any repetition in progress.
+					removeCallbacks(repeatClickWhileButtonHeldRunnable);
+				}else if(action == MotionEvent.ACTION_CANCEL) {
 					//return button to non pressed state
 					v.setPressed(false);
 					
