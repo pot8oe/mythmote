@@ -52,6 +52,9 @@ public class AutoRepeatImageButton extends ImageButton {
 					// Just to be sure that we removed all callbacks,
 					// which should have occurred in the ACTION_UP
 					removeCallbacks(repeatClickWhileButtonHeldRunnable);
+					
+					//enable drawing of button pressed state
+					v.setPressed(true);
 
 					// Schedule the start of repetitions after a one half second
 					// delay.
@@ -60,6 +63,10 @@ public class AutoRepeatImageButton extends ImageButton {
 						action == MotionEvent.ACTION_CANCEL) {
 					if ( !wasLongClick) 
 						performClick();
+					
+					//return button to non pressed state
+					v.setPressed(false);
+					
 					// Cancel any repetition in progress.
 					removeCallbacks(repeatClickWhileButtonHeldRunnable);
 				}
