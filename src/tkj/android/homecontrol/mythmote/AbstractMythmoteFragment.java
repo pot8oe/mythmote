@@ -29,14 +29,7 @@ public class AbstractMythmoteFragment extends Fragment implements KeyMapBinder {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-		
-	}
-	
-	
-	@Override
-	public void onResume() {
 		mKeyManager.loadKeys();
-		super.onResume();
 	}
 	
 	

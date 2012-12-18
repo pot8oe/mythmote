@@ -78,6 +78,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		OnLongClickListener {
@@ -320,26 +322,37 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		alert.setMessage(R.string.command_edit_msg_str);
 
 		// Set an EditText view to get user input
+		final TextView fnLabel = new TextView(v.getContext());
+		fnLabel.setText("Friendly Name");
+		final TextView cmdLabel = new TextView(v.getContext());
+		cmdLabel.setText("Command");
 		final EditText friendlyName = new EditText(v.getContext());
 		final EditText command = new EditText(v.getContext());
+		final LinearLayout linearLayout = new LinearLayout(v.getContext());
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+		linearLayout.addView(fnLabel);
+		linearLayout.addView(friendlyName);
+		linearLayout.addView(cmdLabel);
+		linearLayout.addView(command);
 		
 		KeyBindingEntry currentEntry = viewToEntryMap.get(v);
 		if (null != currentEntry){
-			friendlyName.setText(currentEntry.getCommand());
+			friendlyName.setText(currentEntry.getFriendlyName());
 			command.setText(currentEntry.getCommand());
 		}
-		alert.setView(command);
+		alert.setView(linearLayout);
 
 		//set positive action button
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Editable value = command.getText();
+				Editable friendlyNameValue = friendlyName.getText();
 				KeyBindingEntry oldEntry = viewToEntryMap.get(v);
 				if (null != oldEntry && null != communicator) {
 					Log.d(MythMote.LOG_TAG,
 							"onLongClick " + oldEntry.getFriendlyName());
 					KeyBindingEntry entry = new KeyBindingEntry(oldEntry
-							.getRowID(), oldEntry.getFriendlyName(), oldEntry
+							.getRowID(), friendlyNameValue.toString(), oldEntry
 							.getMythKey(), value.toString(), oldEntry
 							.requiresConfirmation());
 					viewToEntryMap.put(v, entry);
