@@ -6,6 +6,7 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 
 
 public class AbstractMythmoteFragment extends Fragment implements KeyMapBinder {
@@ -28,8 +29,16 @@ public class AbstractMythmoteFragment extends Fragment implements KeyMapBinder {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-		mKeyManager.loadKeys();
+		
 	}
+	
+	
+	@Override
+	public void onResume() {
+		mKeyManager.loadKeys();
+		super.onResume();
+	}
+	
 	
 	@Override
 	public void onDestroy() {
@@ -46,11 +55,19 @@ public class AbstractMythmoteFragment extends Fragment implements KeyMapBinder {
 	 * This is the callback from the {@link KeyBindingManager}
 	 */
 	public View bind(KeyBindingEntry entry) {
-		View v = this.getActivity().findViewById(entry.getMythKey().getButtonId());
+		int buttonId = entry.getMythKey().getButtonId();
+		View v = this.getActivity().findViewById(buttonId);
 		if (null == v)
 			return null;
 		v.setOnLongClickListener(mKeyManager);
 		v.setOnClickListener(mKeyManager);
+		
+		if(buttonId == R.id.ButtonJump1 || buttonId == R.id.ButtonJump2 ||
+			buttonId == R.id.ButtonJump3 || buttonId == R.id.ButtonJump4 ||
+			buttonId == R.id.ButtonJump5 || buttonId == R.id.ButtonJump6){
+			((Button)v).setText(entry.getFriendlyName());
+		}
+			
 		return v;
 	}
 

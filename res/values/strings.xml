@@ -172,6 +172,9 @@
 <item>900</item>
 <item>1000</item>
 </string-array>
+<string name="quickjump_str">Quick Jump</string>
+<string name="keyboard_input_str">Keyboard Input</string>
+<string name="clear_str">Clear</string>
 
 
 </resources>
