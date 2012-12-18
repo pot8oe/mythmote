@@ -320,16 +320,20 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 		alert.setMessage(R.string.command_edit_msg_str);
 
 		// Set an EditText view to get user input
-		final EditText input = new EditText(v.getContext());
+		final EditText friendlyName = new EditText(v.getContext());
+		final EditText command = new EditText(v.getContext());
+		
 		KeyBindingEntry currentEntry = viewToEntryMap.get(v);
-		if (null != currentEntry)
-			input.setText(currentEntry.getCommand());
-		alert.setView(input);
+		if (null != currentEntry){
+			friendlyName.setText(currentEntry.getCommand());
+			command.setText(currentEntry.getCommand());
+		}
+		alert.setView(command);
 
 		//set positive action button
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				Editable value = input.getText();
+				Editable value = command.getText();
 				KeyBindingEntry oldEntry = viewToEntryMap.get(v);
 				if (null != oldEntry && null != communicator) {
 					Log.d(MythMote.LOG_TAG,
