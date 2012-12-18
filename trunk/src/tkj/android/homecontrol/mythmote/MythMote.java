@@ -344,6 +344,16 @@ public class MythMote extends FragmentActivity implements
 			sFragmentArrayList.add(num);
 			sHeaderArrayList.add(this.getString(R.string.numpad_str));
 			
+			//mythmote numbers page fragment
+			Fragment jump = Fragment.instantiate(this, MythmoteQuickJumpFragment.class.getName());
+			sFragmentArrayList.add(jump);
+			sHeaderArrayList.add(this.getString(R.string.quickjump_str));
+			
+			//mythmote keyboard input page fragment
+			Fragment keyboard = Fragment.instantiate(this, MythmoteKeyboardInputFragment.class.getName());
+			sFragmentArrayList.add(keyboard);
+			sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
+			
 			//set pager adapter and initial item
 			pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
 			pager.setCurrentItem(cItem);
