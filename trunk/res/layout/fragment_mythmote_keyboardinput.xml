@@ -29,7 +29,8 @@
             android:id="@+id/EditTextKeyboardInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp" />
+            android:layout_margin="1dp"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/ButtonClear"
@@ -39,15 +40,6 @@
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color"
             android:text="@string/clear_str" />
-        
-        <Button
-            android:id="@+id/ButtonKeyboardInputBackspace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="1dp"
-            android:background="@drawable/mythmote_button"
-            android:textColor="@color/button_text_color"
-            android:text="@string/backspace_str" />
         
         <Button
             android:id="@+id/ButtonEnter"
