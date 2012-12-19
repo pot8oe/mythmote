@@ -38,11 +38,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TabHost.OnTabChangeListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.util.Log;
@@ -51,6 +53,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 public class MythMote extends FragmentActivity implements
@@ -92,23 +95,20 @@ public class MythMote extends FragmentActivity implements
 		//allow mythmote to be shown ontop of lock screen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		
-		//load main layout
-		this.setContentView(R.layout.main);
-
 		// determine if large screen layouts are being used
 		sIsScreenLarge = this.getResources().getString(R.string.screensize)
 				.equals("large");
 
+		// Get mythcom object
 		if (sComm == null) {
-			// create comm class
 			sComm = MythCom.GetMythCom(this);
 		}
 		
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
-
-		// setup view pager
-		this.setupViewPager();
+		
+		//load and configure user interface
+		this.setupContentView();
 	}
 
 	/**
@@ -167,8 +167,7 @@ public class MythMote extends FragmentActivity implements
 	public void onConfigurationChanged(Configuration config) {
 		super.onConfigurationChanged(config);
 
-		// setup view pager
-		this.setupViewPager();
+		this.setupContentView();
 	}
 
 	/**
@@ -311,54 +310,115 @@ public class MythMote extends FragmentActivity implements
 		}
 		return false;
 	}
+	
+	private void setupContentView(){
+		//load main layout
+		this.setContentView(R.layout.main);
+
+		// try to setup view pager
+		if(this.setupViewPager()) return;
+		
+		// if viewpager wasn't found try to setup large layout
+		if(this.setupLargeLayout()) return;
+	}
 
 	/**
 	 * Setups up the viewpager and MythmotePagerAdapter if
 	 * the current layout contains the mythmote_pager view pager.
 	 */
-	private void setupViewPager() {
+	private boolean setupViewPager() {
 
 		// get viewpager from layout
 		ViewPager pager = (ViewPager) findViewById(R.id.mythmote_pager);
 
 		// if there is a viewpager set it up
-		if (null != pager) {
-			
-			int cItem = pager.getCurrentItem();
-			cItem = cItem >= 0 ? cItem : 0;
-			
-			//get fragment manager
-			FragmentManager fm = this.getSupportFragmentManager();
-			
-			//create fragment and header arrays
-			sFragmentArrayList = new ArrayList<Fragment>();
-			sHeaderArrayList = new ArrayList<String>();
-			
-			//mythmote navigation page fragment
-			Fragment nav = Fragment.instantiate(this, MythmoteNavigationFragment.class.getName());
-			sFragmentArrayList.add(nav);
-			sHeaderArrayList.add(this.getString(R.string.navigation_str));
+		if (null == pager)
+			return false;
 
-			//mythmote numbers page fragment
-			Fragment num = Fragment.instantiate(this, MythmoteNumberPadFragment.class.getName());
-			sFragmentArrayList.add(num);
-			sHeaderArrayList.add(this.getString(R.string.numpad_str));
-			
-			//mythmote numbers page fragment
-			Fragment jump = Fragment.instantiate(this, MythmoteQuickJumpFragment.class.getName());
-			sFragmentArrayList.add(jump);
-			sHeaderArrayList.add(this.getString(R.string.quickjump_str));
-			
-			//mythmote keyboard input page fragment
-			Fragment keyboard = Fragment.instantiate(this, MythmoteKeyboardInputFragment.class.getName());
-			sFragmentArrayList.add(keyboard);
-			sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
-			
-			//set pager adapter and initial item
-			pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
-			pager.setCurrentItem(cItem);
+		//get current view pager page
+		int cItem = pager.getCurrentItem();
+		cItem = cItem >= 0 ? cItem : 0;
 
+		// create fragment and header arrays
+		sFragmentArrayList = new ArrayList<Fragment>();
+		sHeaderArrayList = new ArrayList<String>();
+
+		// mythmote navigation page fragment
+		Fragment nav = Fragment.instantiate(this,
+				MythmoteNavigationFragment.class.getName());
+		sFragmentArrayList.add(nav);
+		sHeaderArrayList.add(this.getString(R.string.navigation_str));
+
+		// mythmote numbers page fragment
+		Fragment num = Fragment.instantiate(this,
+				MythmoteNumberPadFragment.class.getName());
+		sFragmentArrayList.add(num);
+		sHeaderArrayList.add(this.getString(R.string.numpad_str));
+
+		// mythmote numbers page fragment
+		Fragment jump = Fragment.instantiate(this,
+				MythmoteQuickJumpFragment.class.getName());
+		sFragmentArrayList.add(jump);
+		sHeaderArrayList.add(this.getString(R.string.quickjump_str));
+
+		// mythmote keyboard input page fragment
+		Fragment keyboard = Fragment.instantiate(this,
+				MythmoteKeyboardInputFragment.class.getName());
+		sFragmentArrayList.add(keyboard);
+		sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
+
+		// set pager adapter and initial item
+		pager.setAdapter(new MythmotePagerAdapter(this
+				.getSupportFragmentManager()));
+		pager.setCurrentItem(cItem);
+
+		return true;
+	}
+
+	/**
+	 * Setups up the large layout that does not
+	 * use the ViewPager
+	 */
+	private boolean setupLargeLayout() {
+		
+		//get framgment manager and start a transaction
+		FragmentManager fragMgr = this.getSupportFragmentManager();
+		FragmentTransaction fTran = fragMgr.beginTransaction();
+
+		//Setup nav fragment
+		Fragment nav = fragMgr.findFragmentById(R.layout.fragment_mythmote_navigation);
+		if (null == nav) {
+			nav = Fragment.instantiate(this,
+					MythmoteNavigationFragment.class.getName());
+			fTran.add(R.id.framelayout_navigation_fragment, nav);
+		}else{
+			fTran.replace(R.id.framelayout_navigation_fragment, nav);
 		}
+		
+		//setup number pad
+		Fragment num = fragMgr.findFragmentById(R.layout.fragment_mythmote_numbers);
+		if (null == num) {
+			num = Fragment.instantiate(this,
+					MythmoteNumberPadFragment.class.getName());
+			fTran.add(R.id.framelayout_numberpad_fragment, num);
+		}else{
+			fTran.replace(R.id.framelayout_numberpad_fragment, num);
+		}
+		
+		//setup quick jump
+		Fragment jump = fragMgr.findFragmentById(R.layout.fragment_mythmote_quickjump);
+		if (null == jump) {
+			jump = Fragment.instantiate(this,
+					MythmoteQuickJumpFragment.class.getName());
+			fTran.add(R.id.framelayout_quickjump_fragment, jump);
+		}else{
+			fTran.replace(R.id.framelayout_quickjump_fragment, jump);
+		}
+		
+		//finalize fragment transaction
+		fTran.commit();
+		
+		return true;
 	}
 
 	/**
