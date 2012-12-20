@@ -1,8 +1,13 @@
 package tkj.android.homecontrol.mythmote;
 
 import tkj.android.homecontrol.mythmote.R.id;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,27 +18,49 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 
-public class MythmoteKeyboardInputFragment extends AbstractMythmoteFragment implements TextWatcher, OnKeyListener {
+public class MythmoteKeyboardInputFragment extends AbstractMythmoteDialogFragment implements TextWatcher, OnKeyListener, OnClickListener {
 	
-	
+	//keeps track if this fragment is being displayed as a dialog or not
+	boolean mIsDialog = false;
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		
+		mIsDialog = true;
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		
+		builder.setMessage(R.string.keyboard_input_dialog_message);
+		//builder.setNeutralButton(R.string.done_str, this);
+		builder.setView(setupViewButtons(getActivity().getLayoutInflater().inflate(R.layout.fragment_mythmote_keyboardinput, null)));
+		
+		return builder.create();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		//if this is a dialog the layout has already been inflated
+		if(mIsDialog) return super.onCreateView(inflater, container, savedInstanceState);
 		
-		View view = inflater.inflate(R.layout.fragment_mythmote_keyboardinput, container, false);
-		
-		return view;
+		return this.setupViewButtons(inflater.inflate(R.layout.fragment_mythmote_keyboardinput, container, false));
 	}
-	
+
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+	public void onResume() {
 		
-		EditText input = (EditText) view.findViewById(R.id.EditTextKeyboardInput);
+		//if this is a dialog do not play with the keyboard
+		if(mIsDialog) {
+			super.onResume();
+			return;
+		}
 		
+		//try to force the keyboard visible
+		EditText input = (EditText) this.getView().findViewById(R.id.EditTextKeyboardInput);
 		if(null != input){
 			input.setOnKeyListener(this);
 			input.addTextChangedListener(this);
@@ -42,16 +69,22 @@ public class MythmoteKeyboardInputFragment extends AbstractMythmoteFragment impl
 			imm.showSoftInput(input,InputMethodManager.SHOW_FORCED);
 		}
 		
+		super.onResume();
 	}
-	
-	
 	
 	@Override
 	public void onPause() {
 		
+		//if this is a dialog do not play with the keyboard
+		if(mIsDialog) {
+			super.onPause();
+			return;
+		}
+		
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 		
+
 		super.onPause();
 	}
 	
@@ -96,18 +129,28 @@ public class MythmoteKeyboardInputFragment extends AbstractMythmoteFragment impl
 		}
 	}
 	
-	class InputConnection extends BaseInputConnection{
-
-		@Override
-		public boolean sendKeyEvent(KeyEvent event) {
-			sendString(event.getCharacters());
-			return super.sendKeyEvent(event);
-		}
-
-		public InputConnection(View targetView, boolean fullEditor) {
-			super(targetView, fullEditor);
+	private View setupViewButtons(View view){
+		Button button = (Button)view.findViewById(R.id.ButtonClear);
+		if(null != button){
+			button.setOnClickListener(new View.OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					EditText edit = (EditText)v.findViewById(R.id.EditTextKeyboardInput);
+					if(null != edit) edit.setText("");
+				}});
 		}
 		
+		button = (Button)view.findViewById(R.id.ButtonEnter);
+		if(null != button){
+			button.setOnClickListener(new View.OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					if(null == mythCom || !mythCom.IsConnected()) return;
+					mythCom.SendKey("enter");
+				}});
+		}
+		
+		return view;
 	}
 
 	@Override
@@ -148,7 +191,10 @@ public class MythmoteKeyboardInputFragment extends AbstractMythmoteFragment impl
 		}
 		return false;
 	}
-	
-	
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		//don't have to do anything
+	}
 	
 }
