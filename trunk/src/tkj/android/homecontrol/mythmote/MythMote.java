@@ -104,8 +104,7 @@ public class MythMote extends FragmentActivity implements
 		// set status changed event handler
 		sComm.SetOnStatusChangeHandler(this);
 		
-		//load and configure user interface
-		this.setupContentView();
+		
 	}
 
 	/**
@@ -115,6 +114,9 @@ public class MythMote extends FragmentActivity implements
 	public void onResume() {
 		super.onResume();
 		
+		//load and configure user interface
+		this.setupContentView();
+				
 		// Here we disconnect if connected because the selected location
 		// may have changed from the preference activity. setSelectedLocation()
 		// will also trigger
