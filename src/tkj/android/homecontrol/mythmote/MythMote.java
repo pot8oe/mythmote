@@ -66,9 +66,6 @@ public class MythMote extends FragmentActivity implements
 	public static final int SENDWOL_ID = Menu.FIRST + 4;
 	public static final int SENDWOL_RE_ID = Menu.FIRST + 5;
 	public static final int SENDWOL_PJ_ID = Menu.FIRST + 6;
-	public static final String NAME_NAV_TAB = "TabNavigation";
-	public static final String NAME_MEDIA_TAB = "TabNMediaControl";
-	public static final String NAME_NUMPAD_TAB = "TabNumberPad";
 	public static final String LOG_TAG = "MythMote";
 
 	private static final String KEY_VOLUME_DOWN = "[";
@@ -508,50 +505,6 @@ public class MythMote extends FragmentActivity implements
 		dbManager.close();
 
 		return true;
-	}
-
-	/**
-	 * Creates and defines the OnClickListener for media tab's send keyboard
-	 * input button.
-	 */
-	private void setupSendKeyboardInputButton() {
-		// send keyboard input
-		final Button buttonJump = (Button) this.findViewById(R.id.ButtonSend);
-		final EditText textBox = (EditText) this
-				.findViewById(R.id.EditTextKeyboardInput);
-		if (buttonJump != null && textBox != null) {
-			buttonJump.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-
-					// get send keyboard text
-					Editable text = textBox.getText();
-					int count = text.length();
-
-					// for each character
-					for (int i = 0; i < count; i++) {
-						// get char
-						char c = text.charAt(i);
-
-						// check if it's whitespace
-						if (Character.isWhitespace(c)) {
-							if (c == '\t')// tab
-							{
-								sComm.SendKey("tab");
-							} else if (c == ' ')// space
-							{
-								sComm.SendKey("space");
-							} else if (c == '\r')// enter/return
-							{
-								sComm.SendKey("enter");
-							}
-						} else// not white space. Just send as is
-						{
-							sComm.SendKey(c);
-						}
-					}
-				}
-			});
-		}
 	}
 
 	/**
