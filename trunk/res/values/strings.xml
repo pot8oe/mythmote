@@ -111,6 +111,8 @@
 <string name="key_repeat_interval_description_str">Speed of key presses during Long-Press action "Auto Repeat"</string>
 <string name="conection_timeout_interval_str">Connection Timeout Interval</string>
 <string name="conection_timeout_interval_description_str">How long connection attempts wait before failing.</string>
+<string name="keyboard_input_dialog_message">Characters typed into the textbox below will be sent to the connected frontend. Backspace should function as expected. Mythfrontend does not appear to honor the \'key space\' command breaking spacebar functionality.</string>
+<string name="done_str">Done</string>
 
 
 <string-array name="status_Update_Interval_strings">

@@ -27,6 +27,7 @@ import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,11 +36,13 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TabHost.OnTabChangeListener;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -66,6 +69,7 @@ public class MythMote extends FragmentActivity implements
 	public static final int SENDWOL_ID = Menu.FIRST + 4;
 	public static final int SENDWOL_RE_ID = Menu.FIRST + 5;
 	public static final int SENDWOL_PJ_ID = Menu.FIRST + 6;
+	public static final int KEYBOARD_INPUT_ID = Menu.FIRST + 7;
 	public static final String LOG_TAG = "MythMote";
 
 	private static final String KEY_VOLUME_DOWN = "[";
@@ -191,26 +195,52 @@ public class MythMote extends FragmentActivity implements
 	/**
 	 * Called to create the options menu once.
 	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
-		// create settings menu item
-		menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(
-				R.drawable.settings);
-
 		// create reconnect menu item
-		menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(
-				R.drawable.menu_refresh);
+		MenuItem menuItem = menu.add(0, RECONNECT_ID, 0, R.string.reconnect_str).setIcon(
+				R.drawable.ic_menu_refresh);
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	menuItem.setShowAsAction( MenuItem.SHOW_AS_ACTION_ALWAYS );
+	    }
+
+		// create settings menu item
+		menuItem = menu.add(0, SETTINGS_ID, 0, R.string.settings_menu_str).setIcon(
+				android.R.drawable.ic_menu_preferences);
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	menuItem.setShowAsAction( MenuItem.SHOW_AS_ACTION_IF_ROOM );
+	    }
+		
+		// create keyboard input menu item
+		menuItem = menu.add(0, KEYBOARD_INPUT_ID, 0, R.string.keyboard_input_str).setIcon(
+				R.drawable.ic_notification_ime_default);
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	menuItem.setShowAsAction( MenuItem.SHOW_AS_ACTION_IF_ROOM );
+	    }
 
 		// create select location menu item
-		menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
-				.setIcon(R.drawable.selected_location);
+		menuItem = menu.add(0, SELECTLOCATION_ID, 0, R.string.selected_location_str)
+				.setIcon(R.drawable.ic_menu_home);
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	menuItem.setShowAsAction( MenuItem.SHOW_AS_ACTION_NEVER );
+	    }
 		
 		//create wake on lan menu item
-		menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str).setIcon(R.drawable.ic_menu_sun);
+		menuItem = menu.add(0, SENDWOL_ID, 0, R.string.send_wol_str).setIcon(R.drawable.ic_menu_sun);
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	menuItem.setShowAsAction( MenuItem.SHOW_AS_ACTION_NEVER);
+	    	
+	    }
 		//menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
 		//menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
+		
+		//add donate button if enabled
+		if(sShowDonateMenuItem){
+			
+		}
 		
 		// return results
 		return result;
@@ -222,14 +252,18 @@ public class MythMote extends FragmentActivity implements
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		
-		if(menu != null){
-			if(menu.findItem(DONATE_ID) != null)menu.removeItem(DONATE_ID);
+		if(null != menu){
 			
-			//remove donate button if disabled
-			if(sShowDonateMenuItem){
-				// create donate menu item
+			//get donate menu item
+			MenuItem menuItem = menu.findItem(DONATE_ID);
+			
+			//if donate menu item exists and the user wants it gone remove it
+			if(null != menuItem && !sShowDonateMenuItem)
+				menu.removeItem(DONATE_ID);
+
+			//if the donate button is missing and the user wants it add it back
+			if(null == menuItem && sShowDonateMenuItem)
 				menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str).setIcon(R.drawable.paypal);
-			}
 		}
 		return super.onMenuOpened(featureId, menu);
 	}
@@ -244,10 +278,10 @@ public class MythMote extends FragmentActivity implements
 			switch (item.getItemId()) {
 			case SETTINGS_ID:
 				// Create mythmote preferences intent and start the activity
-				Intent intent = new Intent(
+				Intent settingsIntent = new Intent(
 						this,
 						tkj.android.homecontrol.mythmote.MythMotePreferences.class);
-				this.startActivity(intent);
+				this.startActivity(settingsIntent);
 				break;
 
 			case RECONNECT_ID:
@@ -296,6 +330,11 @@ public class MythMote extends FragmentActivity implements
 				break;
 			case DONATE_ID:
 				this.startDonateIntent();
+				break;
+				
+			case KEYBOARD_INPUT_ID:
+			    DialogFragment newFragment = new MythmoteKeyboardInputFragment();
+			    newFragment.show(getSupportFragmentManager(), "keyboard_input");
 				break;
 				
 			};
@@ -360,11 +399,11 @@ public class MythMote extends FragmentActivity implements
 		sFragmentArrayList.add(jump);
 		sHeaderArrayList.add(this.getString(R.string.quickjump_str));
 
-		// mythmote keyboard input page fragment
-		Fragment keyboard = Fragment.instantiate(this,
-				MythmoteKeyboardInputFragment.class.getName());
-		sFragmentArrayList.add(keyboard);
-		sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
+//		// mythmote keyboard input page fragment
+//		Fragment keyboard = Fragment.instantiate(this,
+//				MythmoteKeyboardInputFragment.class.getName());
+//		sFragmentArrayList.add(keyboard);
+//		sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
 
 		// set pager adapter and initial item
 		pager.setAdapter(new MythmotePagerAdapter(this
