@@ -109,6 +109,8 @@
 <string name="longpress_action_description_str">Action taken when a button is held down.</string>
 <string name="key_repeat_interval_str">Key Repeat Interval</string>
 <string name="key_repeat_interval_description_str">Speed of key presses during Long-Press action "Auto Repeat"</string>
+<string name="conection_timeout_interval_str">Connection Timeout Interval</string>
+<string name="conection_timeout_interval_description_str">How long connection attempts wait before failing.</string>
 
 
 <string-array name="status_Update_Interval_strings">
@@ -126,6 +128,31 @@
 </string-array>
 <string-array name="status_Update_Interval_values">
 <item>0</item>
+<item>1000</item>
+<item>2000</item>
+<item>3000</item>
+<item>4000</item>
+<item>5000</item>
+<item>6000</item>
+<item>7000</item>
+<item>8000</item>
+<item>9000</item>
+<item>10000</item>
+</string-array>
+
+<string-array name="connection_timeout_interval_strings">
+<item>1sec</item>
+<item>2sec</item>
+<item>3sec</item>
+<item>4sec</item>
+<item>5sec (Recommended)</item>
+<item>6sec</item>
+<item>7sec</item>
+<item>8sec</item>
+<item>9sec</item>
+<item>10sec</item>
+</string-array>
+<string-array name="connection_timeout_interval_values">
 <item>1000</item>
 <item>2000</item>
 <item>3000</item>
