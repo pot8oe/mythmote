@@ -30,7 +30,7 @@
             android:id="@+id/ButtonJump1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />
@@ -39,9 +39,7 @@
             android:id="@+id/ButtonJump2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />
@@ -50,9 +48,7 @@
             android:id="@+id/ButtonJump3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />
@@ -61,9 +57,7 @@
             android:id="@+id/ButtonJump4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />
@@ -72,9 +66,7 @@
             android:id="@+id/ButtonJump5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />
@@ -83,9 +75,7 @@
             android:id="@+id/ButtonJump6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_margin="0.5dip"
             android:layout_weight="10"
             android:background="@drawable/mythmote_button"
             android:textColor="@color/button_text_color" />

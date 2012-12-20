@@ -11,12 +11,12 @@
         android:name="tkj.android.homecontrol.mythmote.MythmoteNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5" />
+        android:layout_weight="0.4" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="0.6"
         android:orientation="horizontal"
         android:weightSum="1" >
 
