@@ -48,6 +48,7 @@ public class MythMotePreferences extends PreferenceActivity {
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_GESTURES_ENABLED = "gestures-enabled";
 	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
+	public static final String PREF_CONNECTION_TIMEOUT_INTERVAL = "conection-timeout-interval";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 
 	private static int sIdIndex;
@@ -111,15 +112,15 @@ public class MythMotePreferences extends PreferenceActivity {
 		//general category
 		PreferenceCategory generalCat = new PreferenceCategory(context);
 		generalCat.setTitle(R.string.general_preferences_str);
-		//gesture category
-		PreferenceCategory gestureCat = new PreferenceCategory(context);
-		gestureCat.setTitle(R.string.gesture_settings_str);
+//		//gesture category
+//		PreferenceCategory gestureCat = new PreferenceCategory(context);
+//		gestureCat.setTitle(R.string.gesture_settings_str);
 		
 
 		// add categories to preference screen
 		prefScreen.addPreference(selectedCat);
 		prefScreen.addPreference(locationListCat);
-		prefScreen.addPreference(gestureCat);
+//		prefScreen.addPreference(gestureCat);
 		prefScreen.addPreference(generalCat);
 
 		// Create add and delete location preferences and add to location list
@@ -160,21 +161,29 @@ public class MythMotePreferences extends PreferenceActivity {
 				R.array.key_repeat_interval_strings,
 				R.array.key_repeat_interval_values, "100"));
 		
+		// create connection timeout interval preference
+		generalCat.addPreference(createIntListPreference(context,
+				PREF_CONNECTION_TIMEOUT_INTERVAL,
+				R.string.conection_timeout_interval_str,
+				R.string.conection_timeout_interval_description_str,
+				R.array.connection_timeout_interval_strings,
+				R.array.connection_timeout_interval_values, "5000"));
+		
 		// create donate button visible checkbox
 		generalCat.addPreference(createCheckBox(context,
 				PREF_SHOW_DONATE_MENU_ITEM,
 				R.string.show_donate_menu_item_str,
 				R.string.show_donate_menu_item_str, true));
 		
-		//create gestures enabled
-		gestureCat.addPreference(createCheckBox(context,
-				PREF_GESTURES_ENABLED,
-				R.string.gestures_enabled_str,
-				R.string.gestures_enabled_str, false));
-		
-		//gesture list preference
-		Preference gestureList = createGestureListPreference(context);
-		gestureCat.addPreference(gestureList);
+//		//create gestures enabled
+//		gestureCat.addPreference(createCheckBox(context,
+//				PREF_GESTURES_ENABLED,
+//				R.string.gestures_enabled_str,
+//				R.string.gestures_enabled_str, false));
+//		
+//		//gesture list preference
+//		Preference gestureList = createGestureListPreference(context);
+//		gestureCat.addPreference(gestureList);
 
 		// open DB
 		MythMoteDbManager _dbAdapter = new MythMoteDbManager(context);
@@ -252,7 +261,7 @@ public class MythMotePreferences extends PreferenceActivity {
 		context.setPreferenceScreen(prefScreen);
 		
 		//Assign dependences
-		gestureList.setDependency(PREF_GESTURES_ENABLED);
+//		gestureList.setDependency(PREF_GESTURES_ENABLED);
 	}
 
 	private static void showLocationEditDialog(Context context,

@@ -45,7 +45,7 @@ public class MythCom {
 	}
 
 	public static final int DEFAULT_MYTH_PORT = 6546;
-	public static final int DEFAULT_SOCKET_TIMEOUT = 2000;
+	public static final int DEFAULT_SOCKET_TIMEOUT = 5000;
 	public static final int ENABLE_WIFI = 0;
 	public static final int CANCEL = 1;
 	public static final int STATUS_DISCONNECTED = 0;
@@ -107,6 +107,12 @@ public class MythCom {
 				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
 				Context.MODE_PRIVATE).getInt(
 				MythMotePreferences.PREF_STATUS_UPDATE_INTERVAL, 5000);
+		
+		//read connection timeout interval
+		int connectionTimeoutInterval = sParent.getSharedPreferences(
+				MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,
+				Context.MODE_PRIVATE).getInt(
+				MythMotePreferences.PREF_CONNECTION_TIMEOUT_INTERVAL, DEFAULT_SOCKET_TIMEOUT);
 
 		// schedule update timer
 		scheduleUpdateTimer(updateInterval);
@@ -130,7 +136,7 @@ public class MythCom {
 		this.setStatus("Connecting", STATUS_CONNECTING);
 
 		// create a socket connecting to the address on the requested port
-		this.connectSocket();
+		this.connectSocket(connectionTimeoutInterval);
 	}
 
 	/** Closes the socket if it exists and it is already connected **/
@@ -199,7 +205,7 @@ public class MythCom {
 	}
 
 	/** Connects _socket to _frontend using a separate thread **/
-	private void connectSocket() {
+	private void connectSocket(final int connectionTimeout) {
 		// create socket if it does not exist
 		if (sSocket == null)
 			sSocket = new Socket();
@@ -232,7 +238,7 @@ public class MythCom {
 						// connect
 						sSocket.connect(new InetSocketAddress(
 								sFrontend.Address, sFrontend.Port),
-								DEFAULT_SOCKET_TIMEOUT);
+								connectionTimeout);
 
 						// check if connected
 						if (sSocket.isConnected()) {
