@@ -33,27 +33,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="3">
+        
+        <Button
+            android:id="@+id/ButtonKeyboardInputDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/mythmote_button"
+            android:text="@string/backspace_str"
+            android:textColor="@color/button_text_color" />
+        
+        <Button
+            android:id="@+id/ButtonEnter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/mythmote_button"
+            android:text="@string/enter_str"
+            android:textColor="@color/button_text_color" />
         
         <Button
             android:id="@+id/ButtonClear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:background="@drawable/mythmote_button"
             android:text="@string/clear_str"
             android:textColor="@color/button_text_color" />
 
-        <Button
-            android:id="@+id/ButtonEnter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="1dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/mythmote_button"
-            android:text="@string/enter_str"
-            android:textColor="@color/button_text_color" />
+        
         
     </LinearLayout>
 
