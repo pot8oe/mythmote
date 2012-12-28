@@ -23,9 +23,7 @@ import java.util.List;
 import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
-import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
-import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
 import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -38,10 +36,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TabHost.OnTabChangeListener;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -49,14 +43,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 public class MythMote extends FragmentActivity implements
@@ -454,7 +444,9 @@ public class MythMote extends FragmentActivity implements
 		}
 		
 		//finalize fragment transaction
-		fTran.commit();
+		//fTran.commit();
+		//this fixes an exception reported via google play caused by a bug in support library.
+		fTran.commitAllowingStateLoss();
 		
 		return true;
 	}
