@@ -21,6 +21,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -221,6 +222,9 @@ public class MythCom {
 					// set status and code
 					sStatus = "Socket is not defined.";
 					sStatusCode = STATUS_ERROR;
+				} else if(null == sFrontend.Address || "".contentEquals(sFrontend.Address)){
+					sStatus = "Invalid configuration: Host name undefined";
+					sStatusCode = STATUS_ERROR;
 				} else {
 					try {
 						
@@ -238,13 +242,17 @@ public class MythCom {
 						
 						// connect
 						InetSocketAddress sockAdr = new InetSocketAddress(sFrontend.Address, sFrontend.Port);
-						
+
 						//try to ping the frontend first
 						try{
-							Log.d(MythMote.LOG_TAG, sockAdr.getAddress().isReachable(PING_TIMEOUT) ?
+							InetAddress iNetAdr = sockAdr.getAddress();
+							Log.d(MythMote.LOG_TAG, iNetAdr.isReachable(PING_TIMEOUT) ?
 									"Frontend is reachable" : "Failed to ping frontend");
 						}catch(IOException e){
 							Log.e(MythMote.LOG_TAG, "Error pinging frontend: " + e.getMessage()); 
+						}catch(NullPointerException e){
+							sStatus = "Invalid configuration: Bad Host Name";
+							sStatusCode = STATUS_ERROR;
 						}
 						
 						//connect
@@ -276,6 +284,7 @@ public class MythCom {
 							sStatus = sFrontend.Name + " - Connected";
 							sStatusCode = STATUS_CONNECTED;
 						}
+						
 					} catch (UnknownHostException e) {
 						// set status and code
 						sStatus = "Unknown host: " + sFrontend.Address;
