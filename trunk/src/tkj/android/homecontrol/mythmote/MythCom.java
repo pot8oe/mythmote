@@ -28,16 +28,24 @@ import java.net.UnknownHostException;
 import java.util.EventListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Toast;
 import android.util.Log;
 
-/** Class that handles network communication with mythtvfrontend **/
+/**
+ *  Class that handles network communication with mythtvfrontend 
+ *  
+ *  @author pot8oe
+ */
 public class MythCom {
 
 	public interface StatusChangedEventListener extends EventListener {
@@ -368,27 +376,41 @@ public class MythCom {
 	}
 
 	/**
-	 * Sends data to the output stream of the socket. Attempts to reconnect
-	 * socket if connection does not already exist.
+	 * Sends data to the output stream of the socket using SendDataTask.
 	 **/
 	private boolean sendData(String data) {
-		if (this.IsConnected() && sOutputStream != null) {
-			try {
-				if (!data.endsWith("\n"))
-					data = String.format("%s\n", data);
-
-				sOutputStream.write(data);
-				sOutputStream.flush();
-
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-				this.setStatus(e.getLocalizedMessage() + ": "
-						+ sFrontend.Address, STATUS_ERROR);
-				this.Disconnect();
-				return false;
+		
+		//leave if not connected
+		if(!this.IsConnected()) return false;
+		
+		//send data on another thread
+		SendDataTask sTask = new SendDataTask();
+		sTask.execute(data);
+		
+		try {
+			//return task result
+			return sTask.get(1000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			if(null == e.getMessage()){
+				Log.e(MythMote.LOG_TAG, "SendData Async task interrupted");
+			}else{
+				Log.e(MythMote.LOG_TAG, e.getMessage());
 			}
-		}
+		} catch (ExecutionException e) {
+			if(null == e.getMessage()){
+				Log.e(MythMote.LOG_TAG, "SendData Async task ExecutionException");
+			}else{
+				Log.e(MythMote.LOG_TAG, e.getMessage());
+			}
+		} catch (TimeoutException e) {
+			if(null == e.getMessage()){
+				Log.e(MythMote.LOG_TAG, "SendData Async task Timed out");
+			}else{
+				Log.e(MythMote.LOG_TAG, e.getMessage());
+			}
+		};
+		
+		//if we get here then the asyctask did not return true.
 		return false;
 	}
 
@@ -494,6 +516,45 @@ public class MythCom {
 		} catch (Exception ex) {
 			Log.e(MythMote.LOG_TAG, "Error scheduling status update timer.", ex);
 		}
+	}
+	
+	
+	/**
+	 * Sends data to the output stream. The connection is assumed open and will
+	 * be closed on IOException. Only the first String... data param is processed.
+	 * 
+	 * @author pot8oe
+	 */
+	private class SendDataTask extends AsyncTask<String, Integer, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(String... data) {
+
+			if (null == data)
+				return false;
+			if (data.length <= 0)
+				return false;
+
+			if (sOutputStream != null) {
+				try {
+					if (!data[0].endsWith("\n"))
+						data[0] = String.format("%s\n", data[0]);
+
+					sOutputStream.write(data[0]);
+					sOutputStream.flush();
+
+					return true;
+				} catch (IOException e) {
+					e.printStackTrace();
+					setStatus(e.getLocalizedMessage() + ": "
+							+ sFrontend.Address, STATUS_ERROR);
+					Disconnect();
+					return false;
+				}
+			}
+			return false;
+		}
+
 	}
 
 }
