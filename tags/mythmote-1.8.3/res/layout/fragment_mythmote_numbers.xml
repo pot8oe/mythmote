@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    This file is part of MythTV Android Frontend
+
+    MythTV Android Frontend is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    MythTV Android Frontend is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with MythTV Android Frontend.  If not, see <http://www.gnu.org/licenses/>.
+
+    This software can be found at <https://github.com/MythTV-Clients/MythTV-Android-Frontend/>
+
+-->
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:weightSum="4" xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="3" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="1"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="2"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="3"
+            android:textColor="@color/button_text_color" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="3" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="4"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="5"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="6"
+            android:textColor="@color/button_text_color" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="3" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="7"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="8"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="9"
+            android:textColor="@color/button_text_color" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="3" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonBackspace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="Delete"
+            android:textColor="@color/button_text_color" />
+
+        <!-- On older versions of android the left and right columns would be wider because of the
+        length of the words 'Delete' and 'Enter'. Added padding to reduce the effect.  -->
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/Button0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:background="@drawable/mythmote_button"
+            android:text="0"
+            android:textColor="@color/button_text_color" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+            android:id="@+id/ButtonEnter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="0.5dip"
+            android:background="@drawable/mythmote_button"
+            android:text="Enter"
+            android:textColor="@color/button_text_color" />
+
+    </TableRow>
+    
+</TableLayout>
