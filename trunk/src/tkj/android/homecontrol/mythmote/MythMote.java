@@ -16,7 +16,6 @@
 
 package tkj.android.homecontrol.mythmote;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +56,7 @@ public class MythMote extends FragmentActivity implements
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
 	public static final int DONATE_ID = Menu.FIRST + 3;
 	public static final int SENDWOL_ID = Menu.FIRST + 4;
-	public static final int SENDWOL_RE_ID = Menu.FIRST + 5;
-	public static final int SENDWOL_PJ_ID = Menu.FIRST + 6;
-	public static final int KEYBOARD_INPUT_ID = Menu.FIRST + 7;
+	public static final int KEYBOARD_INPUT_ID = Menu.FIRST + 5;
 	public static final String LOG_TAG = "MythMote";
 
 	private static final String KEY_VOLUME_DOWN = "[";
@@ -292,31 +289,7 @@ public class MythMote extends FragmentActivity implements
 				break;
 
 			case SENDWOL_ID:
-				//This sends the PJRS implementation of WOL
-				try {
-					//PJRS WOL
-					//WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
-					WOLPowerManager.sendWOL(this, sLocation.MAC, 2);
-				} catch (IOException e) {
-					Log.d(LOG_TAG, e.getMessage());
-				}
-				break;
-			case SENDWOL_RE_ID:
-				try {
-					//Rob Elsner WOL
-					WOLPowerManager.sendWOL(sLocation.MAC, this);
-				} catch (IOException e) {
-					Log.d(LOG_TAG, e.getMessage());
-				}
-				break;
-			case SENDWOL_PJ_ID:
-				try {
-					//PJRS WOL
-					//WOLPowerManager.sendWOL(sLocation.Address, sLocation.MAC, 2);
-					WOLPowerManager.sendWOL(this, sLocation.MAC, 2);
-				} catch (IOException e) {
-					Log.d(LOG_TAG, e.getMessage());
-				}
+				WOLPowerManager.sendWOL(this, sLocation.MAC, 5);
 				break;
 			case DONATE_ID:
 				this.startDonateIntent();

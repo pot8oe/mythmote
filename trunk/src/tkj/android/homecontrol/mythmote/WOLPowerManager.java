@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 
@@ -21,90 +19,75 @@ import android.widget.Toast;
  */
 public class WOLPowerManager
 {
-	public static int MACPORT = 7000;
-
-
-
 	/**
-	 * Send a WOL broadcast packet to the specified MAC
-	 * 
-	 * @param macAddress
-	 *            00:00:00:00:00 format
-	 * @return true on success
-	 * @throws IOException
+	 * PJRS Wake On Lan based on code at www.jibble.org
 	 */
-	public static boolean sendWOL(final String macAddress, final Context mContext) throws IOException
-	{
-		try
-		{
-			byte[] wolPacket = buildWolPacket(macAddress);
-			InetAddress broadcast = getBroadcastAddress(mContext);
-			DatagramSocket socket = new DatagramSocket(MACPORT);
-			socket.setBroadcast(true);
-			DatagramPacket packet = new DatagramPacket(wolPacket,
-					wolPacket.length, broadcast, MACPORT);
-			socket.send(packet);
-			socket.close();
-			return true;
-		} catch (Exception e)
-		{
-			Log.e(MythMote.LOG_TAG, "failure", e);
-			Toast t = Toast.makeText(mContext, e.getLocalizedMessage(), Toast.LENGTH_LONG);
-			t.show();
-			return false;
-		}
-
-	}
-
-	/**
-	 * PJRS Wake On Lan based on code at www.jibble.org which is
-	 * 	 * similar to that by rob elsner; the original sendWOL doesn't work
-	 */
-	public static void sendWOL(final Context context, final String MACAddress, int nos_to_send) throws IOException 
+	public static void sendWOL(final Context context, final String MACAddress, int packetCount)
 	{
 		//check for errors
 		if(MACAddress == null || MACAddress.length() == 0) return;
 
 		try {
-			byte[] macBytes = getMacBytes(MACAddress);
-			byte[] bytes = new byte[6 + 16 * macBytes.length];
-			for (int i = 0; i < 6; i++) {
-				bytes[i] = (byte) 0xff;
-			}
-			for (int i = 6; i < bytes.length; i += macBytes.length) {
-				System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
-			}
-
-			InetAddress address = getBroadcastAddress(context);
-			DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, MACPORT);
-			DatagramSocket socket = new DatagramSocket(MACPORT);
-			for (int i = 0; i < nos_to_send; i++)
-				socket.send(packet);
-			socket.close();
-
-			System.out.println("Wake-on-LAN packet sent.");
+			//build task data parameter
+			SendWolTaskData taskData = new SendWolTaskData();
+			taskData.count = packetCount;
+			taskData.MACAddress = MACAddress;
+			taskData.broadcastAddress = getBroadcastAddress(context);
+			
+			//run sendwoltask
+			new SendWolTask().execute(taskData);
 		}
 		catch (Exception e) {
-
+			Log.e(MythMote.LOG_TAG, null != e.getMessage()? e.getMessage() : "Unknown error in sendWOL(Conext, String, int)");
 		}
 
 	}
 
+	/**
+	 * Returns the IP broadcast address for the current wifi connection
+	 * @param mContext
+	 * @return
+	 * @throws IOException
+	 */
 	private static InetAddress getBroadcastAddress(final Context mContext) throws IOException
 	{
-
-		WifiManager wifi = (WifiManager) mContext
-		.getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 		DhcpInfo dhcp = wifi.getDhcpInfo();
-		// handle null somehow
 
 		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
 		byte[] quads = new byte[4];
-		for (int k = 0; k < 4; k++)
+		for (int k = 0; k < 4; k++){
 			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+		}
 		return InetAddress.getByAddress(quads);
 	}
 
+}
+
+/**
+ * Parameter container for sending WOL packets using 
+ * the SendWolTask
+ * @author pot8oe
+ *
+ */
+class SendWolTaskData
+{
+	public String MACAddress;
+	public InetAddress broadcastAddress;
+	public int count;
+	
+	public SendWolTaskData(){}
+}
+
+/**
+ * Sends the given WOL packet 
+ * @author pot8oe
+ *
+ */
+class SendWolTask extends AsyncTask<SendWolTaskData, Integer, Boolean> {
+
+	private static int MACPORT = 7000;
+	
 	/**
 	 * PJRS WOL's getBytes
 	 * @param macStr
@@ -126,37 +109,66 @@ public class WOLPowerManager
 		}
 		catch (NumberFormatException e) {
 			//throw new IllegalArgumentException("Invalid hex digit in MAC address.");
+			Log.e(MythMote.LOG_TAG, "Invalid hex digit in MAC address.");
 		}
 		return bytes;
 	}
-
+	
 	/**
-	 * 
-	 * @param macAddress
-	 *            should be formatted as 00:00:00:00:00:00 in a string
-	 * @return the raw packet bytes to send along
+	 * Returns a WOL magic packet
+	 *  
+	 * @param MACAddress
+	 * @param broadcastAddress
+	 * @return
 	 */
-	private static byte[] buildWolPacket(final String macAddress)
-	{
-		final byte[] preamble =
-		{ (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-				(byte) 0xFF };
-		byte[] macBytes = new byte[6];
-		String[] octets = macAddress.split(":");
-		for (int i = 0; i < 6; i++)
-		{
-
-			macBytes[i] = (byte)(Integer.parseInt(octets[i], 16) & 0xFF);
+	private static DatagramPacket getWolMagicPacket(final String MACAddress, final InetAddress broadcastAddress){
+		byte[] macBytes = getMacBytes(MACAddress);
+		byte[] bytes = new byte[6 + 16 * macBytes.length];
+		
+		for (int i = 0; i < 6; i++) bytes[i] = (byte) 0xff;
+		
+		for (int i = 6; i < bytes.length; i += macBytes.length) {
+			System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
 		}
-		final byte[] body = new byte[36]; // 6 bytes for mac, repeated 6 times
-		for (int destPos = 0; destPos < 36; destPos += 6)
-		{
-			System.arraycopy(macBytes, 0, body, destPos, 6);
-		}
-		final byte[] packetBody = new byte[42];
-		System.arraycopy(preamble, 0, packetBody, 0, 6);
-		System.arraycopy(body, 0, packetBody, 6, 36);
-		return packetBody;
+		
+		return new DatagramPacket(bytes, bytes.length, broadcastAddress, MACPORT);
 	}
+	
+	/**
+	 * Creates a datagram socket, creates wol magic packet and sends the packet
+	 * the requested number of times.
+	 */
+	@Override
+	protected Boolean doInBackground(SendWolTaskData... params) {
+		
+		//check for param errors
+		if (null == params || params.length <= 0)
+			return false;
+		if (null == params[0])
+			return false;
 
+		try {
+			//create magic packet
+			DatagramPacket packet = getWolMagicPacket(params[0].MACAddress, params[0].broadcastAddress);
+			
+			//create socket
+			DatagramSocket socket = new DatagramSocket(MACPORT);
+			socket.setBroadcast(true);
+			
+			//send packet requested number of times
+			for (int i = 0; i < params[0].count; i++) {
+				socket.send(packet);
+				Log.d(MythMote.LOG_TAG, "WOL Magic Packet sent");
+			}
+			
+			//close socket
+			socket.close();
+		} catch (IOException e) {
+			Log.e(MythMote.LOG_TAG, e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+	
 }
