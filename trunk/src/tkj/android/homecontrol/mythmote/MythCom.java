@@ -37,6 +37,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.widget.Toast;
 import android.util.Log;
@@ -86,6 +87,8 @@ public class MythCom {
 		}
 
 	};
+	
+	private final Handler mHandlerMainLooper= new Handler(Looper.getMainLooper());
 
 	/** TimerTask that probes the current connection for its mythtv screen. **/
 	private static TimerTask timerTaskCheckStatus;
@@ -378,40 +381,55 @@ public class MythCom {
 	/**
 	 * Sends data to the output stream of the socket using SendDataTask.
 	 **/
-	private boolean sendData(String data) {
+	private boolean sendData(final String data) {
 		
 		//leave if not connected
 		if(!this.IsConnected()) return false;
 		
-		//send data on another thread
-		SendDataTask sTask = new SendDataTask();
-		sTask.execute(data);
-		
-		try {
-			//return task result
-			return sTask.get(1000, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			if(null == e.getMessage()){
-				Log.e(MythMote.LOG_TAG, "SendData Async task interrupted");
-			}else{
-				Log.e(MythMote.LOG_TAG, e.getMessage());
-			}
-		} catch (ExecutionException e) {
-			if(null == e.getMessage()){
-				Log.e(MythMote.LOG_TAG, "SendData Async task ExecutionException");
-			}else{
-				Log.e(MythMote.LOG_TAG, e.getMessage());
-			}
-		} catch (TimeoutException e) {
-			if(null == e.getMessage()){
-				Log.e(MythMote.LOG_TAG, "SendData Async task Timed out");
-			}else{
-				Log.e(MythMote.LOG_TAG, e.getMessage());
-			}
-		};
-		
-		//if we get here then the asyctask did not return true.
-		return false;
+		//check if called from main thread
+		if(Looper.getMainLooper().equals(Looper.myLooper())){
+			
+			//send data on another thread
+			SendDataTask sTask = new SendDataTask();
+			sTask.execute(data);
+			
+			try {
+				//return task result
+				return sTask.get(1000, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				if(null == e.getMessage()){
+					Log.e(MythMote.LOG_TAG, "SendData Async task interrupted");
+				}else{
+					Log.e(MythMote.LOG_TAG, e.getMessage());
+				}
+			} catch (ExecutionException e) {
+				if(null == e.getMessage()){
+					Log.e(MythMote.LOG_TAG, "SendData Async task ExecutionException");
+				}else{
+					Log.e(MythMote.LOG_TAG, e.getMessage());
+				}
+			} catch (TimeoutException e) {
+				if(null == e.getMessage()){
+					Log.e(MythMote.LOG_TAG, "SendData Async task Timed out");
+				}else{
+					Log.e(MythMote.LOG_TAG, e.getMessage());
+				}
+			};
+			
+			//if we get here then the asyctask did not return true.
+			return false;
+			
+		}else{
+			//If we're not called from the UI thread recall ourself on the UI thread.
+			//This ensures the AsycTask can be created correctly.
+			mHandlerMainLooper.post(new Runnable(){
+				@Override
+				public void run() {
+					sendData(data);
+				}});
+			//we wont get the real status just say OK to scheduling a call
+			return true;
+		}
 	}
 
 	/**
@@ -455,9 +473,8 @@ public class MythCom {
 	 * location. Returns null on error
 	 **/
 	private String queryMythScreen() {
-
-		if (this.sendData("query location")) {
-			if (this.IsConnected()) {
+		if (this.IsConnected()) {
+			if (this.sendData("query location")) {
 				return this.readData();
 			} else {
 				Log.e(MythMote.LOG_TAG, sStatus + ": Not connected on receive");
@@ -493,6 +510,7 @@ public class MythCom {
 			if (updateInterval > 0) {
 				// create timer task
 				timerTaskCheckStatus = new TimerTask() {
+					
 					// Run at every timer tick
 					@Override
 					public void run() {
