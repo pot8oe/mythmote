@@ -259,10 +259,6 @@ public class MythCom {
 							InetAddress iNetAdr = sockAdr.getAddress();
 							Log.d(MythMote.LOG_TAG, iNetAdr.isReachable(PING_TIMEOUT) ?
 									"Frontend is reachable" : "Failed to ping frontend");
-
-							//connect
-							sSocket.connect(sockAdr, connectionTimeout);
-							
 						}catch(IOException e){
 							Log.e(MythMote.LOG_TAG, "Error pinging frontend: " + e.getMessage()); 
 						}catch(NullPointerException e){
@@ -270,7 +266,8 @@ public class MythCom {
 							sStatusCode = STATUS_ERROR;
 						}
 						
-						
+						//connect
+						sSocket.connect(sockAdr, connectionTimeout);
 
 						// check if connected
 						if (sSocket.isConnected()) {
