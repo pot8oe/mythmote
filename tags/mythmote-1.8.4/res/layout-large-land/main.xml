@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_layout_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1" >
+
+    <FrameLayout
+        android:id="@+id/framelayout_navigation_fragment"
+        android:name="tkj.android.homecontrol.mythmote.MythmoteNavigationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:weightSum="4">
+        
+        <FrameLayout
+            android:id="@+id/framelayout_numberpad_fragment"
+            android:name="tkj.android.homecontrol.mythmote.MythmoteNumberPadFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <FrameLayout
+            android:id="@+id/framelayout_quickjump_fragment"
+            android:name="tkj.android.homecontrol.mythmote.MythmoteQuickJumpFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+	</LinearLayout>
+
+</LinearLayout>
