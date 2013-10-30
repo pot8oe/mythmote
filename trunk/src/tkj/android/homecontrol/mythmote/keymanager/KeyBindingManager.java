@@ -57,6 +57,10 @@ import static tkj.android.homecontrol.mythmote.R.id.ButtonStop;
 import static tkj.android.homecontrol.mythmote.R.id.ButtonUp;
 import static tkj.android.homecontrol.mythmote.R.id.ButtonVolDown;
 import static tkj.android.homecontrol.mythmote.R.id.ButtonVolUp;
+import static tkj.android.homecontrol.mythmote.R.id.ButtonRed;
+import static tkj.android.homecontrol.mythmote.R.id.ButtonGreen;
+import static tkj.android.homecontrol.mythmote.R.id.ButtonYellow;
+import static tkj.android.homecontrol.mythmote.R.id.ButtonBlue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,33 +98,46 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 	 * 
 	 */
 	public enum MythKey {
-		BUTTON_0("key 0", Button0), BUTTON_1("key 1", Button1), BUTTON_2(
-				"key 2", Button2), BUTTON_3("key 3", Button3), BUTTON_4(
-				"key 4", Button4), BUTTON_5("key 5", Button5), BUTTON_6(
-				"key 6", Button6), BUTTON_7("key 7", Button7), BUTTON_8(
-				"key 8", Button8), BUTTON_9("key 9", Button9), BUTTON_BACKSPACE(
-				"key backspace", ButtonBackspace), BUTTON_CHANNEL_DOWN(
-				"play channel down", ButtonChDown), BUTTON_CHANNEL_UP(
-				"play channel up", ButtonChUp), BUTTON_CHANNEL_RECALL("key h",
-				ButtonChReturn), BUTTON_ESCAPE("key escape", ButtonEsc), BUTTON_ENTER(
-				"key enter", ButtonEnter), BUTTON_RECORD("key r", ButtonRecord), BUTTON_STOP(
-				"play stop", ButtonStop), BUTTON_PLAY("play speed normal",
-				ButtonPlay), BUTTON_PAUSE("play speed pause", ButtonPause), BUTTON_DOWN(
-				"key down", ButtonDown), BUTTON_UP("key up", ButtonUp), BUTTON_LEFT(
-				"key left", ButtonLeft), BUTTON_RIGHT("key right", ButtonRight), BUTTON_SELECT(
-				"key enter", ButtonSelect), BUTTON_FAST_FORWARD(
-				"play seek forward", ButtonFF), BUTTON_REWIND(
-				"play seek backward", ButtonRew), BUTTON_SKIP_FORWARD(
-				"key end", ButtonSkipForward), BUTTON_SKIP_BACKWARD("key home",
-				ButtonSkipBack), BUTTON_GUIDE("key s", ButtonGuide), BUTTON_INFO(
-				"key i", ButtonInfo), BUTTON_JUMP_1("jump mainmenu",
-				ButtonJump1), BUTTON_JUMP_2("jump livetv", ButtonJump2), BUTTON_JUMP_3(
-				"jump playbackrecordings", ButtonJump3), BUTTON_JUMP_4(
-				"jump playmusic", ButtonJump4), BUTTON_JUMP_5(
-				"jump videogallery", ButtonJump5), BUTTON_JUMP_6(
-				"jump statusbox", ButtonJump6), BUTTON_MENU("key m", ButtonMenu), BUTTON_MUTE(
-				"key |", ButtonMute), BUTTON_VOLUME_UP("key ]", ButtonVolUp), BUTTON_VOLUME_DOWN(
-				"key [", ButtonVolDown);
+		BUTTON_0("key 0", Button0), BUTTON_1("key 1", Button1),
+		BUTTON_2("key 2", Button2), BUTTON_3("key 3", Button3),
+		BUTTON_4("key 4", Button4), BUTTON_5("key 5", Button5),
+		BUTTON_6("key 6", Button6), BUTTON_7("key 7", Button7),
+		BUTTON_8("key 8", Button8), BUTTON_9("key 9", Button9),
+		BUTTON_BACKSPACE("key backspace", ButtonBackspace),
+		BUTTON_CHANNEL_DOWN("play channel down", ButtonChDown),
+		BUTTON_CHANNEL_UP("play channel up", ButtonChUp),
+		BUTTON_CHANNEL_RECALL("key h", ButtonChReturn),
+		BUTTON_ESCAPE("key escape", ButtonEsc),
+		BUTTON_ENTER("key enter", ButtonEnter),
+		BUTTON_RECORD("key r", ButtonRecord),
+		BUTTON_STOP("play stop", ButtonStop),
+		BUTTON_PLAY("play speed normal", ButtonPlay),
+		BUTTON_PAUSE("play speed pause", ButtonPause),
+		BUTTON_DOWN("key down", ButtonDown),
+		BUTTON_UP("key up", ButtonUp),
+		BUTTON_LEFT("key left", ButtonLeft),
+		BUTTON_RIGHT("key right", ButtonRight),
+		BUTTON_SELECT("key enter", ButtonSelect),
+		BUTTON_FAST_FORWARD("play seek forward", ButtonFF),
+		BUTTON_REWIND("play seek backward", ButtonRew),
+		BUTTON_SKIP_FORWARD("key end", ButtonSkipForward),
+		BUTTON_SKIP_BACKWARD("key home", ButtonSkipBack),
+		BUTTON_GUIDE("key s", ButtonGuide),
+		BUTTON_INFO("key i", ButtonInfo),
+		BUTTON_JUMP_1("jump mainmenu", ButtonJump1),
+		BUTTON_JUMP_2("jump livetv", ButtonJump2),
+		BUTTON_JUMP_3("jump playbackrecordings", ButtonJump3),
+		BUTTON_JUMP_4("jump playmusic", ButtonJump4),
+		BUTTON_JUMP_5("jump videogallery", ButtonJump5),
+		BUTTON_JUMP_6("jump statusbox", ButtonJump6),
+		BUTTON_MENU("key m", ButtonMenu),
+		BUTTON_MUTE("key |", ButtonMute),
+		BUTTON_VOLUME_UP("key ]", ButtonVolUp),
+		BUTTON_VOLUME_DOWN("key [", ButtonVolDown),
+		BUTTON_RED("key f2", ButtonRed),
+		BUTTON_GREEN("key f3", ButtonGreen),
+		BUTTON_YELLOW("key f4", ButtonYellow),
+		BUTTON_BLUE("key f5", ButtonBlue);
 
 		private final String defaultCommand;
 		private final int layoutId;
@@ -230,6 +247,14 @@ public class KeyBindingManager implements KeyMapBinder, OnClickListener,
 					BUTTON_VOLUME_UP.defaultCommand, false));
 			entries.add(new KeyBindingEntry("Vol Down", BUTTON_VOLUME_DOWN,
 					BUTTON_VOLUME_DOWN.defaultCommand, false));
+			entries.add(new KeyBindingEntry("Red Button", BUTTON_RED,
+					BUTTON_RED.defaultCommand, false));
+			entries.add(new KeyBindingEntry("Green Button", BUTTON_GREEN,
+					BUTTON_GREEN.defaultCommand, false));
+			entries.add(new KeyBindingEntry("Yellow Button", BUTTON_YELLOW,
+					BUTTON_YELLOW.defaultCommand, false));
+			entries.add(new KeyBindingEntry("Blue Button", BUTTON_BLUE,
+					BUTTON_BLUE.defaultCommand, false));
 			return entries;
 		}
 	}

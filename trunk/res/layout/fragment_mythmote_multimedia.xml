@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/FragmentMultimedia"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonRecord"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/rec" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonStop"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/stop" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonPause"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/pause" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonPlay"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/play" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10" >
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonSkipBack"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/skipbk" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonRew"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/rw" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonFF"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/ff" />
+
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+            android:id="@+id/ButtonSkipForward"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dip"
+            android:layout_weight="10"
+            android:background="@drawable/mythmote_button"
+            android:src="@drawable/skipfw" />
+
+    </TableRow>
+
+</TableLayout>
