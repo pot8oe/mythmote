@@ -1,0 +1,292 @@
+Index: src/tkj/android/homecontrol/mythmote/MythmoteMultimediaFragment.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythmoteMultimediaFragment.java	(revision 0)
++++ src/tkj/android/homecontrol/mythmote/MythmoteMultimediaFragment.java	(revision 0)
+@@ -0,0 +1,19 @@
++package tkj.android.homecontrol.mythmote;
++
++import android.os.Bundle;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++public class MythmoteMultimediaFragment extends AbstractMythmoteFragment {
++
++	@Override
++	public View onCreateView(LayoutInflater inflater, ViewGroup container,
++			Bundle savedInstanceState) {
++		
++		View view = inflater.inflate(R.layout.fragment_mythmote_multimedia, container, false);
++		
++		return view;
++	}
++
++}
+Index: src/tkj/android/homecontrol/mythmote/MythmoteInteractiveTVFragment.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/MythmoteInteractiveTVFragment.java	(revision 0)
++++ src/tkj/android/homecontrol/mythmote/MythmoteInteractiveTVFragment.java	(revision 0)
+@@ -0,0 +1,19 @@
++package tkj.android.homecontrol.mythmote;
++
++import android.os.Bundle;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++public class MythmoteInteractiveTVFragment extends AbstractMythmoteFragment {
++
++	@Override
++	public View onCreateView(LayoutInflater inflater, ViewGroup container,
++			Bundle savedInstanceState) {
++		
++		View view = inflater.inflate(R.layout.fragment_mythmote_interactivetv, container, false);
++		
++		return view;
++	}
++	
++}
+Index: src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java
+===================================================================
+--- src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java	(revision 327)
++++ src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java	(working copy)
+@@ -57,6 +57,10 @@
+ import static tkj.android.homecontrol.mythmote.R.id.ButtonUp;
+ import static tkj.android.homecontrol.mythmote.R.id.ButtonVolDown;
+ import static tkj.android.homecontrol.mythmote.R.id.ButtonVolUp;
++import static tkj.android.homecontrol.mythmote.R.id.ButtonRed;
++import static tkj.android.homecontrol.mythmote.R.id.ButtonGreen;
++import static tkj.android.homecontrol.mythmote.R.id.ButtonYellow;
++import static tkj.android.homecontrol.mythmote.R.id.ButtonBlue;
+ 
+ import java.util.ArrayList;
+ import java.util.HashMap;
+@@ -94,33 +98,46 @@
+ 	 * 
+ 	 */
+ 	public enum MythKey {
+-		BUTTON_0("key 0", Button0), BUTTON_1("key 1", Button1), BUTTON_2(
+-				"key 2", Button2), BUTTON_3("key 3", Button3), BUTTON_4(
+-				"key 4", Button4), BUTTON_5("key 5", Button5), BUTTON_6(
+-				"key 6", Button6), BUTTON_7("key 7", Button7), BUTTON_8(
+-				"key 8", Button8), BUTTON_9("key 9", Button9), BUTTON_BACKSPACE(
+-				"key backspace", ButtonBackspace), BUTTON_CHANNEL_DOWN(
+-				"play channel down", ButtonChDown), BUTTON_CHANNEL_UP(
+-				"play channel up", ButtonChUp), BUTTON_CHANNEL_RECALL("key h",
+-				ButtonChReturn), BUTTON_ESCAPE("key escape", ButtonEsc), BUTTON_ENTER(
+-				"key enter", ButtonEnter), BUTTON_RECORD("key r", ButtonRecord), BUTTON_STOP(
+-				"play stop", ButtonStop), BUTTON_PLAY("play speed normal",
+-				ButtonPlay), BUTTON_PAUSE("play speed pause", ButtonPause), BUTTON_DOWN(
+-				"key down", ButtonDown), BUTTON_UP("key up", ButtonUp), BUTTON_LEFT(
+-				"key left", ButtonLeft), BUTTON_RIGHT("key right", ButtonRight), BUTTON_SELECT(
+-				"key enter", ButtonSelect), BUTTON_FAST_FORWARD(
+-				"play seek forward", ButtonFF), BUTTON_REWIND(
+-				"play seek backward", ButtonRew), BUTTON_SKIP_FORWARD(
+-				"key end", ButtonSkipForward), BUTTON_SKIP_BACKWARD("key home",
+-				ButtonSkipBack), BUTTON_GUIDE("key s", ButtonGuide), BUTTON_INFO(
+-				"key i", ButtonInfo), BUTTON_JUMP_1("jump mainmenu",
+-				ButtonJump1), BUTTON_JUMP_2("jump livetv", ButtonJump2), BUTTON_JUMP_3(
+-				"jump playbackrecordings", ButtonJump3), BUTTON_JUMP_4(
+-				"jump playmusic", ButtonJump4), BUTTON_JUMP_5(
+-				"jump videogallery", ButtonJump5), BUTTON_JUMP_6(
+-				"jump statusbox", ButtonJump6), BUTTON_MENU("key m", ButtonMenu), BUTTON_MUTE(
+-				"key |", ButtonMute), BUTTON_VOLUME_UP("key ]", ButtonVolUp), BUTTON_VOLUME_DOWN(
+-				"key [", ButtonVolDown);
++		BUTTON_0("key 0", Button0), BUTTON_1("key 1", Button1),
++		BUTTON_2("key 2", Button2), BUTTON_3("key 3", Button3),
++		BUTTON_4("key 4", Button4), BUTTON_5("key 5", Button5),
++		BUTTON_6("key 6", Button6), BUTTON_7("key 7", Button7),
++		BUTTON_8("key 8", Button8), BUTTON_9("key 9", Button9),
++		BUTTON_BACKSPACE("key backspace", ButtonBackspace),
++		BUTTON_CHANNEL_DOWN("play channel down", ButtonChDown),
++		BUTTON_CHANNEL_UP("play channel up", ButtonChUp),
++		BUTTON_CHANNEL_RECALL("key h", ButtonChReturn),
++		BUTTON_ESCAPE("key escape", ButtonEsc),
++		BUTTON_ENTER("key enter", ButtonEnter),
++		BUTTON_RECORD("key r", ButtonRecord),
++		BUTTON_STOP("play stop", ButtonStop),
++		BUTTON_PLAY("play speed normal", ButtonPlay),
++		BUTTON_PAUSE("play speed pause", ButtonPause),
++		BUTTON_DOWN("key down", ButtonDown),
++		BUTTON_UP("key up", ButtonUp),
++		BUTTON_LEFT("key left", ButtonLeft),
++		BUTTON_RIGHT("key right", ButtonRight),
++		BUTTON_SELECT("key enter", ButtonSelect),
++		BUTTON_FAST_FORWARD("play seek forward", ButtonFF),
++		BUTTON_REWIND("play seek backward", ButtonRew),
++		BUTTON_SKIP_FORWARD("key end", ButtonSkipForward),
++		BUTTON_SKIP_BACKWARD("key home", ButtonSkipBack),
++		BUTTON_GUIDE("key s", ButtonGuide),
++		BUTTON_INFO("key i", ButtonInfo),
++		BUTTON_JUMP_1("jump mainmenu", ButtonJump1),
++		BUTTON_JUMP_2("jump livetv", ButtonJump2),
++		BUTTON_JUMP_3("jump playbackrecordings", ButtonJump3),
++		BUTTON_JUMP_4("jump playmusic", ButtonJump4),
++		BUTTON_JUMP_5("jump videogallery", ButtonJump5),
++		BUTTON_JUMP_6("jump statusbox", ButtonJump6),
++		BUTTON_MENU("key m", ButtonMenu),
++		BUTTON_MUTE("key |", ButtonMute),
++		BUTTON_VOLUME_UP("key ]", ButtonVolUp),
++		BUTTON_VOLUME_DOWN("key [", ButtonVolDown),
++		BUTTON_RED("key f2", ButtonRed),
++		BUTTON_GREEN("key f3", ButtonGreen),
++		BUTTON_YELLOW("key f4", ButtonYellow),
++		BUTTON_BLUE("key f5", ButtonBlue);
+ 
+ 		private final String defaultCommand;
+ 		private final int layoutId;
+@@ -230,6 +247,14 @@
+ 					BUTTON_VOLUME_UP.defaultCommand, false));
+ 			entries.add(new KeyBindingEntry("Vol Down", BUTTON_VOLUME_DOWN,
+ 					BUTTON_VOLUME_DOWN.defaultCommand, false));
++			entries.add(new KeyBindingEntry("Red Button", BUTTON_RED,
++					BUTTON_RED.defaultCommand, false));
++			entries.add(new KeyBindingEntry("Green Button", BUTTON_GREEN,
++					BUTTON_GREEN.defaultCommand, false));
++			entries.add(new KeyBindingEntry("Yellow Button", BUTTON_YELLOW,
++					BUTTON_YELLOW.defaultCommand, false));
++			entries.add(new KeyBindingEntry("Blue Button", BUTTON_BLUE,
++					BUTTON_BLUE.defaultCommand, false));
+ 			return entries;
+ 		}
+ 	}
+Index: res/layout/fragment_mythmote_multimedia.xml
+===================================================================
+--- res/layout/fragment_mythmote_multimedia.xml	(revision 0)
++++ res/layout/fragment_mythmote_multimedia.xml	(revision 0)
+@@ -0,0 +1,85 @@
++<?xml version="1.0" encoding="utf-8"?>
++<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:id="@+id/FragmentMultimedia"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent" >
++
++    <TableRow
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_weight="10" >
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonRecord"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/rec" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonStop"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/stop" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonPause"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/pause" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonPlay"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/play" />
++
++    </TableRow>
++
++    <TableRow
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_weight="10" >
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonSkipBack"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/skipbk" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonRew"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/rw" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonFF"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/ff" />
++
++        <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++            android:id="@+id/ButtonSkipForward"
++            android:layout_height="match_parent"
++            android:layout_margin="0.5dip"
++            android:layout_weight="10"
++            android:background="@drawable/mythmote_button"
++            android:src="@drawable/skipfw" />
++
++    </TableRow>
++
++</TableLayout>
+Index: res/layout/fragment_mythmote_interactivetv.xml
+===================================================================
+--- res/layout/fragment_mythmote_interactivetv.xml	(revision 0)
++++ res/layout/fragment_mythmote_interactivetv.xml	(revision 0)
+@@ -0,0 +1,44 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:background="#000000"
++    android:orientation="horizontal" >
++    
++    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++        android:id="@+id/ButtonRed"
++	    android:layout_width="match_parent"
++	    android:layout_height="match_parent"
++	    android:layout_margin="0.5dip"
++	    android:layout_weight="10"
++	         android:background="@drawable/mythmote_button"
++	         android:src="@drawable/red" />
++	
++	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++	        android:id="@+id/ButtonGreen"
++	        android:layout_width="match_parent"
++	        android:layout_height="match_parent"
++	        android:layout_margin="0.5dip"
++	        android:layout_weight="10"
++	        android:background="@drawable/mythmote_button"
++	        android:src="@drawable/green" />
++	    
++	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++	        android:id="@+id/ButtonYellow"
++	        android:layout_width="match_parent"
++	        android:layout_height="match_parent"
++	        android:layout_margin="0.5dip"
++	        android:layout_weight="10"
++	        android:background="@drawable/mythmote_button"
++	        android:src="@drawable/yellow" />
++	    
++	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
++	        android:id="@+id/ButtonBlue"
++	        android:layout_width="match_parent"
++	        android:layout_height="match_parent"
++	        android:layout_margin="0.5dip"
++	        android:layout_weight="10"
++	        android:background="@drawable/mythmote_button"
++	        android:src="@drawable/blue" />
++    
++</LinearLayout>
+\ No newline at end of file
