@@ -20,4 +20,21 @@
 <resources>
     <color name="gesture_color">#FFFFFF00</color>
     <color name="button_text_color">#000000</color>
+    
+    <color name="mythmote_button_normal_stroke">#000000</color>
+    <color name="mythmote_button_normal_start">#c1bfc1</color>
+    <color name="mythmote_button_normal_center">#ffffff</color>
+    <color name="mythmote_button_normal_end">#e2e2e2</color>
+    
+    <color name="mythmote_button_focused_stroke">#2d3f44</color>
+    <color name="mythmote_button_focused_start">#c1bfc1</color>
+    <color name="mythmote_button_focused_center">#adcbdb</color>
+    <color name="mythmote_button_focused_end">#576a71</color>
+    
+    <color name="mythmote_button_pressed_stroke">#000000</color>
+    <color name="mythmote_button_pressed_start">#576a71</color>
+    <color name="mythmote_button_pressed_center">#adcbdb</color>
+    <color name="mythmote_button_pressed_end">#2d3f44</color>
+    
+    
 </resources>
