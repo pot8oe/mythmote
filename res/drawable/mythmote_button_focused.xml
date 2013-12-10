@@ -24,7 +24,7 @@
     android:shape="rectangle" >
 
     <gradient
-        android:angle="90"
+        android:angle="270"
         android:centerColor="@color/mythmote_button_focused_center"
         android:endColor="@color/mythmote_button_focused_end"
         android:startColor="@color/mythmote_button_focused_start" />
