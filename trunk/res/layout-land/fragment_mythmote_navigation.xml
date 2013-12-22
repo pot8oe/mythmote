@@ -188,7 +188,7 @@
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="10"
 	         android:background="@drawable/mythmote_button"
-	         android:src="@drawable/rec" />
+	         android:src="@drawable/ic_media_tango_record" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonStop"
@@ -197,7 +197,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/stop" />
+	        android:src="@drawable/ic_media_tango_stop" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonPause"
@@ -206,7 +206,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/pause" />
+	        android:src="@drawable/ic_media_tango_pause" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonPlay"
@@ -215,7 +215,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/play" />
+	        android:src="@drawable/ic_media_tango_play" />
     
     </TableRow>
     
@@ -230,7 +230,7 @@
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="10"
 	         android:background="@drawable/mythmote_button"
-	         android:src="@drawable/skipbk" />
+	         android:src="@drawable/ic_media_tango_previous" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonRew"
@@ -239,7 +239,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/rw" />
+	        android:src="@drawable/ic_media_tango_rew" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonFF"
@@ -248,7 +248,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/ff" />
+	        android:src="@drawable/ic_media_tango_ff" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 	        android:id="@+id/ButtonSkipForward"
@@ -257,7 +257,7 @@
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
 	        android:background="@drawable/mythmote_button"
-	        android:src="@drawable/skipfw" />
+	        android:src="@drawable/ic_media_tango_next" />
     
     </TableRow>
     
