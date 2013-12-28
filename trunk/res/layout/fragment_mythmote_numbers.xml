@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="1"
             android:textColor="@color/button_text_color" />
 
@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="2"
             android:textColor="@color/button_text_color" />
 
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="3"
             android:textColor="@color/button_text_color" />
 
@@ -75,7 +75,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="4"
             android:textColor="@color/button_text_color" />
 
@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="5"
             android:textColor="@color/button_text_color" />
 
@@ -95,7 +95,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="6"
             android:textColor="@color/button_text_color" />
 
@@ -113,7 +113,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="7"
             android:textColor="@color/button_text_color" />
 
@@ -123,7 +123,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="8"
             android:textColor="@color/button_text_color" />
 
@@ -133,7 +133,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="9"
             android:textColor="@color/button_text_color" />
 
@@ -151,7 +151,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="Delete"
             android:textColor="@color/button_text_color" />
 
@@ -165,7 +165,7 @@
             android:layout_margin="0.5dip"
             android:paddingLeft="15dip"
             android:paddingRight="15dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="0"
             android:textColor="@color/button_text_color" />
 
@@ -175,7 +175,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="0.5dip"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="Enter"
             android:textColor="@color/button_text_color" />
 

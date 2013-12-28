@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
         <Button
@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
         <Button
@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
         <Button
@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
         <Button
@@ -68,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
         <Button
@@ -77,7 +77,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:textColor="@color/button_text_color" />
 
 </LinearLayout>
