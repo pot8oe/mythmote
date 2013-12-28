@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="1"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="@string/backspace_str"
             android:textColor="@color/button_text_color" />
         
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="1"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="@string/enter_str"
             android:textColor="@color/button_text_color" />
         
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="1"
-            android:background="@drawable/mythmote_button"
+            android:background="@drawable/mythmote_button_dark_square"
             android:text="@string/clear_str"
             android:textColor="@color/button_text_color" />
 
