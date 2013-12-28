@@ -145,6 +145,44 @@ public class MythMoteDbManager {
 		return mCursor;
 
 	}
+	
+	/**
+	 * Return a Cursor positioned at the frontend that matches the given address
+	 * 
+	 * @param address
+	 *            address of frontend
+	 * @param port
+	 * 				port of frontend
+	 * @return Cursor positioned to matching note, if found
+	 */
+	public Cursor fetchFrontendLocation(String address, int port) {
+		Cursor mCursor = null;
+		try {
+			mCursor = db.query(
+					true,
+					FRONTEND_TABLE, 
+					new String[] { KEY_ROWID, KEY_NAME, KEY_ADDRESS, KEY_PORT, KEY_MAC, KEY_WIFIONLY },
+					KEY_ADDRESS + "=" + address + " AND " + KEY_PORT + "=" + port,
+					null, null, null, null, null);
+			if (mCursor != null) {
+				mCursor.moveToFirst();
+			}
+		} catch (SQLException e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle("DataBase Error");
+			builder.setMessage(e.getLocalizedMessage());
+			builder.setNeutralButton(R.string.ok_str, new OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+
+		}
+		return mCursor;
+
+	}
 
 	/**
 	 * Update the note using the details provided. The note to be updated is
