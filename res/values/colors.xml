@@ -21,40 +21,40 @@
     <color name="gesture_color">#FFFFFF00</color>
     <color name="button_text_color">#ffffff</color>
     
-    <!-- Light Buttons  
+    <!-- Light Buttons -->
     
-    <color name="mythmote_button_normal_stroke">#000000</color>
-    <color name="mythmote_button_normal_start">#c1bfc1</color>
-    <color name="mythmote_button_normal_center">#ffffff</color>
-    <color name="mythmote_button_normal_end">#e2e2e2</color>
+    <color name="mythmote_button_light_square_normal_stroke">#000000</color>
+    <color name="mythmote_button_light_square_normal_start">#c1bfc1</color>
+    <color name="mythmote_button_light_square_normal_center">#ffffff</color>
+    <color name="mythmote_button_light_square_normal_end">#e2e2e2</color>
     
-    <color name="mythmote_button_focused_stroke">#2d3f44</color>
-    <color name="mythmote_button_focused_start">#c1bfc1</color>
-    <color name="mythmote_button_focused_center">#adcbdb</color>
-    <color name="mythmote_button_focused_end">#576a71</color>
+    <color name="mythmote_button_light_square_focused_stroke">#2d3f44</color>
+    <color name="mythmote_button_light_square_focused_start">#c1bfc1</color>
+    <color name="mythmote_button_light_square_focused_center">#adcbdb</color>
+    <color name="mythmote_button_light_square_focused_end">#576a71</color>
     
-    <color name="mythmote_button_pressed_stroke">#000000</color>
-    <color name="mythmote_button_pressed_start">#576a71</color>
-    <color name="mythmote_button_pressed_center">#adcbdb</color>
-    <color name="mythmote_button_pressed_end">#2d3f44</color>
+    <color name="mythmote_button_light_square_pressed_stroke">#000000</color>
+    <color name="mythmote_button_light_square_pressed_start">#576a71</color>
+    <color name="mythmote_button_light_square_pressed_center">#adcbdb</color>
+    <color name="mythmote_button_light_square_pressed_end">#2d3f44</color>
     
-    -->
     
-    <!-- Dark Buttons -->
     
-    <color name="mythmote_button_normal_stroke">#0B1127</color>
-    <color name="mythmote_button_normal_start">#000000</color>
-    <color name="mythmote_button_normal_center">#000000</color>
-    <color name="mythmote_button_normal_end">#0B1127</color>
+    <!-- Dark Square Buttons -->
     
-    <color name="mythmote_button_focused_stroke">#0E1B4B</color>
-    <color name="mythmote_button_focused_start">#c1bfc1</color>
-    <color name="mythmote_button_focused_center">#adcbdb</color>
-    <color name="mythmote_button_focused_end">#576a71</color>
+    <color name="mythmote_button_dark_square_normal_stroke">#0B1127</color>
+    <color name="mythmote_button_dark_square_normal_start">#000000</color>
+    <color name="mythmote_button_dark_square_normal_center">#000000</color>
+    <color name="mythmote_button_dark_square_normal_end">#0B1127</color>
     
-    <color name="mythmote_button_pressed_stroke">#0B1127</color>
-    <color name="mythmote_button_pressed_start">#000000</color>
-    <color name="mythmote_button_pressed_center">#000000</color>
-    <color name="mythmote_button_pressed_end">#0B1127</color>
+    <color name="mythmote_button_dark_square_focused_stroke">#0E1B4B</color>
+    <color name="mythmote_button_dark_square_focused_start">#c1bfc1</color>
+    <color name="mythmote_button_dark_square_focused_center">#adcbdb</color>
+    <color name="mythmote_button_dark_square_focused_end">#576a71</color>
+    
+    <color name="mythmote_button_dark_square_pressed_stroke">#0B1127</color>
+    <color name="mythmote_button_dark_square_pressed_start">#000000</color>
+    <color name="mythmote_button_dark_square_pressed_center">#000000</color>
+    <color name="mythmote_button_dark_square_pressed_end">#0B1127</color>
     
 </resources>

@@ -19,22 +19,18 @@
     This software can be found at <https://github.com/MythTV-Clients/MythTV-Android-Frontend/>
 
 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:dither="true"
+    android:shape="rectangle" >
 
+    <gradient
+        android:angle="270"
+        android:centerColor="@color/mythmote_button_light_square_focused_center"
+        android:endColor="@color/mythmote_button_light_square_focused_end"
+        android:startColor="@color/mythmote_button_light_square_focused_start" />
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    <!-- pressed -->
-    <item android:state_pressed="true"
-          android:drawable="@drawable/mythmote_button_pressed" /> 
-    
-    <!-- focused -->
-    <item android:state_focused="true"
-          android:drawable="@drawable/mythmote_button_focused" /> 
-    
-    <!-- hovered -->
-    <item android:state_hovered="true"
-          android:drawable="@drawable/mythmote_button_focused" /> 
-          
-    <!-- default -->
-    <item android:drawable="@drawable/mythmote_button_normal" /> 
-</selector>
+    <stroke
+        android:width="1dp"
+        android:color="@color/mythmote_button_light_square_focused_stroke" />
+
+</shape>
