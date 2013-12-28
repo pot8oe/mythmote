@@ -52,7 +52,6 @@ import android.widget.Toast;
 public class MythMote extends FragmentActivity implements
 		LocationChangedEventListener, MythCom.StatusChangedEventListener {
 
-
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
@@ -87,6 +86,8 @@ public class MythMote extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		sIntent = getIntent();
+		
 		//allow mythmote to be shown ontop of lock screen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		
@@ -104,13 +105,6 @@ public class MythMote extends FragmentActivity implements
 		
 		
 	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		
-		sIntent = intent.getAction() == "tkj.android.homecontrol.mythmote.CONNECT_TO_FRONTEND" ? intent : null;
-	}
 
 	/**
 	 * Called when the activity is resumed
@@ -123,7 +117,9 @@ public class MythMote extends FragmentActivity implements
 		this.setupContentView();
 		
 		// If intent is not null attempt to process it's data
-		if(sIntent != null){
+		if(sIntent != null && sIntent.getAction() == "tkj.android.homecontrol.mythmote.CONNECT_TO_FRONTEND"){
+			Log.d(MythMote.LOG_TAG, "Intent Action: " + sIntent.getAction());
+			
 			FrontendLocation intentFe = new FrontendLocation();
 			intentFe.Name = sIntent.getStringExtra(EXTRA_LOCATION_NAME);
 			intentFe.Address = sIntent.getStringExtra(EXTRA_LOCATION_ADDRESS);
@@ -134,12 +130,20 @@ public class MythMote extends FragmentActivity implements
 			dbAdapter.open();
 			
 			Cursor dbCursor = dbAdapter.fetchFrontendLocation(intentFe.Address, intentFe.Port);
-			if(dbCursor.getCount() > 0){
+			if(dbCursor != null && dbCursor.getCount() > 0){
 				//select found frontend
 				sSelected = dbCursor.getInt(dbCursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+				Log.d(MythMote.LOG_TAG, "Selecting existing frontend from Intent: " + intentFe.Address);
 			}else{
 				//add and selected provided frontend
 				sSelected = (int)dbAdapter.createFrontendLocation(intentFe);
+				//save to preferences (required because setSelectedLocation() will overwrite sSelected)
+				if(sSelected != -1) {
+					this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,MODE_PRIVATE)
+					.edit().putInt(MythMotePreferences.PREF_SELECTED_LOCATION, sSelected).commit();
+				}
+				
+				Log.d(MythMote.LOG_TAG, "Created new frontend from Intent: " + intentFe.Address);
 			}
 		}
 		
