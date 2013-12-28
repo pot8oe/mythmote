@@ -26,6 +26,9 @@
 	            <action android:name="android.intent.action.MAIN" />
 	            <category android:name="android.intent.category.LAUNCHER" />
 	        </intent-filter>
+	        <intent-filter>
+                <action android:name="tkj.android.homecontrol.mythmote.CONNECT_TO_FRONTEND" />
+            </intent-filter>
 	    </activity>
 	        
 		<activity android:name=".MythMotePreferences" android:label="preferences"></activity>
