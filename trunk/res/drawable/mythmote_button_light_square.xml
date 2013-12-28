@@ -20,20 +20,21 @@
 
 -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:dither="true"
-    android:shape="rectangle"> 
 
-    <gradient
-        android:type="linear"
-        android:angle="270"
-        android:centerColor="@color/mythmote_button_normal_center"
-        android:endColor="@color/mythmote_button_normal_end"
-        android:startColor="@color/mythmote_button_normal_start" />
-
-    <stroke
-        android:width="1dp"
-        android:color="@color/mythmote_button_normal_stroke" />
-
-</shape>
-
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- pressed -->
+    <item android:state_pressed="true"
+          android:drawable="@drawable/mythmote_button_pressed_light_square" /> 
+    
+    <!-- focused -->
+    <item android:state_focused="true"
+          android:drawable="@drawable/mythmote_button_focused_light_square" /> 
+    
+    <!-- hovered -->
+    <item android:state_hovered="true"
+          android:drawable="@drawable/mythmote_button_focused_light_square" /> 
+          
+    <!-- default -->
+    <item android:drawable="@drawable/mythmote_button_normal_light_square" /> 
+</selector>
