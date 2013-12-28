@@ -47,9 +47,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MythMote extends FragmentActivity implements
 		LocationChangedEventListener, MythCom.StatusChangedEventListener {
+
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
@@ -58,6 +60,10 @@ public class MythMote extends FragmentActivity implements
 	public static final int SENDWOL_ID = Menu.FIRST + 4;
 	public static final int KEYBOARD_INPUT_ID = Menu.FIRST + 5;
 	public static final String LOG_TAG = "MythMote";
+	public static final String EXTRA_LOCATION_NAME = "EXTRA_LOCATION_NAME";
+	public static final String EXTRA_LOCATION_ADDRESS = "EXTRA_LOCATION_ADDRESS";
+	public static final String EXTRA_LOCATION_PORT = "EXTRA_LOCATION_PORT";
+	public static final String EXTRA_LOCATION_MAC = "EXTRA_LOCATION_MAC";
 
 	private static final String KEY_VOLUME_DOWN = "[";
 	private static final String KEY_VOLUME_UP = "]";
@@ -72,6 +78,7 @@ public class MythMote extends FragmentActivity implements
 //	private static PowerManager.WakeLock wakeLock;
 	private static List<Fragment> sFragmentArrayList;
 	private static List<String> sHeaderArrayList;
+	private static Intent sIntent = null;
 
 	/**
 	 * Called when the activity is first created.
@@ -97,6 +104,13 @@ public class MythMote extends FragmentActivity implements
 		
 		
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		
+		sIntent = intent.getAction() == "tkj.android.homecontrol.mythmote.CONNECT_TO_FRONTEND" ? intent : null;
+	}
 
 	/**
 	 * Called when the activity is resumed
@@ -107,6 +121,28 @@ public class MythMote extends FragmentActivity implements
 		
 		//load and configure user interface
 		this.setupContentView();
+		
+		// If intent is not null attempt to process it's data
+		if(sIntent != null){
+			FrontendLocation intentFe = new FrontendLocation();
+			intentFe.Name = sIntent.getStringExtra(EXTRA_LOCATION_NAME);
+			intentFe.Address = sIntent.getStringExtra(EXTRA_LOCATION_ADDRESS);
+			intentFe.Port = sIntent.getIntExtra(EXTRA_LOCATION_PORT, MythCom.DEFAULT_MYTH_PORT);
+			intentFe.MAC = sIntent.getStringExtra(EXTRA_LOCATION_MAC);
+			
+			MythMoteDbManager dbAdapter = new MythMoteDbManager(this);
+			dbAdapter.open();
+			
+			Cursor dbCursor = dbAdapter.fetchFrontendLocation(intentFe.Address, intentFe.Port);
+			if(dbCursor.getCount() > 0){
+				//select found frontend
+				sSelected = dbCursor.getInt(dbCursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+			}else{
+				//add and selected provided frontend
+				sSelected = (int)dbAdapter.createFrontendLocation(intentFe);
+			}
+		}
+		
 				
 		// Here we disconnect if connected because the selected location
 		// may have changed from the preference activity. setSelectedLocation()
@@ -130,6 +166,9 @@ public class MythMote extends FragmentActivity implements
 	@Override
 	public void onPause() {
 		super.onPause();
+		
+		//clear intent
+		sIntent = null;
 		
 		if (sComm != null && sComm.IsConnected())
 			sComm.Disconnect();
