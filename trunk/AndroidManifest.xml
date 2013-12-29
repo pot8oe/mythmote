@@ -17,18 +17,26 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     
     <application
+        android:name=".MainApplication"
         android:icon="@drawable/mythmote"
         android:label="@string/app_name"
+        android:theme="@style/Theme_custom_dark"
         android:allowBackup="false"> 
         
-	    <activity android:label="@string/app_name" android:name=".MythMote" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+	    <activity
+	        android:label="@string/app_name"
+	        android:name=".MythMote"
+	        android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+	        
 	        <intent-filter>
 	            <action android:name="android.intent.action.MAIN" />
 	            <category android:name="android.intent.category.LAUNCHER" />
 	        </intent-filter>
+	        
 	        <intent-filter>
                 <action android:name="tkj.android.homecontrol.mythmote.CONNECT_TO_FRONTEND" />
             </intent-filter>
+            
 	    </activity>
 	        
 		<activity android:name=".MythMotePreferences" android:label="preferences"></activity>

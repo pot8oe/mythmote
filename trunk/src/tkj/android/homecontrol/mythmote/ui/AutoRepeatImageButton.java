@@ -99,8 +99,8 @@ public class AutoRepeatImageButton extends ImageButton {
 	public AutoRepeatImageButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		TypedArray a = context.obtainStyledAttributes(attrs,
-				R.styleable.AutoRepeatButton);
+		
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoRepeatButton);
 		int n = a.getIndexCount();
 		for (int i = 0; i < n; i++) {
 			int attr = a.getIndex(i);
@@ -110,8 +110,7 @@ public class AutoRepeatImageButton extends ImageButton {
 				initialRepeatDelay = a.getInt(attr, DEFAULT_INITIAL_DELAY);
 				break;
 			case R.styleable.AutoRepeatButton_repeat_interval:
-				repeatIntervalInMilliseconds = a.getInt(attr,
-						DEFAULT_REPEAT_INTERVAL);
+				repeatIntervalInMilliseconds = a.getInt(attr, DEFAULT_REPEAT_INTERVAL);
 				break;
 			}
 		}

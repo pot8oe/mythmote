@@ -31,53 +31,41 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
         <Button
             android:id="@+id/ButtonJump2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
         <Button
             android:id="@+id/ButtonJump3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
         <Button
             android:id="@+id/ButtonJump4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
         <Button
             android:id="@+id/ButtonJump5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
         <Button
             android:id="@+id/ButtonJump6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
-            android:textColor="@color/button_text_color" />
+            android:layout_weight="10" />
 
 </LinearLayout>

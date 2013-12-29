@@ -113,7 +113,20 @@
 <string name="conection_timeout_interval_description_str">How long connection attempts wait before failing.</string>
 <string name="keyboard_input_dialog_message">Characters typed into the textbox below will be sent to the connected frontend. Backspace should function as expected. Mythfrontend does not appear to honor the \'key space\' command breaking spacebar functionality.</string>
 <string name="done_str">Done</string>
+<string name="pref_app_theme">Theme</string>
+<string name="pref_app_theme_description">User interface style and colors</string>
 
+<string-array name="app_theme_strings">
+    <item>Light Sqaure Buttons</item>
+	<item>Dark Square Buttons</item>
+	<item>Dark Glow Buttons</item>
+</string-array>
+
+<string-array name="app_theme_values">
+	<item>0</item>
+	<item>1</item>
+	<item>2</item>
+</string-array>
 
 <string-array name="status_Update_Interval_strings">
 <item>0 (Off)</item>
