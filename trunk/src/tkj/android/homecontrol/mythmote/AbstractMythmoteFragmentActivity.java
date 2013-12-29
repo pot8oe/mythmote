@@ -20,12 +20,18 @@ public class AbstractMythmoteFragmentActivity extends FragmentActivity {
 		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
 				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 		
-		if(theme == 1){
-			this.setTheme(R.style.Theme_custom_dark);
-		} else if(theme == 2){
-			
+		this.setTheme(AbstractMythmoteFragmentActivity.getThemeStyle(theme));
+	}
+	
+	public static int getThemeStyle(int preferenceValue){
+		
+		if(preferenceValue == 1){
+			return R.style.Theme_custom_dark;
+		} else if(preferenceValue == 2){
+			return R.style.Theme_custom_dark_glow;
 		} else {
-			this.setTheme(R.style.Theme_custom_light);
+			return R.style.Theme_custom_light;
 		}
+		
 	}
 }
