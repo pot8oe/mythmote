@@ -137,13 +137,13 @@ public class MythMote extends FragmentActivity implements
 			}else{
 				//add and selected provided frontend
 				sSelected = (int)dbAdapter.createFrontendLocation(intentFe);
-				//save to preferences (required because setSelectedLocation() will overwrite sSelected)
-				if(sSelected != -1) {
-					this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,MODE_PRIVATE)
-					.edit().putInt(MythMotePreferences.PREF_SELECTED_LOCATION, sSelected).commit();
-				}
-				
 				Log.d(MythMote.LOG_TAG, "Created new frontend from Intent: " + intentFe.Address);
+			}
+			
+			//save to preferences (required because setSelectedLocation() will overwrite sSelected)
+			if(sSelected != -1) {
+				this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID,MODE_PRIVATE)
+				.edit().putInt(MythMotePreferences.PREF_SELECTED_LOCATION, sSelected).commit();
 			}
 		}
 		
