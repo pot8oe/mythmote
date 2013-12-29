@@ -162,7 +162,7 @@ public class MythMoteDbManager {
 					true,
 					FRONTEND_TABLE, 
 					new String[] { KEY_ROWID, KEY_NAME, KEY_ADDRESS, KEY_PORT, KEY_MAC, KEY_WIFIONLY },
-					KEY_ADDRESS + "=" + address + " AND " + KEY_PORT + "=" + port,
+					KEY_ADDRESS + "= '" + address + "' AND " + KEY_PORT + "=" + port,
 					null, null, null, null, null);
 			if (mCursor != null) {
 				mCursor.moveToFirst();
