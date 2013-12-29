@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content" >
 
                 <Button
+                    style="@android:style/Widget.Button"
                     android:id="@+id/ButtonLocationSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
                 </Button>
 
                 <Button
+                    style="@android:style/Widget.Button"
                     android:id="@+id/ButtonLocationCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

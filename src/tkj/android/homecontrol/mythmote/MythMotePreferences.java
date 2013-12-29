@@ -36,12 +36,13 @@ import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MythMotePreferences extends PreferenceActivity {
+public class MythMotePreferences extends AbstractMythmotePreferenceActivity {
 
 	public static final int NEW_LOCATION_ID = Menu.FIRST;
 	public static final int DELETE_LOCATION_ID = Menu.FIRST + 1;
 	public static final String MYTHMOTE_SHARED_PREFERENCES_ID = "mythmote.preferences";
 	public static final String PREF_SELECTED_LOCATION = "selected-frontend";
+	public static final String PREF_APP_THEME = "app-theme";
 	public static final String PREF_HAPTIC_FEEDBACK_ENABLED = "haptic-feedback-enabled";
 	public static final String PREF_LONGPRESS_ACTION = "longpress-action";
 	public static final String PREF_KEY_REPEAT_INTERVAL = "key-repeat-interval";
@@ -131,6 +132,14 @@ public class MythMotePreferences extends PreferenceActivity {
 				context.getString(R.string.delete_location_str),
 				context.getString(R.string.delete_location_description_str)));
 
+		// create apptheme action preference
+		generalCat.addPreference(createIntListPreference(context,
+				PREF_APP_THEME,
+				R.string.pref_app_theme,
+				R.string.pref_app_theme_description,
+				R.array.app_theme_strings,
+				R.array.app_theme_values, "0"));
+		
 		// create mythfrontend update status interval preference
 		generalCat.addPreference(createIntListPreference(context,
 				PREF_STATUS_UPDATE_INTERVAL,

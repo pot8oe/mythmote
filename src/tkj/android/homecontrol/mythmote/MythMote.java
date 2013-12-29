@@ -49,7 +49,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class MythMote extends FragmentActivity implements
+public class MythMote extends AbstractMythmoteFragmentActivity implements
 		LocationChangedEventListener, MythCom.StatusChangedEventListener {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -86,6 +86,7 @@ public class MythMote extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		//get intent that started this activity
 		sIntent = getIntent();
 		
 		//allow mythmote to be shown ontop of lock screen
@@ -354,6 +355,10 @@ public class MythMote extends FragmentActivity implements
 		}
 		return false;
 	}
+	
+	
+	
+	
 	
 	private void setupContentView(){
 		//load main layout

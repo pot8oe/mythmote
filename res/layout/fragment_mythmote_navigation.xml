@@ -22,7 +22,6 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     android:orientation="vertical"
     android:weightSum="70">
     
@@ -35,7 +34,6 @@
 	         android:layout_height="match_parent"
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="10"
-	         android:background="@drawable/mythmote_button_dark_square"
 	         android:src="@drawable/info" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -44,7 +42,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/up" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -53,7 +50,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/guide" />
     
     </TableRow>
@@ -68,7 +64,6 @@
 	         android:layout_height="match_parent"
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="10"
-	         android:background="@drawable/mythmote_button_dark_square"
 	         android:src="@drawable/left" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -77,7 +72,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/square" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -86,7 +80,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/right" />
     
     </TableRow>
@@ -100,7 +93,6 @@
 	         android:layout_height="match_parent"
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="10"
-	         android:background="@drawable/mythmote_button_dark_square"
 	         android:src="@drawable/cancel" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -109,7 +101,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/down" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -118,7 +109,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="10"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/menu" />
     
     </TableRow>
@@ -132,7 +122,6 @@
 		    android:layout_height="match_parent"
 		    android:layout_margin="0.5dip"
 		    android:layout_weight="10"
-		    android:background="@drawable/mythmote_button_dark_square"
 		    android:src="@drawable/tv_plus" />
 			
 		<tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -141,7 +130,6 @@
 		    android:layout_height="match_parent"
 		    android:layout_margin="0.5dip"
 		    android:layout_weight="10"
-		    android:background="@drawable/mythmote_button_dark_square"
 		    android:src="@drawable/tv_back" />
 			   
 		<tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -150,7 +138,6 @@
 		    android:layout_height="match_parent"
 		    android:layout_margin="0.5dip"
 		    android:layout_weight="10"
-		    android:background="@drawable/mythmote_button_dark_square"
 		    android:src="@drawable/tv_minus" />
 	
     </TableRow>
@@ -164,7 +151,6 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:background="@drawable/mythmote_button_dark_square"
             android:src="@drawable/speaker_plus" />
 	
 	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -173,7 +159,6 @@
 	       android:layout_height="match_parent"
 	       android:layout_margin="0.5dip"
 	       android:layout_weight="10"
-	       android:background="@drawable/mythmote_button_dark_square"
 	       android:src="@drawable/speaker_off" />
 	   
 	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -182,7 +167,6 @@
 	       android:layout_height="match_parent"
 	       android:layout_margin="0.5dip"
 	       android:layout_weight="10"
-	       android:background="@drawable/mythmote_button_dark_square"
 	       android:src="@drawable/speaker_minus" />
 	   
     </TableRow>
@@ -196,7 +180,6 @@
 	         android:layout_height="match_parent"
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="25"
-	         android:background="@drawable/mythmote_button_dark_square"
 	         android:src="@drawable/ic_media_tango_record" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -205,7 +188,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_stop" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -214,7 +196,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_pause" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -223,7 +204,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_play" />
     
     </TableRow>
@@ -238,7 +218,6 @@
 	         android:layout_height="match_parent"
 	         android:layout_margin="0.5dip"
 	         android:layout_weight="25"
-	         android:background="@drawable/mythmote_button_dark_square"
 	         android:src="@drawable/ic_media_tango_previous" />
 	
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -247,7 +226,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_rew" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -256,7 +234,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_ff" />
 	    
 	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
@@ -265,7 +242,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="0.5dip"
 	        android:layout_weight="25"
-	        android:background="@drawable/mythmote_button_dark_square"
 	        android:src="@drawable/ic_media_tango_next" />
     
     </TableRow>
