@@ -3,7 +3,7 @@
       package="tkj.android.homecontrol.mythmote"
       android:versionCode="2308" android:versionName="1.8.6">
 
-<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"></uses-sdk>
+<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"></uses-sdk>
       
       <supports-screens android:smallScreens="true"
       					android:normalScreens="true"
