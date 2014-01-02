@@ -20,10 +20,10 @@
 
 -->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:weightSum="4" xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote">
+    android:weightSum="4">
 
     <TableRow
         android:layout_width="match_parent"
