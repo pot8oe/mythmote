@@ -43,6 +43,8 @@
     
     <!-- Dark Square Buttons -->
     
+    <color name="dark_square_app_background">#000000</color>
+    
     <color name="mythmote_button_dark_square_button_text_color">#ffffff</color>
     <color name="mythmote_button_dark_square_normal_stroke">#0B1127</color>
     <color name="mythmote_button_dark_square_normal_start">#000000</color>
@@ -62,21 +64,23 @@
     
     
      <!-- Dark Glow Buttons -->
+     
+     <color name="dark_glow_app_background">#000000</color>
     
     <color name="mythmote_button_dark_glow_button_text_color">#ffffff</color>
-    <color name="mythmote_button_dark_glow_normal_stroke">#0B1127</color>
-    <color name="mythmote_button_dark_glow_normal_start">#000000</color>
-    <color name="mythmote_button_dark_glow_normal_center">#000000</color>
-    <color name="mythmote_button_dark_glow_normal_end">#0B1127</color>
+    <color name="mythmote_button_dark_glow_normal_stroke">#000000</color>
+    <color name="mythmote_button_dark_glow_normal_start">#000033</color>
+    <color name="mythmote_button_dark_glow_normal_center">#000011</color>
+    <color name="mythmote_button_dark_glow_normal_end">#000000</color>
     
-    <color name="mythmote_button_dark_glow_focused_stroke">#0E1B4B</color>
-    <color name="mythmote_button_dark_glow_focused_start">#c1bfc1</color>
-    <color name="mythmote_button_dark_glow_focused_center">#adcbdb</color>
-    <color name="mythmote_button_dark_glow_focused_end">#576a71</color>
+    <color name="mythmote_button_dark_glow_focused_stroke">#000000</color>
+    <color name="mythmote_button_dark_glow_focused_start">#000033</color>
+    <color name="mythmote_button_dark_glow_focused_center">#000033</color>
+    <color name="mythmote_button_dark_glow_focused_end">#000011</color>
     
-    <color name="mythmote_button_dark_glow_pressed_stroke">#0B1127</color>
-    <color name="mythmote_button_dark_glow_pressed_start">#000000</color>
-    <color name="mythmote_button_dark_glow_pressed_center">#000000</color>
-    <color name="mythmote_button_dark_glow_pressed_end">#0B1127</color>
+    <color name="mythmote_button_dark_glow_pressed_stroke">#000000</color>
+    <color name="mythmote_button_dark_glow_pressed_start">#000055</color>
+    <color name="mythmote_button_dark_glow_pressed_center">#000055</color>
+    <color name="mythmote_button_dark_glow_pressed_end">#000011</color>
     
 </resources>

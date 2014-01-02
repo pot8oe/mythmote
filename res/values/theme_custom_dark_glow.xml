@@ -4,6 +4,7 @@
     <style name="Theme_custom_dark_glow" parent="android:Theme.Holo">
     	<item name="android:buttonStyle" >@style/button_dark_glow</item>
     	<item name="android:imageButtonStyle" >@style/imagebutton_dark_glow</item>
+    	<item name="android:windowBackground">@color/dark_glow_app_background</item>
     </style>
 
     <style name="button_dark_glow" parent="@android:style/Widget.Button">
