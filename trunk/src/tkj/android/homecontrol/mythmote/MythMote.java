@@ -68,7 +68,6 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	private static final String KEY_VOLUME_UP = "]";
 	private static final String DONATE_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TX7RH2TX6NJ2N&lc=US&item_name=mythmote%2ddonation&item_number=mythmote%2dgooglecodepage&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted";
 
-	private static MythCom sComm;
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
@@ -95,17 +94,8 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		// determine if large screen layouts are being used
 		sIsScreenLarge = this.getResources().getString(R.string.screensize)
 				.equals("large");
-
-		// Get mythcom object
-		if (sComm == null) {
-			sComm = MythCom.GetMythCom(this);
-		}
-		
-		// set status changed event handler
-		sComm.SetOnStatusChangeHandler(this);
-		
-		
 	}
+
 
 	/**
 	 * Called when the activity is resumed
@@ -113,6 +103,10 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		//set mythcom status handler
+		MythCom mythCom = MythCom.GetMythCom(this);
+		mythCom.SetOnStatusChangeHandler(this);
 		
 		//load and configure user interface
 		this.setupContentView();
@@ -155,14 +149,14 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		// loading any other changed preferences
 
 		// disconnect if connected
-		if (sComm != null && (sComm.IsConnected() || sComm.IsConnecting())) {
+		if (mythCom != null && (mythCom.IsConnected() || mythCom.IsConnecting())) {
 			// force disconnected state
-			sComm.Disconnect();
+			mythCom.Disconnect();
 		}
 
 		// set selected location and connect
 		if (this.setSelectedLocation())
-			sComm.Connect(sLocation);
+			mythCom.Connect(sLocation);
 	}
 
 	/**
@@ -175,8 +169,10 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		//clear intent
 		sIntent = null;
 		
-		if (sComm != null && sComm.IsConnected())
-			sComm.Disconnect();
+		MythCom mythCom = MythCom.GetMythCom(this);
+		
+		if (mythCom != null && mythCom.IsConnected())
+			mythCom.Disconnect();
 	}
 
 	/**
@@ -186,9 +182,10 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	public void onDestroy() {
 		super.onDestroy();
 
-		if (sComm != null){
-			sComm.ActivityOnDestroy();
-			sComm = null;
+		MythCom mythCom = MythCom.GetMythCom(this);
+		
+		if (mythCom != null){
+			mythCom.ActivityOnDestroy();
 		}
 
 	}
@@ -212,10 +209,10 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
-			sComm.SendKey(KEY_VOLUME_DOWN);
+			 MythCom.GetMythCom(this).SendKey(KEY_VOLUME_DOWN);
 			return true;
 		case KeyEvent.KEYCODE_VOLUME_UP:
-			sComm.SendKey(KEY_VOLUME_UP);
+			 MythCom.GetMythCom(this).SendKey(KEY_VOLUME_UP);
 			return true;
 		default:
 			return super.onKeyDown(keyCode, event);
@@ -316,12 +313,13 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 				break;
 
 			case RECONNECT_ID:
-				if (sComm.IsConnected() || sComm.IsConnecting())
-					sComm.Disconnect();
+				MythCom mythCom = MythCom.GetMythCom(this);
+				if (mythCom.IsConnected() || mythCom.IsConnecting())
+					mythCom.Disconnect();
 
 				// set selected location and connect
 				if (this.setSelectedLocation())
-					sComm.Connect(sLocation);
+					mythCom.Connect(sLocation);
 				break;
 
 			case SELECTLOCATION_ID:
@@ -476,12 +474,13 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	 * Called when the frontend location is changed
 	 */
 	public void LocationChanged() {
-		if (sComm.IsConnected() || sComm.IsConnecting())
-			sComm.Disconnect();
+		MythCom mythCom = MythCom.GetMythCom(this);
+		if (mythCom.IsConnected() || mythCom.IsConnecting())
+			mythCom.Disconnect();
 
 		// set selected location and connect
 		if (this.setSelectedLocation())
-			sComm.Connect(sLocation);
+			mythCom.Connect(sLocation);
 	}
 
 	/**
