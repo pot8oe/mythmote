@@ -1,0 +1,454 @@
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager$MythKey.class and ./bin/classes/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager$MythKey.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$drawable.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$drawable.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$id.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$id.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$layout.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$layout.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$raw.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$raw.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$string.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$string.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$styleable.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$styleable.class differ
+Binary files ../mythmote-read-only/bin/classes/tkj/android/homecontrol/mythmote/R$xml.class and ./bin/classes/tkj/android/homecontrol/mythmote/R$xml.class differ
+Binary files ../mythmote-read-only/bin/classes.dex and ./bin/classes.dex differ
+Binary files ../mythmote-read-only/bin/dexedLibs/android-support-v4-0b9d35089d90e2a0441c6a69fc80ccde.jar and ./bin/dexedLibs/android-support-v4-0b9d35089d90e2a0441c6a69fc80ccde.jar differ
+Binary files ../mythmote-read-only/bin/dexedLibs/android-support-v4-4e066a25f19b4f5340c4e85842f1c58f.jar and ./bin/dexedLibs/android-support-v4-4e066a25f19b4f5340c4e85842f1c58f.jar differ
+Binary files ../mythmote-read-only/bin/dexedLibs/android-support-v4-5192f2f8c3ff43da2c9e25668062a6cc.jar and ./bin/dexedLibs/android-support-v4-5192f2f8c3ff43da2c9e25668062a6cc.jar differ
+diff -crBN ../mythmote-read-only/bin/jarlist.cache ./bin/jarlist.cache
+*** ../mythmote-read-only/bin/jarlist.cache	1969-12-31 16:00:00.000000000 -0800
+--- ./bin/jarlist.cache	2013-12-06 08:25:30.853414202 -0800
+***************
+*** 0 ****
+--- 1,3 ----
++ # cache for current jar dependency. DO NOT EDIT.
++ # format is <lastModified> <length> <SHA-1> <path>
++ # Encoding is UTF-8
+Binary files ../mythmote-read-only/bin/mythmote.apk and ./bin/mythmote.apk differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/cancel.png and ./bin/res/crunch/drawable/cancel.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/down.png and ./bin/res/crunch/drawable/down.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/ff.png and ./bin/res/crunch/drawable/ff.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/guide.png and ./bin/res/crunch/drawable/guide.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/info.png and ./bin/res/crunch/drawable/info.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/left.png and ./bin/res/crunch/drawable/left.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/menu.png and ./bin/res/crunch/drawable/menu.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/mythmote_large.png and ./bin/res/crunch/drawable/mythmote_large.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/mythmote.png and ./bin/res/crunch/drawable/mythmote.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/pause.png and ./bin/res/crunch/drawable/pause.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/play.png and ./bin/res/crunch/drawable/play.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/rec.png and ./bin/res/crunch/drawable/rec.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/right.png and ./bin/res/crunch/drawable/right.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/rw.png and ./bin/res/crunch/drawable/rw.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/skipbk.png and ./bin/res/crunch/drawable/skipbk.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/skipfw.png and ./bin/res/crunch/drawable/skipfw.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/speaker_minus.png and ./bin/res/crunch/drawable/speaker_minus.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/speaker_off.png and ./bin/res/crunch/drawable/speaker_off.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/speaker_plus.png and ./bin/res/crunch/drawable/speaker_plus.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/square.png and ./bin/res/crunch/drawable/square.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/stop.png and ./bin/res/crunch/drawable/stop.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/trash.png and ./bin/res/crunch/drawable/trash.png differ
+Binary files ../mythmote-read-only/bin/res/crunch/drawable/up.png and ./bin/res/crunch/drawable/up.png differ
+Binary files ../mythmote-read-only/bin/resources.ap_ and ./bin/resources.ap_ differ
+diff -crBN ../mythmote-read-only/gen/tkj/android/homecontrol/mythmote/R.java ./gen/tkj/android/homecontrol/mythmote/R.java
+*** ../mythmote-read-only/gen/tkj/android/homecontrol/mythmote/R.java	2013-12-06 11:36:29.881381160 -0800
+--- ./gen/tkj/android/homecontrol/mythmote/R.java	2013-12-06 11:23:23.634005828 -0800
+***************
+*** 98,108 ****
+          public static final int square=0x7f020032;
+          public static final int starsmall=0x7f020033;
+          public static final int stop=0x7f020034;
+!         public static final int tv_back=0x7f020035;
+!         public static final int tv_minus=0x7f020036;
+!         public static final int tv_plus=0x7f020037;
+!         public static final int up=0x7f020038;
+!         public static final int yellow=0x7f020039;
+      }
+      public static final class id {
+          public static final int Button0=0x7f0a002f;
+--- 98,109 ----
+          public static final int square=0x7f020032;
+          public static final int starsmall=0x7f020033;
+          public static final int stop=0x7f020034;
+!         public static final int trash=0x7f020035;
+!         public static final int tv_back=0x7f020036;
+!         public static final int tv_minus=0x7f020037;
+!         public static final int tv_plus=0x7f020038;
+!         public static final int up=0x7f020039;
+!         public static final int yellow=0x7f02003a;
+      }
+      public static final class id {
+          public static final int Button0=0x7f0a002f;
+***************
+*** 126,132 ****
+          public static final int ButtonEsc=0x7f0a001c;
+          public static final int ButtonFF=0x7f0a0014;
+          public static final int ButtonGreen=0x7f0a0006;
+-         public static final int ButtonGuide=0x7f0a0018;
+          public static final int ButtonInfo=0x7f0a0016;
+          public static final int ButtonJump1=0x7f0a0030;
+          public static final int ButtonJump2=0x7f0a0031;
+--- 127,132 ----
+***************
+*** 139,145 ****
+          public static final int ButtonLocationCancel=0x7f0a0044;
+          public static final int ButtonLocationSave=0x7f0a0043;
+          public static final int ButtonMenu=0x7f0a001e;
+!         public static final int ButtonMute=0x7f0a0023;
+          public static final int ButtonPause=0x7f0a0010;
+          public static final int ButtonPlay=0x7f0a0011;
+          public static final int ButtonRecord=0x7f0a000e;
+--- 139,145 ----
+          public static final int ButtonLocationCancel=0x7f0a0044;
+          public static final int ButtonLocationSave=0x7f0a0043;
+          public static final int ButtonMenu=0x7f0a001e;
+!         public static final int ButtonMute=0x7f0a0024;
+          public static final int ButtonPause=0x7f0a0010;
+          public static final int ButtonPlay=0x7f0a0011;
+          public static final int ButtonRecord=0x7f0a000e;
+***************
+*** 150,157 ****
+          public static final int ButtonSkipBack=0x7f0a0012;
+          public static final int ButtonSkipForward=0x7f0a0015;
+          public static final int ButtonStop=0x7f0a000f;
+          public static final int ButtonUp=0x7f0a0017;
+!         public static final int ButtonVolDown=0x7f0a0024;
+          public static final int ButtonVolUp=0x7f0a0022;
+          public static final int ButtonYellow=0x7f0a0007;
+          public static final int EditTextAddress=0x7f0a003d;
+--- 150,158 ----
+          public static final int ButtonSkipBack=0x7f0a0012;
+          public static final int ButtonSkipForward=0x7f0a0015;
+          public static final int ButtonStop=0x7f0a000f;
++         public static final int ButtonTrash=0x7f0a0018;
+          public static final int ButtonUp=0x7f0a0017;
+!         public static final int ButtonVolDown=0x7f0a0023;
+          public static final int ButtonVolUp=0x7f0a0022;
+          public static final int ButtonYellow=0x7f0a0007;
+          public static final int EditTextAddress=0x7f0a003d;
+***************
+*** 252,258 ****
+          public static final int gestures_rename_label_str=0x7f08005c;
+          public static final int gestures_rename_str=0x7f080058;
+          public static final int gestures_rename_title_str=0x7f08005b;
+-         public static final int guide_str=0x7f080063;
+          public static final int haptic_feedback_enabled_description_str=0x7f08003a;
+          public static final int haptic_feedback_enabled_str=0x7f080039;
+          public static final int home_str=0x7f080064;
+--- 253,258 ----
+***************
+*** 311,316 ****
+--- 311,317 ----
+          public static final int status_update_interval_description_str=0x7f08003c;
+          public static final int status_update_interval_str=0x7f08003b;
+          public static final int stop_str=0x7f08000f;
++         public static final int trash_str=0x7f080063;
+          public static final int up_str=0x7f080012;
+          public static final int videos_str=0x7f080068;
+          public static final int vol_down_str=0x7f080030;
+Binary files ../mythmote-read-only/res/drawable/cancel.png and ./res/drawable/cancel.png differ
+Binary files ../mythmote-read-only/res/drawable/down.png and ./res/drawable/down.png differ
+Binary files ../mythmote-read-only/res/drawable/ff.png and ./res/drawable/ff.png differ
+Binary files ../mythmote-read-only/res/drawable/guide.png and ./res/drawable/guide.png differ
+Binary files ../mythmote-read-only/res/drawable/info.png and ./res/drawable/info.png differ
+Binary files ../mythmote-read-only/res/drawable/left.png and ./res/drawable/left.png differ
+Binary files ../mythmote-read-only/res/drawable/menu.png and ./res/drawable/menu.png differ
+diff -crBN ../mythmote-read-only/res/drawable/mythmote_button_normal.xml ./res/drawable/mythmote_button_normal.xml
+*** ../mythmote-read-only/res/drawable/mythmote_button_normal.xml	2013-12-06 11:36:29.885381118 -0800
+--- ./res/drawable/mythmote_button_normal.xml	2013-12-05 16:04:16.982875000 -0800
+***************
+*** 24,38 ****
+      android:shape="rectangle" >
+  
+      <gradient
+!         android:angle="90"
+!         android:centerColor="#ffffff"
+!         android:endColor="#e2e2e2"
+!         android:startColor="#c1bfc1" />
+  
+  <!--     <stroke -->
+  <!--         android:width="1dp" -->
+  <!--         android:color="#000000" /> -->
+  
+! <!--     <corners android:radius="10dp" /> -->
+  
+  </shape>
+--- 24,38 ----
+      android:shape="rectangle" >
+  
+      <gradient
+!         android:endColor="#000000"
+!         android:startColor="#000033"
+!         android:gradientRadius="12000%p"
+!         android:type="radial" />
+  
+  <!--     <stroke -->
+  <!--         android:width="1dp" -->
+  <!--         android:color="#000000" /> -->
+  
+!      <corners android:radius="10dp" />
+  
+  </shape>
+Binary files ../mythmote-read-only/res/drawable/mythmote_large.png and ./res/drawable/mythmote_large.png differ
+Binary files ../mythmote-read-only/res/drawable/mythmote.png and ./res/drawable/mythmote.png differ
+Binary files ../mythmote-read-only/res/drawable/pause.png and ./res/drawable/pause.png differ
+Binary files ../mythmote-read-only/res/drawable/play.png and ./res/drawable/play.png differ
+Binary files ../mythmote-read-only/res/drawable/rec.png and ./res/drawable/rec.png differ
+Binary files ../mythmote-read-only/res/drawable/right.png and ./res/drawable/right.png differ
+Binary files ../mythmote-read-only/res/drawable/rw.png and ./res/drawable/rw.png differ
+Binary files ../mythmote-read-only/res/drawable/skipbk.png and ./res/drawable/skipbk.png differ
+Binary files ../mythmote-read-only/res/drawable/skipfw.png and ./res/drawable/skipfw.png differ
+Binary files ../mythmote-read-only/res/drawable/speaker_minus.png and ./res/drawable/speaker_minus.png differ
+Binary files ../mythmote-read-only/res/drawable/speaker_off.png and ./res/drawable/speaker_off.png differ
+Binary files ../mythmote-read-only/res/drawable/speaker_plus.png and ./res/drawable/speaker_plus.png differ
+Binary files ../mythmote-read-only/res/drawable/square.png and ./res/drawable/square.png differ
+Binary files ../mythmote-read-only/res/drawable/stop.png and ./res/drawable/stop.png differ
+Binary files ../mythmote-read-only/res/drawable/trash.png and ./res/drawable/trash.png differ
+Binary files ../mythmote-read-only/res/drawable/up.png and ./res/drawable/up.png differ
+diff -crBN ../mythmote-read-only/res/layout/fragment_mythmote_navigation.xml ./res/layout/fragment_mythmote_navigation.xml
+*** ../mythmote-read-only/res/layout/fragment_mythmote_navigation.xml	2013-12-06 11:36:29.885381118 -0800
+--- ./res/layout/fragment_mythmote_navigation.xml	2013-12-06 10:35:46.528922588 -0800
+***************
+*** 48,60 ****
+  	        android:src="@drawable/up" />
+  	    
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonGuide"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/guide" />
+      
+      </TableRow>
+      
+--- 48,60 ----
+  	        android:src="@drawable/up" />
+  	    
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonTrash"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/trash" />
+      
+      </TableRow>
+      
+***************
+*** 168,189 ****
+              android:src="@drawable/speaker_plus" />
+  	
+  	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	       android:id="@+id/ButtonMute"
+  	       android:layout_width="match_parent"
+  	       android:layout_height="match_parent"
+  	       android:layout_margin="0.5dip"
+  	       android:layout_weight="10"
+  	       android:background="@drawable/mythmote_button"
+! 	       android:src="@drawable/speaker_off" />
+  	   
+  	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	       android:id="@+id/ButtonVolDown"
+  	       android:layout_width="match_parent"
+  	       android:layout_height="match_parent"
+  	       android:layout_margin="0.5dip"
+  	       android:layout_weight="10"
+  	       android:background="@drawable/mythmote_button"
+! 	       android:src="@drawable/speaker_minus" />
+  	   
+      </TableRow>
+      
+--- 168,189 ----
+              android:src="@drawable/speaker_plus" />
+  	
+  	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	       android:id="@+id/ButtonVolDown"
+  	       android:layout_width="match_parent"
+  	       android:layout_height="match_parent"
+  	       android:layout_margin="0.5dip"
+  	       android:layout_weight="10"
+  	       android:background="@drawable/mythmote_button"
+! 	       android:src="@drawable/speaker_minus" />
+  	   
+  	   <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	       android:id="@+id/ButtonMute"
+  	       android:layout_width="match_parent"
+  	       android:layout_height="match_parent"
+  	       android:layout_margin="0.5dip"
+  	       android:layout_weight="10"
+  	       android:background="@drawable/mythmote_button"
+! 	       android:src="@drawable/speaker_off" />
+  	   
+      </TableRow>
+      
+diff -crBN ../mythmote-read-only/res/layout-land/fragment_mythmote_navigation.xml ./res/layout-land/fragment_mythmote_navigation.xml
+*** ../mythmote-read-only/res/layout-land/fragment_mythmote_navigation.xml	2013-12-06 11:36:29.885381118 -0800
+--- ./res/layout-land/fragment_mythmote_navigation.xml	2013-12-06 10:34:57.037709439 -0800
+***************
+*** 58,79 ****
+  	        android:src="@drawable/up" />
+  	    
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonGuide"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/guide" />
+  
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonVolUp"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/speaker_plus" />
+      
+      </TableRow>
+      
+--- 58,79 ----
+  	        android:src="@drawable/up" />
+  	    
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonTrash"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/trash" />
+  
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonMute"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/speaker_off" />
+      
+      </TableRow>
+      
+***************
+*** 118,131 ****
+  	        android:src="@drawable/right" />
+  
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+! 	        android:id="@+id/ButtonMute"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/speaker_off" />
+!     
+      </TableRow>
+      
+      <TableRow android:layout_weight="10"
+--- 118,131 ----
+  	        android:src="@drawable/right" />
+  
+  	    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+!  	        android:id="@+id/ButtonVolUp"
+  	        android:layout_width="match_parent"
+  	        android:layout_height="match_parent"
+  	        android:layout_margin="0.5dip"
+  	        android:layout_weight="10"
+  	        android:background="@drawable/mythmote_button"
+! 	        android:src="@drawable/speaker_plus" />
+!    
+      </TableRow>
+      
+      <TableRow android:layout_weight="10"
+diff -crBN ../mythmote-read-only/res/values/colors.xml ./res/values/colors.xml
+*** ../mythmote-read-only/res/values/colors.xml	2013-12-06 11:36:29.889381076 -0800
+--- ./res/values/colors.xml	2013-12-06 09:08:00.643801481 -0800
+***************
+*** 19,23 ****
+  -->
+  <resources>
+      <color name="gesture_color">#FFFFFF00</color>
+!     <color name="button_text_color">#000000</color>
+  </resources>
+--- 19,23 ----
+  -->
+  <resources>
+      <color name="gesture_color">#FFFFFF00</color>
+!     <color name="button_text_color">#00bb00</color>
+  </resources>
+diff -crBN ../mythmote-read-only/res/values/strings.xml ./res/values/strings.xml
+*** ../mythmote-read-only/res/values/strings.xml	2013-12-06 11:36:29.889381076 -0800
+--- ./res/values/strings.xml	2013-12-06 10:34:14.150400492 -0800
+***************
+*** 98,104 ****
+  <string name="gesture_default_command">key enter</string>
+  <string name="show_donate_menu_item_str">Show Donate Menu Item</string>
+  <string name="donate_intent_alert_str">Pressing OK will open the mythmote paypal donation web page.</string>
+! <string name="guide_str">Guide</string>
+  <string name="home_str">Home</string>
+  <string name="live_tv_str">Live TV</string>
+  <string name="rec_tv_str">Rec TV</string>
+--- 98,104 ----
+  <string name="gesture_default_command">key enter</string>
+  <string name="show_donate_menu_item_str">Show Donate Menu Item</string>
+  <string name="donate_intent_alert_str">Pressing OK will open the mythmote paypal donation web page.</string>
+! <string name="trash_str">Trash</string>
+  <string name="home_str">Home</string>
+  <string name="live_tv_str">Live TV</string>
+  <string name="rec_tv_str">Rec TV</string>
+diff -crBN ../mythmote-read-only/src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java ./src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java
+*** ../mythmote-read-only/src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java	2013-12-06 11:36:29.893381034 -0800
+--- ./src/tkj/android/homecontrol/mythmote/keymanager/KeyBindingManager.java	2013-12-06 10:33:04.755536985 -0800
+***************
+*** 34,40 ****
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonEnter;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonEsc;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonFF;
+! import static tkj.android.homecontrol.mythmote.R.id.ButtonGuide;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonInfo;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonJump1;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonJump2;
+--- 34,40 ----
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonEnter;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonEsc;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonFF;
+! import static tkj.android.homecontrol.mythmote.R.id.ButtonTrash;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonInfo;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonJump1;
+  import static tkj.android.homecontrol.mythmote.R.id.ButtonJump2;
+***************
+*** 122,128 ****
+  		BUTTON_REWIND("play seek backward", ButtonRew),
+  		BUTTON_SKIP_FORWARD("key end", ButtonSkipForward),
+  		BUTTON_SKIP_BACKWARD("key home", ButtonSkipBack),
+! 		BUTTON_GUIDE("key s", ButtonGuide),
+  		BUTTON_INFO("key i", ButtonInfo),
+  		BUTTON_JUMP_1("jump mainmenu", ButtonJump1),
+  		BUTTON_JUMP_2("jump livetv", ButtonJump2),
+--- 122,128 ----
+  		BUTTON_REWIND("play seek backward", ButtonRew),
+  		BUTTON_SKIP_FORWARD("key end", ButtonSkipForward),
+  		BUTTON_SKIP_BACKWARD("key home", ButtonSkipBack),
+! 		BUTTON_TRASH("key d", ButtonTrash),
+  		BUTTON_INFO("key i", ButtonInfo),
+  		BUTTON_JUMP_1("jump mainmenu", ButtonJump1),
+  		BUTTON_JUMP_2("jump livetv", ButtonJump2),
+***************
+*** 223,230 ****
+  					BUTTON_SKIP_BACKWARD.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("End", BUTTON_SKIP_FORWARD,
+  					BUTTON_SKIP_FORWARD.defaultCommand, false));
+! 			entries.add(new KeyBindingEntry("Guide", BUTTON_GUIDE,
+! 					BUTTON_GUIDE.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("Info", BUTTON_INFO,
+  					BUTTON_INFO.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("Main", BUTTON_JUMP_1,
+--- 223,230 ----
+  					BUTTON_SKIP_BACKWARD.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("End", BUTTON_SKIP_FORWARD,
+  					BUTTON_SKIP_FORWARD.defaultCommand, false));
+! 			entries.add(new KeyBindingEntry("Trash", BUTTON_TRASH,
+! 					BUTTON_TRASH.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("Info", BUTTON_INFO,
+  					BUTTON_INFO.defaultCommand, false));
+  			entries.add(new KeyBindingEntry("Main", BUTTON_JUMP_1,
+Binary files ../mythmote-read-only/.svn/wc.db and ./.svn/wc.db differ
