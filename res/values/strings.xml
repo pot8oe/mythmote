@@ -114,7 +114,7 @@
 <string name="keyboard_input_dialog_message">Characters typed into the textbox below will be sent to the connected frontend. Backspace should function as expected. Mythfrontend does not appear to honor the \'key space\' command breaking spacebar functionality.</string>
 <string name="done_str">Done</string>
 <string name="pref_app_theme">Theme</string>
-<string name="pref_app_theme_description">User interface style and colors. ( Requires App Restart )</string>
+<string name="pref_app_theme_description">User interface style and colors.</string>
 
 <string-array name="app_theme_strings">
     <item>Light Sqaure Buttons</item>
