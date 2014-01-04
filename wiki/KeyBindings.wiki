@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Each button on the mythmote interface sends a command to the frontend. The commands are editable by long pressing on a button. The default long-press action is to repeat the button command so it is necessary to change the button long-press action under settings.
+Each button on the mythmote interface sends a command to the frontend. The commands are editable by long pressing on a button. By default the long-press action is to repeat button commands making it is necessary to change the button long-press action under settings.
 
 
 == Enable edit keybings long press action ==
