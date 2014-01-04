@@ -1,0 +1,14 @@
+#Mythmote editable Key Bindings
+
+= Introduction =
+
+Each button on the mythmote interface sends a command to the frontend. The commands are editable by long pressing on a button. The default long-press action is to repeat the button command so it is necessary to change the button long-press action under settings.
+
+
+= Enable edit keybings long press action =
+
+  * Press Settings (Wrench Icon)
+  * General Preferences -> Button Long-Press action -> Edit key-binding
+  * Back to main mythmote user interface.
+  * Long-Press on the desired button
+  * Change 'Command' to the desired MythTV frontend network protocol command.
