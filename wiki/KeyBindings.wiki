@@ -12,3 +12,7 @@ Each button on the mythmote interface sends a command to the frontend. The comma
   * Back to main mythmote user interface.
   * Long-Press on the desired button
   * Change 'Command' to the desired MythTV frontend network protocol command.
+
+
+The following is a link to MythTV's
+[http://www.mythtv.org/wiki/Frontend_control_socket Frontend Control Socket documentation]
