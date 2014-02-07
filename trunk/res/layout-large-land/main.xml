@@ -19,21 +19,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.6"
-        android:weightSum="4">
+        android:weightSum="1">
         
         <FrameLayout
             android:id="@+id/framelayout_numberpad_fragment"
             android:name="tkj.android.homecontrol.mythmote.MythmoteNumberPadFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_weight="0.30" />
 
         <FrameLayout
             android:id="@+id/framelayout_quickjump_fragment"
             android:name="tkj.android.homecontrol.mythmote.MythmoteQuickJumpFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_weight="0.30" />
+        
+        <FrameLayout
+            android:id="@+id/framelayout_interactivetv_fragment"
+            android:name="tkj.android.homecontrol.mythmote.MythmoteInteractiveTVFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4" />
+
 	</LinearLayout>
 
 </LinearLayout>
