@@ -115,6 +115,11 @@
 <string name="done_str">Done</string>
 <string name="pref_app_theme">Theme</string>
 <string name="pref_app_theme_description">User interface style and colors.</string>
+<string name="quickjump_str">Quick Jump</string>
+<string name="keyboard_input_str">Keyboard Input</string>
+<string name="clear_str">Clear</string>
+<string name="interactive_tv">Interactive TV</string>
+
 
 <string-array name="app_theme_strings">
     <item>Light Sqaure Buttons</item>
@@ -214,9 +219,7 @@
 <item>900</item>
 <item>1000</item>
 </string-array>
-<string name="quickjump_str">Quick Jump</string>
-<string name="keyboard_input_str">Keyboard Input</string>
-<string name="clear_str">Clear</string>
+
 
 
 </resources>
