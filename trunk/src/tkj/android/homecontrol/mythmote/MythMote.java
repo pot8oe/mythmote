@@ -395,6 +395,12 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 				MythmoteNavigationFragment.class.getName());
 		sFragmentArrayList.add(nav);
 		sHeaderArrayList.add(this.getString(R.string.navigation_str));
+		
+		// mythmote interactive tv page fragment
+		Fragment itv = Fragment.instantiate(this,
+				 MythmoteInteractiveTVFragment.class.getName());
+		sFragmentArrayList.add(itv);
+		sHeaderArrayList.add(this.getString(R.string.interactive_tv));
 
 		// mythmote numbers page fragment
 		Fragment num = Fragment.instantiate(this,
