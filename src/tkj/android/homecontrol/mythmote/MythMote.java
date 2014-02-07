@@ -448,6 +448,16 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 			fTran.replace(R.id.framelayout_navigation_fragment, nav);
 		}
 		
+		//Setup interactive tv fragment
+		Fragment itv = fragMgr.findFragmentById(R.layout.fragment_mythmote_interactivetv);
+		if (null == itv) {
+			itv = Fragment.instantiate(this,
+				MythmoteInteractiveTVFragment.class.getName());
+			fTran.add(R.id.framelayout_interactivetv_fragment, itv);
+		}else{
+			fTran.replace(R.id.framelayout_interactivetv_fragment, itv);
+		}
+		
 		//setup number pad
 		Fragment num = fragMgr.findFragmentById(R.layout.fragment_mythmote_numbers);
 		if (null == num) {
