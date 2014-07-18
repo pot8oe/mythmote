@@ -1,5 +1,7 @@
 #List of commands supported by mythfrontend through the network remote control interface.
 
+http://www.mythtv.org/wiki/Frontend_control_socket
+
 = Introduction =
 
 = Valid Commands =
