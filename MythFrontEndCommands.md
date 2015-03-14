@@ -1,0 +1,134 @@
+#List of commands supported by mythfrontend through the network remote control interface.
+
+http://www.mythtv.org/wiki/Frontend_control_socket
+
+# Introduction #
+
+# Valid Commands #
+```
+jump               - Jump to a specified location in Myth
+key                - Send a keypress to the program
+play               - Playback related commands
+query              - Queries
+exit               - Exit Network Control
+```
+
+
+## jump ##
+```
+Jumps to a JUMPPOINT in the frontend.
+
+JUMPPOINT is one of the following:
+channelpriorities    - Channel Recording Priorities
+channelrecpriority   - Channel Recording Priorities
+deletebox            - TV Recording Deletion
+deleterecordings     - TV Recording Deletion
+flixbrowse           - Netflix Browser
+flixhistory          - Netflix History
+flixqueue            - Netflix Queue
+guidegrid            - Program Guide
+livetv               - Live TV
+livetvinguide        - Live TV In Guide
+mainmenu             - Main Menu
+managerecordings     - Manage Recordings / Fix Conflicts
+manualbox            - Manual Record Scheduling
+manualrecording      - Manual Record Scheduling
+musicplaylists       - Select music playlists
+mythgallery          - MythGallery
+mythgame             - MythGame
+mythmovietime        - MythMovieTime
+mythnews             - MythNews
+mythvideo            - MythVideo
+mythweather          - MythWeather
+playbackbox          - TV Recording Playback
+playbackrecordings   - TV Recording Playback
+playdvd              - Play DVD
+playmusic            - Play music
+previousbox          - Previously Recorded
+progfinder           - Program Finder
+programfinder        - Program Finder
+programguide         - Program Guide
+programrecpriority   - Program Recording Priorities
+recordingpriorities  - Program Recording Priorities
+ripcd                - Rip CD
+ripdvd               - Rip DVD
+statusbox            - Status Screen
+videobrowser         - Video Browser
+videogallery         - Video Gallery
+videolistings        - Video Listings
+videomanager         - Video Manager
+viewscheduled        - Manage Recordings / Fix Conflicts
+zoneminderconsole    - ZoneMinder Console
+zoneminderevents     - ZoneMinder Events
+zoneminderliveview   - ZoneMinder Live View
+```
+
+## key ##
+```
+key LETTER           - Send the letter key specified
+key NUMBER           - Send the number key specified
+key CODE             - Send one of the following key codes
+
+#, $, %, &, (, ), *, +, ,, -, ., /, :, ;, <, =, >, ?, [, \, ], _, 
+ampersand, asterisk, backslash, backspace, backtab, bar, bracketleft, 
+bracketright, colon, comma, delete, dollar, down, end, enter, equal, 
+escape, f1, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f2, f20, 
+f21, f22, f23, f24, f3, f4, f5, f6, f7, f8, f9, greater, hash, home, 
+insert, left, less, minus, numbersign, pagedown, pageup, parenleft, 
+parenright, percent, period, pipe, plus, poundsign, question, return, 
+right, semicolon, slash, space, tab, underscore, up, |
+
+```
+
+## play ##
+```
+play channel up       - Change channel Up
+play channel down     - Change channel Down
+play channel NUMBER   - Change to a specific channel number
+play chanid NUMBER    - Change to a specific channel id (chanid)
+play program CHANID yyyy-mm-ddThh:mm:ss
+                      - Play program with chanid & starttime
+play program CHANID yyyy-mm-ddThh:mm:ss resume
+                      - Resume program with chanid & starttime
+play save screenshot FILENAME
+                      - Save screenshot from current position
+play seek beginning   - Seek to the beginning of the recording
+play seek forward     - Skip forward in the video
+play seek backward    - Skip backwards in the video
+play seek HH:MM:SS    - Seek to a specific position
+play speed pause      - Pause playback
+play speed normal     - Playback at normal speed
+play speed 1x         - Playback at normal speed
+play speed -1x        - Playback at normal speed in reverse
+play speed 1/16x      - Playback at 1/16x speed
+play speed 1/8x       - Playback at 1/8x speed
+play speed 1/4x       - Playback at 1/4x speed
+play speed 1/2x       - Playback at 1/2x speed
+play speed 2x         - Playback at 2x speed
+play speed 4x         - Playback at 4x speed
+play speed 8x         - Playback at 8x speed
+play speed 16x        - Playback at 16x speed
+play stop             - Stop playback
+
+```
+
+## query ##
+```
+query location        - Query current screen or location
+query recordings      - List currently available recordings
+query recording CHANID STARTTIME
+                      - List info about the specified program
+query liveTV          - List current TV schedule
+query liveTV CHANID   - Query current program for specified channel
+query load            - List 1/5/15 load averages
+query memstats        - List free and total, physical and swap memory
+query time            - Query current time on frontend
+query uptime          - Query machine uptime
+query verbose         - Get current VERBOSE filter
+query version         - Query Frontend version details
+
+
+```
+
+## exit ##
+Disconnects from network control
