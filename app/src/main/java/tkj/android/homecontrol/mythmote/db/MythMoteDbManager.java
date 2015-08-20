@@ -73,10 +73,8 @@ public class MythMoteDbManager {
 	 * successfully created return the new rowId for that note, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param title
-	 *            the title of the note
-	 * @param body
-	 *            the body of the note
+	 * @param location
+	 *            the location to create
 	 * @return rowId or -1 if failed
 	 */
 	public long createFrontendLocation(FrontendLocation location) {

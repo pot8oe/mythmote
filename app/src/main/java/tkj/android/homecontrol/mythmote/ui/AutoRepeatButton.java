@@ -1,13 +1,28 @@
+/*
+ * Copyright (C) 2010 Rob Elsner
+ *
+ * Licensed under the GNU General Public License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ *
+ *      http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ */
 package tkj.android.homecontrol.mythmote.ui;
 
-
-import tkj.android.homecontrol.mythmote.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
+
+import tkj.android.homecontrol.mythmote.R;
 
 /**
  * Borrowed from Carl http://stackoverflow.com/questions/4284224
@@ -16,7 +31,7 @@ import android.widget.ImageButton;
  * @author Carl and robelsner
  * 
  */
-public class AutoRepeatImageButton extends ImageButton {
+public class AutoRepeatButton extends Button {
 
 	public static final int DEFAULT_INITIAL_DELAY = 500;
 	public static final int DEFAULT_REPEAT_INTERVAL = 100;
@@ -86,20 +101,19 @@ public class AutoRepeatImageButton extends ImageButton {
 		});
 	}
 
-	public AutoRepeatImageButton(Context context, AttributeSet attrs, int defStyle) {
+	public AutoRepeatButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public AutoRepeatImageButton(Context context) {
+	public AutoRepeatButton(Context context) {
 		super(context);
 		init();
 	}
 
-	public AutoRepeatImageButton(Context context, AttributeSet attrs) {
+	public AutoRepeatButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoRepeatButton);
 		int n = a.getIndexCount();
 		for (int i = 0; i < n; i++) {
@@ -110,7 +124,8 @@ public class AutoRepeatImageButton extends ImageButton {
 				initialRepeatDelay = a.getInt(attr, DEFAULT_INITIAL_DELAY);
 				break;
 			case R.styleable.AutoRepeatButton_repeat_interval:
-				repeatIntervalInMilliseconds = a.getInt(attr, DEFAULT_REPEAT_INTERVAL);
+				repeatIntervalInMilliseconds = a.getInt(attr,
+						DEFAULT_REPEAT_INTERVAL);
 				break;
 			}
 		}
