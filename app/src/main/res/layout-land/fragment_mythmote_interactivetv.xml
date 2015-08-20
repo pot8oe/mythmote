@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+        android:id="@+id/ButtonRed"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_margin="0.5dip"
+	    android:layout_weight="10"
+	    android:src="@drawable/red" />
+	
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+        android:id="@+id/ButtonGreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        android:src="@drawable/green" />
+    
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+        android:id="@+id/ButtonYellow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        android:src="@drawable/yellow" />
+    
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
+        android:id="@+id/ButtonBlue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        android:src="@drawable/blue" />
+    
+</LinearLayout>
