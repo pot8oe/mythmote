@@ -11,7 +11,7 @@ android {
         versionCode 2508
         versionName "1.9.0.1"
     }
-    if (project.hasProperty("mythtmote.signing")
+    if (project.hasProperty("mythmote.signing")
             && new File(project.property("mythmote.signing") + ".gradle").exists()) {
         apply from: project.property("mythmote.signing") + ".gradle";
     }
