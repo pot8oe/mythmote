@@ -9,7 +9,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 23
         versionCode 2508
-        versionName "1.9.0.1"
+        versionName "1.9.0.2"
     }
     if (project.hasProperty("mythmote.signing")
             && new File(project.property("mythmote.signing") + ".gradle").exists()) {
