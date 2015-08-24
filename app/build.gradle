@@ -12,7 +12,7 @@ android {
         versionName "1.9.0.1"
     }
     if (project.hasProperty("mythtmote.signing")
-            && new File(project.property("mythtvmote.signing") + ".gradle").exists()) {
+            && new File(project.property("mythmote.signing") + ".gradle").exists()) {
         apply from: project.property("mythmote.signing") + ".gradle";
     }
     packagingOptions {
@@ -27,6 +27,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     productFlavors {
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
