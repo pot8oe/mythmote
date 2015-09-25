@@ -122,9 +122,8 @@
 
 
 <string-array name="app_theme_strings">
-    <item>Light Sqaure Buttons</item>
-	<item>Dark Square Buttons</item>
-	<item>Dark Glow Buttons</item>
+    <item>Light</item>
+	<item>Dark</item>
 </string-array>
 
 <string-array name="app_theme_values">

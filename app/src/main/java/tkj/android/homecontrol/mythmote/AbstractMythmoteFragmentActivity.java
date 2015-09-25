@@ -45,10 +45,8 @@ public class AbstractMythmoteFragmentActivity extends FragmentActivity {
 	
 	public static int getThemeStyle(int preferenceValue){
 		
-		if(preferenceValue == 1){
+		if(preferenceValue > 0){
 			return R.style.Theme_custom_dark;
-		} else if(preferenceValue == 2){
-			return R.style.Theme_custom_dark_glow;
 		} else {
 			return R.style.Theme_custom_light;
 		}
