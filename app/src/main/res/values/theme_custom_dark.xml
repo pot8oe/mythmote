@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="Theme_custom_dark" parent="android:Theme.Material">
+    <style name="Theme_custom_dark" parent="Theme.AppCompat">
     	<!--<item name="android:buttonStyle" >@style/button_dark_square</item>-->
     	<!--<item name="android:imageButtonStyle" >@style/imagebutton_dark_square</item>-->
     	<!--<item name="android:windowBackground">@color/dark_square_app_background</item>-->
