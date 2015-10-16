@@ -14,28 +14,28 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/rec" />
+            android:src="@drawable/ic_record" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonStop"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/stop" />
+            android:src="@drawable/ic_stop" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonPause"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/pause" />
+            android:src="@drawable/ic_pause" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonPlay"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/play" />
+            android:src="@drawable/ic_play_arrow" />
 
     </TableRow>
 
@@ -49,28 +49,28 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/skipbk" />
+            android:src="@drawable/ic_skip_previous" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonRew"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/rw" />
+            android:src="@drawable/ic_fast_rewind" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonFF"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/ff" />
+            android:src="@drawable/ic_fast_forward" />
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
             android:id="@+id/ButtonSkipForward"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
             android:layout_weight="10"
-            android:src="@drawable/skipfw" />
+            android:src="@drawable/ic_skip_next" />
 
     </TableRow>
 
