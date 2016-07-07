@@ -21,7 +21,12 @@ public class AbstractMythmoteFragmentActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
+
+		/* *
+		 * Locking to Dark theme as light theme is broken.
+		 * Uncomment the following to re-enable theme selection
+		 * */
 //		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
 //				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 		
@@ -40,6 +45,10 @@ public class AbstractMythmoteFragmentActivity extends AppCompatActivity {
 
 		sCurrentTheme = 1;
 
+		/* *
+		 * Locking to Dark theme as light theme is broken.
+		 * Uncomment the following to re-enable theme selection
+		 * */
 //		sCurrentTheme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
 //				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 		

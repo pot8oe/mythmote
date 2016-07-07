@@ -13,7 +13,11 @@ public class AbstractMythmotePreferenceActivity extends PreferenceActivity{
 	}
 	
 	private void setApplicationTheme() {
-		
+
+		/* *
+		 * Locking to Dark theme as light theme is broken.
+		 * Uncomment the following to re-enable theme selection
+		 * */
 //		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
 //				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 

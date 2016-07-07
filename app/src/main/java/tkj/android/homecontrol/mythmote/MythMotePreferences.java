@@ -132,6 +132,10 @@ public class MythMotePreferences extends AbstractMythmotePreferenceActivity {
 				context.getString(R.string.delete_location_str),
 				context.getString(R.string.delete_location_description_str)));
 
+		/* *
+		 * Locking to Dark theme as light theme is broken.
+		 * Uncomment the following to re-enable theme selection
+		 * */
 //		// create apptheme action preference
 //		generalCat.addPreference(createIntListPreference(context,
 //				PREF_APP_THEME,
