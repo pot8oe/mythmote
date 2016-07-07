@@ -14,9 +14,11 @@ public class AbstractMythmotePreferenceActivity extends PreferenceActivity{
 	
 	private void setApplicationTheme() {
 		
-		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
-		
+//		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+//				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
+
+		int theme = 1;
+
 		this.setTheme(AbstractMythmoteFragmentActivity.getThemeStyle(theme));
 	}
 	

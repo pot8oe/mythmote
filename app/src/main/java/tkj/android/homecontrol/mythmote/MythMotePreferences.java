@@ -132,13 +132,13 @@ public class MythMotePreferences extends AbstractMythmotePreferenceActivity {
 				context.getString(R.string.delete_location_str),
 				context.getString(R.string.delete_location_description_str)));
 
-		// create apptheme action preference
-		generalCat.addPreference(createIntListPreference(context,
-				PREF_APP_THEME,
-				R.string.pref_app_theme,
-				R.string.pref_app_theme_description,
-				R.array.app_theme_strings,
-				R.array.app_theme_values, "0"));
+//		// create apptheme action preference
+//		generalCat.addPreference(createIntListPreference(context,
+//				PREF_APP_THEME,
+//				R.string.pref_app_theme,
+//				R.string.pref_app_theme_description,
+//				R.array.app_theme_strings,
+//				R.array.app_theme_values, "0"));
 		
 		// create mythfrontend update status interval preference
 		generalCat.addPreference(createIntListPreference(context,
