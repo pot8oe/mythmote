@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "tkj.android.homecontrol.mythmote"
         minSdkVersion 8
         targetSdkVersion 23
-        versionCode 2608
-        versionName "1.9.0.2"
+        versionCode 2708
+        versionName "1.9.0.3"
     }
     if (project.hasProperty("mythmote.signing")
             && new File(project.property("mythmote.signing") + ".gradle").exists()) {
