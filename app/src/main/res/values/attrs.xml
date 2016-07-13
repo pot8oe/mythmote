@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<declare-styleable name="AutoRepeatButton">
-   <attr name="initial_delay"  format="integer" />
-   <attr name="repeat_interval"  format="integer" />
-</declare-styleable>
+   <declare-styleable name="AutoRepeatButton">
+      <attr name="initial_delay"  format="integer" />
+      <attr name="repeat_interval"  format="integer" />
+   </declare-styleable>
+
+   <attr name="theme_dependent_drawable_color_material_buttons" format="reference"/>
+
+   <attr name="theme_dependent_img_nav_info" format="reference"/>
+   <attr name="theme_dependent_img_nav_guide" format="reference"/>
+   <attr name="theme_dependent_img_nav_arrow_up" format="reference"/>
+   <attr name="theme_dependent_img_nav_arrow_down" format="reference"/>
+   <attr name="theme_dependent_img_nav_arrow_left" format="reference"/>
+   <attr name="theme_dependent_img_nav_arrow_right" format="reference"/>
+   <attr name="theme_dependent_img_nav_enter" format="reference"/>
+   <attr name="theme_dependent_img_nav_back" format="reference"/>
+   <attr name="theme_dependent_img_nav_menu" format="reference"/>
+
+   <attr name="theme_dependent_img_media_channel_down" format="reference"/>
+   <attr name="theme_dependent_img_media_channel_last" format="reference"/>
+   <attr name="theme_dependent_img_media_channel_up" format="reference"/>
+   <attr name="theme_dependent_img_media_fast_forward" format="reference"/>
+   <attr name="theme_dependent_img_media_fast_rewind" format="reference"/>
+   <attr name="theme_dependent_img_media_pause" format="reference"/>
+   <attr name="theme_dependent_img_media_play" format="reference"/>
+   <attr name="theme_dependent_img_media_record" format="reference"/>
+   <attr name="theme_dependent_img_media_skip_next" format="reference"/>
+   <attr name="theme_dependent_img_media_skip_previous" format="reference"/>
+   <attr name="theme_dependent_img_media_stop" format="reference"/>
+   <attr name="theme_dependent_img_media_volume_down" format="reference"/>
+   <attr name="theme_dependent_img_media_volume_mute" format="reference"/>
+   <attr name="theme_dependent_img_media_volume_up" format="reference"/>
+
 </resources>

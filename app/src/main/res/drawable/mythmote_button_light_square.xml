@@ -29,11 +29,12 @@
     
     <!-- focused -->
     <item android:state_focused="true"
-          android:drawable="@drawable/mythmote_button_focused_light_square" /> 
-    
-    <!-- hovered -->
-    <item android:state_hovered="true"
-          android:drawable="@drawable/mythmote_button_focused_light_square" /> 
+          android:drawable="@drawable/mythmote_button_focused_light_square" />
+
+    <!--Setting the Hovered image breaks the buttons normal view on older versions of android -->
+    <!--&lt;!&ndash; hovered &ndash;&gt;-->
+    <!--<item android:state_hovered="true"-->
+          <!--android:drawable="@drawable/mythmote_button_focused_light_square" /> -->
           
     <!-- default -->
     <item android:drawable="@drawable/mythmote_button_normal_light_square" /> 

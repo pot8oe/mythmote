@@ -82,5 +82,13 @@
     <color name="mythmote_button_dark_glow_pressed_start">#000055</color>
     <color name="mythmote_button_dark_glow_pressed_center">#000055</color>
     <color name="mythmote_button_dark_glow_pressed_end">#000011</color>
+
+
+    <!-- Material theme colors -->
+    <color name="material_dark_img_color">#ffcccccc</color>
+    <color name="material_dark_window_bg">3ff151515</color>
+
+    <color name="material_light_img_color">#ff151515</color>
+    <color name="material_light_window_bg">#ffcccccc</color>
     
 </resources>

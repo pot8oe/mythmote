@@ -6,6 +6,30 @@
     	<item name="android:imageButtonStyle" >@style/imagebutton_dark_square</item>
     	<item name="android:windowBackground">@color/dark_square_app_background</item>
 
+        <item name="theme_dependent_img_nav_info" >@drawable/legacy_nav_info</item>
+        <item name="theme_dependent_img_nav_guide" >@drawable/legacy_nav_guide</item>
+        <item name="theme_dependent_img_nav_arrow_up" >@drawable/legacy_nav_arrow_up</item>
+        <item name="theme_dependent_img_nav_arrow_down" >@drawable/legacy_nav_arrow_down</item>
+        <item name="theme_dependent_img_nav_arrow_left" >@drawable/legacy_nav_arrow_left</item>
+        <item name="theme_dependent_img_nav_arrow_right" >@drawable/legacy_nav_arrow_right</item>
+        <item name="theme_dependent_img_nav_enter" >@drawable/legacy_nav_enter</item>
+        <item name="theme_dependent_img_nav_back" >@drawable/legacy_nav_back</item>
+        <item name="theme_dependent_img_nav_menu" >@drawable/legacy_nav_menu</item>
+
+        <item name="theme_dependent_img_media_channel_down">@drawable/legacy_media_channel_down</item>
+        <item name="theme_dependent_img_media_channel_last">@drawable/legacy_media_channel_last</item>
+        <item name="theme_dependent_img_media_channel_up">@drawable/legacy_media_channel_up</item>
+        <item name="theme_dependent_img_media_fast_forward">@drawable/legacy_media_fast_forward</item>
+        <item name="theme_dependent_img_media_fast_rewind">@drawable/legacy_media_fast_rewind</item>
+        <item name="theme_dependent_img_media_pause">@drawable/legacy_media_pause</item>
+        <item name="theme_dependent_img_media_play">@drawable/legacy_media_play</item>
+        <item name="theme_dependent_img_media_record">@drawable/legacy_media_record</item>
+        <item name="theme_dependent_img_media_skip_next">@drawable/legacy_media_skip_next</item>
+        <item name="theme_dependent_img_media_skip_previous">@drawable/legacy_media_skip_previous</item>
+        <item name="theme_dependent_img_media_stop">@drawable/legacy_media_stop</item>
+        <item name="theme_dependent_img_media_volume_down">@drawable/legacy_media_volume_down</item>
+        <item name="theme_dependent_img_media_volume_mute">@drawable/legacy_media_volume_mute</item>
+        <item name="theme_dependent_img_media_volume_up">@drawable/legacy_media_volume_up</item>
     </style>
 
     <style name="button_dark_square" parent="@android:style/Widget.Button">
