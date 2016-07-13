@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class AbstractMythmoteFragmentActivity extends AppCompatActivity {
 	
-	private static int sCurrentTheme = 1;
+	private static int sCurrentTheme = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -22,45 +22,42 @@ public class AbstractMythmoteFragmentActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 
-
-		/* *
-		 * Locking to Dark theme as light theme is broken.
-		 * Uncomment the following to re-enable theme selection
-		 * */
-//		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-//				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
+		int theme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 		
-//		if(sCurrentTheme != -1 && theme != sCurrentTheme){
-//			Intent i = new Intent("android.intent.action.MAIN");
-//			i.setComponent(ComponentName.unflattenFromString("tkj.android.homecontrol.mythmote/tkj.android.homecontrol.mythmote.MythMote"));
-//			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(i);
-//		}
+		if(sCurrentTheme != -1 && theme != sCurrentTheme){
+			Intent i = new Intent("android.intent.action.MAIN");
+			i.setComponent(ComponentName.unflattenFromString("tkj.android.homecontrol.mythmote/tkj.android.homecontrol.mythmote.MythMote"));
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+		}
 	}
 	
 	
 	
 	
 	private void setApplicationTheme() {
-
-		sCurrentTheme = 1;
-
-		/* *
-		 * Locking to Dark theme as light theme is broken.
-		 * Uncomment the following to re-enable theme selection
-		 * */
-//		sCurrentTheme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
-//				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
+		sCurrentTheme = this.getSharedPreferences(MythMotePreferences.MYTHMOTE_SHARED_PREFERENCES_ID, MODE_PRIVATE)
+				.getInt(MythMotePreferences.PREF_APP_THEME, 0);
 		
 		this.setTheme(AbstractMythmoteFragmentActivity.getThemeStyle(sCurrentTheme));
 	}
 	
 	public static int getThemeStyle(int preferenceValue){
-		
-		if(preferenceValue > 0){
-			return R.style.Theme_custom_dark;
-		} else {
-			return R.style.Theme_custom_light;
+
+		switch(preferenceValue)
+		{
+			default:
+			case 0:
+				return R.style.Theme_custom_light;
+			case 1:
+				return R.style.Theme_custom_dark;
+			case 2:
+				return R.style.Theme_custom_dark_glow;
+			case 3:
+				return R.style.Theme_custom_material_light;
+			case 4:
+				return R.style.Theme_custom_material_dark;
 		}
 		
 	}

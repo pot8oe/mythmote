@@ -122,14 +122,19 @@
 
 
 <string-array name="app_theme_strings">
-    <item>Light</item>
-	<item>Dark</item>
+    <item>Legacy Design - Light</item>
+	<item>Legacy Design - Dark</item>
+	<item>Legacy Design - Dark Glow</item>
+	<item>Material Design - Light</item>
+	<item>Material Design - Dark</item>
 </string-array>
 
 <string-array name="app_theme_values">
 	<item>0</item>
 	<item>1</item>
 	<item>2</item>
+	<item>3</item>
+	<item>4</item>
 </string-array>
 
 <string-array name="status_Update_Interval_strings">

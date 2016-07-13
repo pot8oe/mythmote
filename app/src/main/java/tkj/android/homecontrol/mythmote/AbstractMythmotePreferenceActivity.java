@@ -3,13 +3,13 @@ package tkj.android.homecontrol.mythmote;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class AbstractMythmotePreferenceActivity extends PreferenceActivity{
+public class AbstractMythmotePreferenceActivity extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		this.setApplicationTheme();
+		//this.setApplicationTheme();
 	}
 	
 	private void setApplicationTheme() {

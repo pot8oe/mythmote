@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme_custom_material_light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--<item name="android:buttonStyle" >@style/button_dark_square</item>-->
+        <!--<item name="android:imageButtonStyle" >@style/imagebutton_dark_square</item>-->
+        <!--<item name="android:windowBackground">@color/dark_square_app_background</item>-->
+    </style>
+
+    <!--<style name="button_dark_square" parent="@android:style/Widget.Button">-->
+        <!--&lt;!&ndash;<item name="android:background">@drawable/mythmote_button_dark_square</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textColor">@color/mythmote_button_dark_square_button_text_color</item>&ndash;&gt;-->
+    <!--</style>-->
+
+    <!--<style name="imagebutton_dark_square" parent="@android:style/Widget.ImageButton">-->
+        <!--&lt;!&ndash;<item name="android:background">@drawable/mythmote_button_dark_square</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textColor">@color/mythmote_button_dark_square_button_text_color</item>&ndash;&gt;-->
+    <!--</style>-->
+
+</resources>

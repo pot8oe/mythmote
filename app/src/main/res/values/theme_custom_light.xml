@@ -2,18 +2,18 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
     <style name="Theme_custom_light" parent="Theme.AppCompat.Light.DarkActionBar">
-    	<!--<item name="android:buttonStyle" >@style/button_light_square</item>-->
-    	<!--<item name="android:imageButtonStyle" >@style/imagebutton_light_square</item>-->
+    	<item name="android:buttonStyle" >@style/button_light_square</item>
+    	<item name="android:imageButtonStyle" >@style/imagebutton_light_square</item>
     </style>
 
     <style name="button_light_square" parent="@android:style/Widget.Button">
-        <!--<item name="android:background">@drawable/mythmote_button_light_square</item>-->
-        <!--<item name="android:textColor">@color/mythmote_button_light_square_button_text_color</item>-->
+        <item name="android:background">@drawable/mythmote_button_light_square</item>
+        <item name="android:textColor">@color/mythmote_button_light_square_button_text_color</item>
     </style>
 
     <style name="imagebutton_light_square" parent="@android:style/Widget.ImageButton">
-        <!--<item name="android:background">@drawable/mythmote_button_light_square</item>-->
-        <!--<item name="android:textColor">@color/mythmote_button_light_square_button_text_color</item>-->
+        <item name="android:background">@drawable/mythmote_button_light_square</item>
+        <item name="android:textColor">@color/mythmote_button_light_square_button_text_color</item>
     </style>
     
 </resources>
