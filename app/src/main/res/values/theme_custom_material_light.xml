@@ -34,14 +34,4 @@
 
     </style>
 
-    <!--<style name="button_dark_square" parent="@android:style/Widget.Button">-->
-        <!--&lt;!&ndash;<item name="android:background">@drawable/mythmote_button_dark_square</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:textColor">@color/mythmote_button_dark_square_button_text_color</item>&ndash;&gt;-->
-    <!--</style>-->
-
-    <!--<style name="imagebutton_dark_square" parent="@android:style/Widget.ImageButton">-->
-        <!--&lt;!&ndash;<item name="android:background">@drawable/mythmote_button_dark_square</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:textColor">@color/mythmote_button_dark_square_button_text_color</item>&ndash;&gt;-->
-    <!--</style>-->
-
 </resources>
