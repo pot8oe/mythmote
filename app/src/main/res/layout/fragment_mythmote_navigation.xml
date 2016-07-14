@@ -32,6 +32,7 @@
 	         android:id="@+id/ButtonInfo"
 	         android:layout_width="match_parent"
 	         android:layout_height="match_parent"
+			 android:layout_margin="0.5dp"
 	         android:layout_weight="10"
 	         android:src="?attr/theme_dependent_img_nav_info" />
 	
@@ -39,6 +40,7 @@
 	        android:id="@+id/ButtonUp"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_arrow_up" />
 	    
@@ -46,6 +48,7 @@
 	        android:id="@+id/ButtonGuide"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_guide" />
     
@@ -59,6 +62,7 @@
 	         android:id="@+id/ButtonLeft"
 	         android:layout_width="match_parent"
 	         android:layout_height="match_parent"
+			 android:layout_margin="0.5dp"
 			 android:layout_weight="10"
 	         android:src="?attr/theme_dependent_img_nav_arrow_left" />
 	
@@ -66,6 +70,7 @@
 	        android:id="@+id/ButtonSelect"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 			android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_enter" />
 	    
@@ -73,6 +78,7 @@
 	        android:id="@+id/ButtonRight"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 			android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_arrow_right" />
     
@@ -85,6 +91,7 @@
 	         android:id="@+id/ButtonEsc"
 	         android:layout_width="match_parent"
 	         android:layout_height="match_parent"
+			 android:layout_margin="0.5dp"
 	         android:layout_weight="10"
 	         android:src="?attr/theme_dependent_img_nav_back" />
 	
@@ -92,6 +99,7 @@
 	        android:id="@+id/ButtonDown"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_arrow_down" />
 	    
@@ -99,6 +107,7 @@
 	        android:id="@+id/ButtonMenu"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="10"
 	        android:src="?attr/theme_dependent_img_nav_menu" />
     
@@ -111,6 +120,7 @@
 		    android:id="@+id/ButtonChUp"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 		    android:layout_weight="10"
 		    android:src="?attr/theme_dependent_img_media_channel_up" />
 			
@@ -118,16 +128,18 @@
 		    android:id="@+id/ButtonChReturn"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 		    android:layout_weight="10"
 		    android:src="?attr/theme_dependent_img_media_channel_last" />
-			   
+
 		<tkj.android.homecontrol.mythmote.ui.AutoRepeatImageButton
 		    android:id="@+id/ButtonChDown"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 		    android:layout_weight="10"
 		    android:src="?attr/theme_dependent_img_media_channel_down" />
-	
+
     </TableRow>
     
     <TableRow android:layout_weight="10"
@@ -137,6 +149,7 @@
             android:id="@+id/ButtonVolUp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
             android:layout_weight="10"
             android:src="?attr/theme_dependent_img_media_volume_up" />
 	
@@ -144,6 +157,7 @@
 	       android:id="@+id/ButtonMute"
 	       android:layout_width="match_parent"
 	       android:layout_height="match_parent"
+		   android:layout_margin="0.5dp"
 	       android:layout_weight="10"
 	       android:src="?attr/theme_dependent_img_media_volume_mute" />
 	   
@@ -151,6 +165,7 @@
 	       android:id="@+id/ButtonVolDown"
 	       android:layout_width="match_parent"
 	       android:layout_height="match_parent"
+		   android:layout_margin="0.5dp"
 	       android:layout_weight="10"
 	       android:src="?attr/theme_dependent_img_media_volume_down" />
 	   
@@ -163,6 +178,7 @@
 	         android:id="@+id/ButtonRecord"
 	         android:layout_width="match_parent"
 	         android:layout_height="match_parent"
+			 android:layout_margin="0.5dp"
 	         android:layout_weight="25"
 	         android:src="?attr/theme_dependent_img_media_record" />
 	
@@ -170,6 +186,7 @@
 	        android:id="@+id/ButtonStop"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_stop" />
 	    
@@ -177,6 +194,7 @@
 	        android:id="@+id/ButtonPause"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_pause" />
 	    
