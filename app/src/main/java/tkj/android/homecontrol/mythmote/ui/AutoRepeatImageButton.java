@@ -14,13 +14,14 @@ import tkj.android.homecontrol.mythmote.R;
  * Borrowed from Carl http://stackoverflow.com/questions/4284224
  * /android-hold-button-to-repeat-action
  * 
- * @author Carl and robelsner
+ * @author Carl and robelsner and Thomas G. Kenny Jr
  * 
  */
 public class AutoRepeatImageButton extends ImageButton {
 
 	public static final int DEFAULT_INITIAL_DELAY = 500;
 	public static final int DEFAULT_REPEAT_INTERVAL = 100;
+	public static final boolean DEFAULT_AUTO_REPEAT_ENABLED = true;
 	private static boolean sAutoRepeatEnabled = true;
 	private static int sRepeatInterval = DEFAULT_REPEAT_INTERVAL;
 	private long initialRepeatDelay = 500;
@@ -112,6 +113,9 @@ public class AutoRepeatImageButton extends ImageButton {
 				break;
 			case R.styleable.AutoRepeatButton_repeat_interval:
 				repeatIntervalInMilliseconds = a.getInt(attr, DEFAULT_REPEAT_INTERVAL);
+				break;
+			case R.styleable.AutoRepeatButton_auto_repeat_enabled:
+				sAutoRepeatEnabled = a.getBoolean(attr, DEFAULT_AUTO_REPEAT_ENABLED);
 				break;
 			}
 		}

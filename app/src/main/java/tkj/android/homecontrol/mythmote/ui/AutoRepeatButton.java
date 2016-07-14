@@ -35,6 +35,7 @@ public class AutoRepeatButton extends Button {
 
 	public static final int DEFAULT_INITIAL_DELAY = 500;
 	public static final int DEFAULT_REPEAT_INTERVAL = 100;
+	public static final boolean DEFAULT_AUTO_REPEAT_ENABLED = true;
 	private static boolean sAutoRepeatEnabled = true;
 	private static int sRepeatInterval = DEFAULT_REPEAT_INTERVAL;
 	private long initialRepeatDelay = 500;
@@ -126,6 +127,9 @@ public class AutoRepeatButton extends Button {
 			case R.styleable.AutoRepeatButton_repeat_interval:
 				repeatIntervalInMilliseconds = a.getInt(attr,
 						DEFAULT_REPEAT_INTERVAL);
+				break;
+			case R.styleable.AutoRepeatButton_auto_repeat_enabled:
+				sAutoRepeatEnabled = a.getBoolean(attr, DEFAULT_AUTO_REPEAT_ENABLED);
 				break;
 			}
 		}

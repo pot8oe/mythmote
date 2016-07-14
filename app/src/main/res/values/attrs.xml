@@ -3,6 +3,7 @@
    <declare-styleable name="AutoRepeatButton">
       <attr name="initial_delay"  format="integer" />
       <attr name="repeat_interval"  format="integer" />
+      <attr name="auto_repeat_enabled"  format="boolean" />
    </declare-styleable>
 
    <attr name="theme_dependent_drawable_color_material_buttons" format="reference"/>
