@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme_custom_material_light" parent="Theme.AppCompat.Light">
-
-        <item name="android:background">@color/material_light_window_bg</item>
+    <style name="Theme_custom_material_light" parent="Theme.AppCompat.Light.DarkActionBar">
 
         <item name="theme_dependent_drawable_color_material_buttons">@color/material_light_img_color</item>
 

@@ -3,8 +3,6 @@
 
     <style name="Theme_custom_material_dark" parent="Theme.AppCompat">
 
-        <item name="android:background">@color/material_dark_window_bg</item>
-
         <item name="theme_dependent_drawable_color_material_buttons">@color/material_dark_img_color</item>
 
         <item name="theme_dependent_img_nav_info" >@drawable/material_nav_info</item>

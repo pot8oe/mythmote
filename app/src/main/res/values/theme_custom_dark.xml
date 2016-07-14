@@ -2,9 +2,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
     <style name="Theme_custom_dark" parent="Theme.AppCompat">
+
     	<item name="android:buttonStyle" >@style/button_dark_square</item>
     	<item name="android:imageButtonStyle" >@style/imagebutton_dark_square</item>
-    	<item name="android:background">@color/dark_square_app_background</item>
+        <item name="android:windowBackground">@color/dark_square_app_background</item>
 
         <item name="theme_dependent_img_nav_info" >@drawable/legacy_nav_info</item>
         <item name="theme_dependent_img_nav_guide" >@drawable/legacy_nav_guide</item>
