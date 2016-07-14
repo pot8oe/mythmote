@@ -202,6 +202,7 @@
 	        android:id="@+id/ButtonPlay"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_play" />
     
@@ -215,6 +216,7 @@
 	         android:id="@+id/ButtonSkipBack"
 	         android:layout_width="match_parent"
 	         android:layout_height="match_parent"
+			 android:layout_margin="0.5dp"
 	         android:layout_weight="25"
 	         android:src="?attr/theme_dependent_img_media_skip_previous" />
 	
@@ -222,6 +224,7 @@
 	        android:id="@+id/ButtonRew"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_fast_rewind" />
 	    
@@ -229,6 +232,7 @@
 	        android:id="@+id/ButtonFF"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_fast_forward" />
 	    
@@ -236,6 +240,7 @@
 	        android:id="@+id/ButtonSkipForward"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
+			android:layout_margin="0.5dp"
 	        android:layout_weight="25"
 	        android:src="?attr/theme_dependent_img_media_skip_next" />
     
