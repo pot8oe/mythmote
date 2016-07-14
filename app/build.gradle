@@ -8,8 +8,8 @@ android {
         applicationId "tkj.android.homecontrol.mythmote"
         minSdkVersion 8
         targetSdkVersion 23
-        versionCode 2808
-        versionName "1.9.1.0"
+        versionCode 2908
+        versionName "1.10.0.0"
     }
     if (project.hasProperty("mythmote.signing")
             && new File(project.property("mythmote.signing") + ".gradle").exists()) {
