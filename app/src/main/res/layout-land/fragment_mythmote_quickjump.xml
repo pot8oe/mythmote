@@ -19,6 +19,7 @@
 -->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote"
+             xmlns:custom="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:weightSum="30">
@@ -29,7 +30,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump1"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
@@ -37,7 +38,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump2"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
@@ -50,7 +51,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump3"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
@@ -58,7 +59,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump4"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
@@ -71,7 +72,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump5"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
@@ -79,7 +80,7 @@
 
         <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump6"
-            app1:auto_repeat_enabled="false"
+            custom:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
