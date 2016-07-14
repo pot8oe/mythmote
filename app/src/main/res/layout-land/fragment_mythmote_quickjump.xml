@@ -18,65 +18,72 @@
     This software can be found at <https://github.com/MythTV-Clients/MythTV-Android-Frontend/>
 -->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="30" >
+             xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:weightSum="30">
 
     <TableRow
         android:layout_weight="10"
-        android:weightSum="20" >
+        android:weightSum="20">
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump1"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump2"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
     </TableRow>
 
     <TableRow
         android:layout_weight="10"
-        android:weightSum="20" >
+        android:weightSum="20">
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump3"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump4"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
     </TableRow>
 
     <TableRow
         android:layout_weight="10"
-        android:weightSum="20" >
+        android:weightSum="20">
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump5"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
 
-        <Button
+        <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
             android:id="@+id/ButtonJump6"
+            app1:auto_repeat_enabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+            android:layout_weight="10"/>
     </TableRow>
 
 </TableLayout>

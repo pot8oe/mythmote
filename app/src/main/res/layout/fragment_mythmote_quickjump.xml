@@ -20,51 +20,59 @@
 
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="60">
+              xmlns:app="http://schemas.android.com/apk/res/tkj.android.homecontrol.mythmote"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app1="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:weightSum="60">
 
-        <Button
-            android:id="@+id/ButtonJump1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
-        <Button
-            android:id="@+id/ButtonJump2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
-        <Button
-            android:id="@+id/ButtonJump3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
-        <Button
-            android:id="@+id/ButtonJump4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
-        <Button
-            android:id="@+id/ButtonJump5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
-        <Button
-            android:id="@+id/ButtonJump6"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dip"
-            android:layout_weight="10" />
+    <tkj.android.homecontrol.mythmote.ui.AutoRepeatButton
+        android:id="@+id/ButtonJump6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.5dip"
+        android:layout_weight="10"
+        app1:auto_repeat_enabled="false"/>
 
 </LinearLayout>
