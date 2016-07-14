@@ -2,6 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
     <style name="Theme_custom_light" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:background">@color/dark_square_app_background</item>
     	<item name="android:buttonStyle" >@style/button_light_square</item>
     	<item name="android:imageButtonStyle" >@style/imagebutton_light_square</item>
 
