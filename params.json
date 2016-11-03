@@ -1,0 +1,6 @@
+{
+  "name": "Mythmote",
+  "tagline": "Android MythTV remote control.",
+  "body": "### Mythmote.\r\nMythMote is an android based MythTV remote control. Control is obtained through the frontend's raw text-based TCP socket interface. More infomation regarding the MythTV network remote control protocol can be found here: http://www.mythtv.org/wiki/Frontend_control_socket\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
