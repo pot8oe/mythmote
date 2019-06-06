@@ -55,8 +55,7 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int RECONNECT_ID = Menu.FIRST + 1;
 	public static final int SELECTLOCATION_ID = Menu.FIRST + 2;
-	public static final int DONATE_ID = Menu.FIRST + 3;
-	public static final int SENDWOL_ID = Menu.FIRST + 4;
+	public static final int SENDWOL_ID = Menu.FIRST + 3;
 	public static final int KEYBOARD_INPUT_ID = Menu.FIRST + 5;
 	public static final String LOG_TAG = "MythMote";
 	public static final String EXTRA_LOCATION_NAME = "EXTRA_LOCATION_NAME";
@@ -71,8 +70,7 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 	private static FrontendLocation sLocation = new FrontendLocation();
 	private static int sSelected = -1;
 	private static boolean sIsScreenLarge = false;
-	private static boolean sShowDonateMenuItem = true;
-//	private static PowerManager powerManager;
+	//	private static PowerManager powerManager;
 //	private static PowerManager.WakeLock wakeLock;
 	private static List<Fragment> sFragmentArrayList;
 	private static List<String> sHeaderArrayList;
@@ -265,35 +263,8 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		//menu.add(0, SENDWOL_RE_ID, 0, R.string.send_wol_re_str);
 		//menu.add(0, SENDWOL_PJ_ID, 0, R.string.send_wol_pj_str);
 		
-		//add donate button if enabled
-		if(sShowDonateMenuItem){
-			
-		}
-		
 		// return results
 		return result;
-	}
-	
-	/**
-	 * Called when the menu is opened.
-	 */
-	@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-		
-		if(null != menu){
-			
-			//get donate menu item
-			MenuItem menuItem = menu.findItem(DONATE_ID);
-			
-			//if donate menu item exists and the user wants it gone remove it
-			if(null != menuItem && !sShowDonateMenuItem)
-				menu.removeItem(DONATE_ID);
-
-			//if the donate button is missing and the user wants it add it back
-			if(null == menuItem && sShowDonateMenuItem)
-				menu.add(0, DONATE_ID, 0, R.string.donate_menu_item_str).setIcon(R.drawable.paypal);
-		}
-		return super.onMenuOpened(featureId, menu);
 	}
 
 	/**
@@ -332,9 +303,6 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 
 			case SENDWOL_ID:
 				WOLPowerManager.sendWOL(this, sLocation.MAC, 5);
-				break;
-			case DONATE_ID:
-				this.startDonateIntent();
 				break;
 				
 			case KEYBOARD_INPUT_ID:
@@ -587,25 +555,22 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 
 		// get selected frontend id
 		sSelected = pref.getInt(MythMotePreferences.PREF_SELECTED_LOCATION, -1);
-		
-		// get if donate button should be visibl
-		sShowDonateMenuItem = pref.getBoolean(MythMotePreferences.PREF_SHOW_DONATE_MENU_ITEM, true);
 
 		//read long press action
-		if(pref.getInt(MythMotePreferences.PREF_LONGPRESS_ACTION, 0) == 0){
+		if (pref.getInt(MythMotePreferences.PREF_LONGPRESS_ACTION, 0) == 0) {
 			//auto repeat action
-			
+
 			//enable auto repeat
 			AutoRepeatButton.SetAutoRepeatEnalbed(true);
-			
+
 			//disable editable
 			KeyBindingManager.EditingEnabled = false;
-		}else{
+		} else {
 			//edit key-bindings action
-			
+
 			//disable auto repeat
 			AutoRepeatButton.SetAutoRepeatEnalbed(false);
-			
+
 			//set editable
 			KeyBindingManager.EditingEnabled = true;
 		}
@@ -613,31 +578,14 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		// set the hapticfeedback setting in keymanager
 		KeyBindingManager.HapticFeedbackEnabled = pref.getBoolean(
 				MythMotePreferences.PREF_HAPTIC_FEEDBACK_ENABLED, false);
-		
+
 		//set autorepeat interval
 		AutoRepeatButton.SetRepeatInterval(pref.getInt(
-				MythMotePreferences.PREF_KEY_REPEAT_INTERVAL, 
+				MythMotePreferences.PREF_KEY_REPEAT_INTERVAL,
 				AutoRepeatButton.DEFAULT_REPEAT_INTERVAL));
 
 		// done with pref ref
 		pref = null;
-	}
-	
-	private void startDonateIntent(){
-		AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
-		dBuilder.setMessage(R.string.donate_intent_alert_str);
-		dBuilder.setTitle("Donate Beer Money?");
-		dBuilder.setNegativeButton("Cancel", null);
-		dBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//open browser at our paypal donation page.
-				Uri uri = Uri.parse(DONATE_URL); 
-				Intent webIntent = new Intent(Intent.ACTION_VIEW, uri); 
-				startActivity(webIntent); 
-			}
-		});
-		dBuilder.show();
 	}
 
 	

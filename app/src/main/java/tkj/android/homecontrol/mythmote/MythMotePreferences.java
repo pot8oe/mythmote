@@ -48,7 +48,6 @@ public class MythMotePreferences extends AbstractMythmotePreferenceActivity {
 	public static final String PREF_KEY_REPEAT_INTERVAL = "key-repeat-interval";
 	public static final String PREF_STATUS_UPDATE_INTERVAL = "status-update-interval";
 	public static final String PREF_GESTURES_ENABLED = "gestures-enabled";
-	public static final String PREF_SHOW_DONATE_MENU_ITEM = "show-donate-menu-item";
 	public static final String PREF_CONNECTION_TIMEOUT_INTERVAL = "conection-timeout-interval";
 	public static final int REQUEST_LOCATIONEDITOR = 0;
 
@@ -181,12 +180,7 @@ public class MythMotePreferences extends AbstractMythmotePreferenceActivity {
 				R.string.conection_timeout_interval_description_str,
 				R.array.connection_timeout_interval_strings,
 				R.array.connection_timeout_interval_values, "5000"));
-		
-		// create donate button visible checkbox
-		generalCat.addPreference(createCheckBox(context,
-				PREF_SHOW_DONATE_MENU_ITEM,
-				R.string.show_donate_menu_item_str,
-				R.string.show_donate_menu_item_str, true));
+
 		
 //		//create gestures enabled
 //		gestureCat.addPreference(createCheckBox(context,
