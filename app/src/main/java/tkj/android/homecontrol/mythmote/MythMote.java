@@ -19,25 +19,21 @@ package tkj.android.homecontrol.mythmote;
 import java.util.ArrayList;
 import java.util.List;
 
-import tkj.android.homecontrol.mythmote.LocationChangedEventListener;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
 import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -47,7 +43,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class MythMote extends AbstractMythmoteFragmentActivity implements
 		LocationChangedEventListener, MythCom.StatusChangedEventListener {

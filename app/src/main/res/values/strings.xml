@@ -96,8 +96,6 @@
 <string name="button_add_str">Add</string>
 <string name="button_remove_str">Remove</string>
 <string name="gesture_default_command">key enter</string>
-<string name="show_donate_menu_item_str">Show Donate Menu Item</string>
-<string name="donate_intent_alert_str">Pressing OK will open the mythmote paypal donation web page.</string>
 <string name="guide_str">Guide</string>
 <string name="home_str">Home</string>
 <string name="live_tv_str">Live TV</string>
