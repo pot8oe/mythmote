@@ -185,11 +185,14 @@ public class GestureBuilderActivity extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mTask != null && mTask.getStatus() != GesturesLoadTask.Status.FINISHED) {
-            mTask.cancel(true);
+        if (mTask != null) {
+
+            if(mTask.getStatus() != GesturesLoadTask.Status.FINISHED)
+                mTask.cancel(true);
+
             mTask = null;
         }
-
+        
         cleanupRenameDialog();
     }
 
