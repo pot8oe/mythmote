@@ -390,9 +390,13 @@ out:        for (String name : entries) {
 
             if (store.load()) {
                 for (String name : store.getGestureEntries()) {
+
                     if (isCancelled()) break;
 
                     for (Gesture gesture : store.getGestures(name)) {
+
+                        if (isCancelled()) break;
+
                         final Bitmap bitmap = gesture.toBitmap(mThumbnailSize, mThumbnailSize,
                                 mThumbnailInset, mPathColor);
                         final NamedGesture namedGesture = new NamedGesture();
