@@ -22,6 +22,13 @@ package tkj.android.homecontrol.mythmote;
  * */
 public class FrontendLocation {
 
+	public static final int DEFAULT_ID = -1;
+	public static final String DEFAULT_NAME = "";
+	public static final String DEFAULT_ADDRESS = "";
+	public static final int DEFAULT_PORT = 6456;
+	public static final String DEFAULT_MAC = "";
+	public static final int DEFAULT_WIFI_ONLY = 1;
+
 	public static String STR_ID = "ID";
 	public static String STR_NAME = "NAME";
 	public static String STR_ADDRESS = "ADDRESS";
@@ -30,12 +37,12 @@ public class FrontendLocation {
 	public static String STR_WIFIONLY = "WIFIONLY";
 	
 	
-	public int ID = -1;
-	public String Name = "";
-	public String Address = "";
-	public int Port = 6456;
-	public String MAC = "";
-	public int WifiOnly = 1;
+	public int ID = DEFAULT_ID;
+	public String Name = DEFAULT_NAME;
+	public String Address = DEFAULT_ADDRESS;
+	public int Port = DEFAULT_PORT;
+	public String MAC = DEFAULT_MAC;
+	public int WifiOnly = DEFAULT_WIFI_ONLY;
 	
 	
 	

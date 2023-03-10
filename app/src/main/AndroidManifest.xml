@@ -23,6 +23,7 @@
 	    <activity
 	        android:label="@string/app_name"
 	        android:name=".MythMote"
+			android:exported="true"
 	        android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
 	        
 	        <intent-filter>
