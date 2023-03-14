@@ -1,12 +1,14 @@
 package tkj.android.homecontrol.mythmote;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.fragment.app.DialogFragment;
+
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingEntry;
 import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
 import tkj.android.homecontrol.mythmote.keymanager.KeyMapBinder;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.View;
-import android.widget.Button;
 
 public class AbstractMythmoteDialogFragment extends DialogFragment implements KeyMapBinder {
 	

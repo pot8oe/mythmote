@@ -16,13 +16,6 @@
 
 package tkj.android.homecontrol.mythmote;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
-import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
-import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
-import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -32,17 +25,27 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import tkj.android.homecontrol.mythmote.db.CursorValueReader;
+import tkj.android.homecontrol.mythmote.db.MythMoteDbHelper;
+import tkj.android.homecontrol.mythmote.db.MythMoteDbManager;
+import tkj.android.homecontrol.mythmote.keymanager.KeyBindingManager;
+import tkj.android.homecontrol.mythmote.ui.AutoRepeatButton;
 
 public class MythMote extends AbstractMythmoteFragmentActivity implements
 		LocationChangedEventListener, MythCom.StatusChangedEventListener {
@@ -120,7 +123,7 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 			Cursor dbCursor = dbAdapter.fetchFrontendLocation(intentFe.Address, intentFe.Port);
 			if(dbCursor != null && dbCursor.getCount() > 0){
 				//select found frontend
-				sSelected = dbCursor.getInt(dbCursor.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
+				sSelected = CursorValueReader.getInt(dbCursor, MythMoteDbHelper.KEY_ROWID, FrontendLocation.DEFAULT_ID);
 				Log.d(MythMote.LOG_TAG, "Selecting existing frontend from Intent: " + intentFe.Address);
 			}else{
 				//add and selected provided frontend
@@ -384,8 +387,7 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 //		sHeaderArrayList.add(this.getString(R.string.keyboard_input_str));
 
 		// set pager adapter and initial item
-		pager.setAdapter(new MythmotePagerAdapter(this
-				.getSupportFragmentManager()));
+		pager.setAdapter(new MythmotePagerAdapter(this.getSupportFragmentManager()));
 		pager.setCurrentItem(cItem);
 
 		return true;
@@ -518,19 +520,14 @@ public class MythMote extends AbstractMythmoteFragmentActivity implements
 		// make sure returned cursor is valid
 		if (cursor == null || cursor.getCount() <= 0)
 			return false;
+
 		// set selected location from Cursor
-		sLocation.ID = cursor.getInt(cursor
-				.getColumnIndex(MythMoteDbHelper.KEY_ROWID));
-		sLocation.Name = cursor.getString(cursor
-				.getColumnIndex(MythMoteDbHelper.KEY_NAME));
-		sLocation.Address = cursor.getString(cursor
-				.getColumnIndex(MythMoteDbHelper.KEY_ADDRESS));
-		sLocation.Port = cursor.getInt(cursor
-				.getColumnIndex(MythMoteDbHelper.KEY_PORT));
-		sLocation.MAC = cursor.getString(cursor
-				.getColumnIndex(MythMoteDbHelper.KEY_MAC));
-		sLocation.WifiOnly = cursor.getInt(cursor.
-				getColumnIndex(MythMoteDbHelper.KEY_WIFIONLY));
+		sLocation.ID = CursorValueReader.getInt(cursor, MythMoteDbHelper.KEY_ROWID, FrontendLocation.DEFAULT_ID);
+		sLocation.Name = CursorValueReader.getString(cursor, MythMoteDbHelper.KEY_NAME, FrontendLocation.DEFAULT_NAME);
+		sLocation.Address = CursorValueReader.getString(cursor, MythMoteDbHelper.KEY_ADDRESS, FrontendLocation.DEFAULT_ADDRESS);
+		sLocation.Port = CursorValueReader.getInt(cursor, MythMoteDbHelper.KEY_PORT, FrontendLocation.DEFAULT_PORT);
+		sLocation.MAC = CursorValueReader.getString(cursor, MythMoteDbHelper.KEY_MAC, FrontendLocation.DEFAULT_MAC);
+		sLocation.WifiOnly = CursorValueReader.getInt(cursor, MythMoteDbHelper.KEY_WIFIONLY, FrontendLocation.DEFAULT_WIFI_ONLY);
 
 		// close cursor and db adapter
 		cursor.close();
